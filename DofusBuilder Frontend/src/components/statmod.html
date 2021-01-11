@@ -1,0 +1,14 @@
+<template>
+
+  <div name="modsearch" class="searchable">
+    <input name="modsearchinput" type="text" autocomplete="off" placeholder="+Add Stat Mod" value.bind="name" onkeyup.call="filterFunction2($this,$event)" onchange.call="oninput($this, $event)" onfocus.call="onModInputFocus($this, $event, i, j)"
+      onblur.call="onModInputBlur($this, $event, i, j)">
+    <dl name="modsearchlist" class="modlist">
+      <section repeat.for="[section, mods] of modsSections">
+        <dt>${section}</dt>
+        <dd repeat.for="modname of mods" onmouseover.call="onDDHover($this, $event, i, j, modname)" onclick.call="onDDClick($this, $event, i, j, modname)">${modname}</dd>
+      </section>
+    </dl>
+  </div>
+
+</template>

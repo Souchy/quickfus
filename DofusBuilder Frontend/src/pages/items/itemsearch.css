@@ -1,0 +1,53 @@
+* {
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* body { font-family: sans-serif; } */
+
+.itemsearch {
+  width: 80%;
+  /* max-width: 1350px; */
+  margin: 0 auto;
+}
+
+
+.itemsearch-title {
+  /* margin-left: 10%; */
+}
+
+/* ---- grid ---- */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+.grid-wrapper {
+  width: 100%;
+  height: 100%;
+  min-height: 1000px;
+}
+.grid {
+  margin: 0 auto;
+  /* min-width: 540;
+  min-height: 1000px; */
+}
+
+/* clearfix */
+ /* .grid:after {
+  content: '';
+  display: block;
+  clear: both;
+} */
+
+/* ---- grid-item ---- */
+.grid-item {
+  float: left;
+  width: 260px;
+  /* min-height: 150px; */
+
+  /* padding: 5px; */
+  /* margin: 5px;  /* masonry does not respect left & right margins, so we need to use gutter : 10 instead */
+  margin-bottom: 10px; /* and to add a margin-bottom for vertical gutter (this is respected by masonry) */
+}

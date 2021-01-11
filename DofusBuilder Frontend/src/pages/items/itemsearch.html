@@ -1,0 +1,38 @@
+<template>
+  <require from="./itemsheet"></require>
+  <require from="./filter"></require>
+  <require from="/src/pages/items/itemsearch.css"></require>
+
+
+  <div class="itemsearch">
+    <!--
+  ${items[0]}
+  ${items[1]}
+
+  <compose view-model="./itemsheet"></compose>
+-->
+
+    <!-- Filtres -->
+    <filter filter.bind="filter"></filter>
+
+
+    <!-- <h2 class="itemsearch-title" onclick.call="layout()">Items (${data.length})</h2> -->
+
+    <!-- <button onclick.call="showMore()">Show more</button>
+    <button onclick.call="reloadMsnry()">Reload</button>
+    <button onclick.call="layout()">Layout</button> -->
+
+    <p></p>
+
+    <div class="grid-wrapper">
+      <!-- items -->
+      <!-- show grid only if data is available -->
+      <div class="grid" ref="grid" onchange.call="onchange()">
+        <!-- <div class="grid-sizer"></div> -->
+        <!-- <div class="grid-item" repeat.for="item of data" data.bind="item" style="background: pink;"></div> -->
+        <itemsheet class="grid-item" repeat.for="item of data" data.bind="item"></itemsheet>
+      </div>
+    </div>
+  </div>
+
+</template>

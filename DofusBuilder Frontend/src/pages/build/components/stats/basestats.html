@@ -1,0 +1,26 @@
+<template>
+  <!-- <h2>Base Stats</h2> -->
+
+  <ul style="list-style-type: none; padding-left: 0px;">
+    <!-- <li repeat.for="line of data"> -->
+    <li class="d-flex" repeat.for="name of statnames">
+      <!-- class="row" -->
+      <!-- <div class="col-sm">${stats[i].icon}</div> -->
+      <div class="mr-auto">${name}</div>
+      <!-- <div class="col-sm">${value}</div> -->
+      <!-- <input id="basestat-${name}" type="number" value.bind="value" style="width: 50px;" change.delegate="onchange(name, value)" /> -->
+      <!-- onchange.call="onchange(name, value)" -->
+      <!-- change.bind="onchange(name, value)" /> -->
+
+      <input id="basestat-${name}" type="number" model.bind="stats.get(name)" value="${stats.get(name)}" onchange.call="onchange(name)" />
+      <!-- value.bind="val" -->
+
+      <!-- <input type="number" oninput.call="test()" /> -->
+
+      <!-- hidden div just to get the same spacing as addedstats.html -->
+      <!-- <div class="btnDelete" style="visibility: hidden;"></div> -->
+    </li>
+
+  </ul>
+
+</template>

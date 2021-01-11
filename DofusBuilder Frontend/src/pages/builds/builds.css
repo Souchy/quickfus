@@ -1,0 +1,60 @@
+
+#buildscontainer {
+  width: 72%;
+  margin-left: 15%;
+}
+
+#buildsearch {
+  /* margin: 0 auto; */
+  /* margin-left: 15%; */
+  /* width: 70%; */
+  width: 100%;
+  margin-left: 1%;
+  margin-bottom: 1%;
+  height: 40px;
+}
+
+.builds {
+  --buildaccent: var(--accent1);
+  --buildaccenthover: var(--accent0);
+  width: 102%;
+  /* margin: 0 auto; */
+  /* margin-left: 14.5%; */
+  /* width: 71%; */
+  flex-wrap: wrap;
+}
+
+  .builds .build {
+    /* width: 200px; */
+    width: 18%;
+    height: 100px;
+    margin: 1%;
+    /* margin: 5px; */
+    padding: 5px;
+    /* border: 1px solid transparent; */
+    border: 1px solid var(--buildaccent);
+    /* background: var(--accent1); */
+  }
+  .builds .build:hover {
+    border: 1px solid var(--accent0);
+  }
+  .builds .build:hover h3 {
+    color: var(--buildaccenthover);
+  }
+    .builds .build h3 {
+      cursor: pointer;
+      width: 100%;
+      color: var(--buildaccent);
+    }
+    .builds .build button {
+      width: 38px;
+      height: 30px;
+      background: var(--bg0);
+      border: 1px solid transparent;
+      color: var(--buildaccent);
+    }
+
+    .builds .build button:hover {
+      background: var(--buildaccent);
+      color: var(--bg0);
+    }

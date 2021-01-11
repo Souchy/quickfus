@@ -1,0 +1,21 @@
+<template>
+  <require from="/src/pages/builds/builds.css"></require>
+  <!-- view container -->
+  <div id="buildscontainer">
+    <!-- search -->
+    <input id="buildsearch" type="text" value="" placeholder="search..." autofocus>
+    <!-- builds grid -->
+    <div class="builds d-flex">
+      <!-- new build -->
+      <div class="build d-flex">
+        <h3 class="" onclick.call="newbuild()">New Build</h3>
+      </div>
+      <!-- saved builds -->
+      <div class="build d-flex" repeat.for="name of names">
+        <h3 class="" onclick.call="load(name)">${name}</h3>
+        <button onclick.call="delete(name)">X</button>
+      </div>
+    </div>
+  </div>
+
+</template>

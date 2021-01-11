@@ -1,0 +1,118 @@
+/*
+body {
+  background-color: #3d3d3d;
+  color: white;
+} */
+:root {
+  /* --bg0: #212121; */
+  --bg0: #121212; /* level 0 dark */
+  --bg1: #212121; /* level 1 dark */
+  --front0: rgba(255, 255, 255, 0.87); /* #bdbdbd; /* text on background */
+  --front1: black; /* text on accent */
+  --accent0: #BB86FC; /* purple */
+  --accent1: #03DAC5; /* teal */
+  --accent2: darkred; /* #CF6679; /* red error */
+  --accent1a: rgba(3, 218, 197, 0.5); /* teal with alpha */
+  --shadow: black;
+
+  --surface: #FFFFFF;
+  --onsurface: #121212;
+  --primarysurface: #3700B3;
+}
+
+body {
+  /* background-image: url("/src/res/Tex_krakken.PNG"); */
+  background-color: var(--bg0) !important;
+  color: var(--front0) !important;
+}
+
+#page-container {
+  position: relative;
+  min-height: 100vh;
+}
+#content-wrap {
+  padding-bottom: 2.5rem;    /* Footer height */
+}
+
+.sheet {
+  background: var(--bg1);
+  color: var(--front0);
+}
+.sheettip {
+  background: var(--bg1);
+  color: var(--front0);
+  opacity: 0.7;
+}
+.surface {
+  background: var(--surface);
+  color: var(--onsurface);
+}
+
+
+/* button */
+/* this button is accent>transparent and turns black>accent on hover */
+.btn0 {
+  color: var(--accent1);
+  background: var(--bg0);
+  border: 1px solid transparent;
+}
+.btn0:hover {
+  color: var(--front1);
+  background: var(--accent1);
+  border-color: var(--accent1);
+}
+/* this button is white>gray with an accent border */
+.btn1 {
+  color: var(--front0);
+  background: var(--bg1);
+  border: 1px solid var(--accent1);
+}
+.btnDelete {
+  color: var(--accent1);
+  background: var(--bg0);
+  border: 1px solid transparent;
+  width: 38px;
+  height: 30px;
+}
+.btnDelete:hover {
+  color: var(--front1);
+  background: var(--accent1);
+  border-color: var(--accent1);
+}
+.btnSearch {
+  color: var(--front0);
+  background: var(--bg1);
+  border: 1px solid var(--accent1);
+  width: 30%;
+  height: 40px;
+  margin: 0 auto;
+}
+.btnAdd {
+  color: var(--front0);
+  background: var(--bg1);
+  border: 1px solid var(--accent1);
+  margin: 0 auto;
+  width: 80%;
+  height: 40px;
+}
+
+/* Text input */
+input[type=text] {
+  background: var(--bg1);
+  color: var(--front0);
+  border: 1px solid var(--accent1);
+}
+
+/* Number input */
+input[type=number] {
+  width: 70px;
+  background: var(--bg1);
+  text-align: center;
+  color: var(--front0);
+  border: 1px solid var(--accent1);
+}
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

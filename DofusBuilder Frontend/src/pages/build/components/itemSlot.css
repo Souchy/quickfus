@@ -1,0 +1,38 @@
+
+.itemSlot {
+  height: 80px;
+  width: 80px;
+  /* color: var(--front1); */
+  /* background-color: #555555; */
+  /* background-color: var(--accent1); */
+  border: 1px solid var(--accent1);
+  z-index: 0;
+}
+
+
+.itemSlot img {
+  height: 80px;
+  width: 80px;
+  z-index: 0;
+}
+
+.itemSlot:hover {
+  border: 1px solid var(--accent0);
+}
+
+.itemSlot itemsheet {
+  position: relative;
+  /* float: */
+  display: inline-block;
+  visibility: collapse;
+  width: 260px;
+  background-color: var(--bg0);
+  z-index: 94561239 !important;
+  pointer-events: none;
+  cursor: default;
+}
+.itemSlot:hover itemsheet {
+  /* display: flex; */
+  visibility: visible;
+  opacity: 95%;
+}

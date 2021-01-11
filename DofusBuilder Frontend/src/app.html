@@ -1,0 +1,19 @@
+<template>
+  <require from="/src/app.less"></require>
+  <require from="./components/header"></require>
+  <require from="./components/footer"></require>
+
+
+
+  <div id="page-container">
+    <div id="content-wrap">
+      <!-- header component -->
+      <header></header>
+      <!-- render the router view (aka whichever page selected by the url and routed by app.ts) -->
+      <router-view model.bind="data"></router-view>
+    </div>
+    <!-- footer component -->
+    <footer></footer>
+  </div>
+
+</template>

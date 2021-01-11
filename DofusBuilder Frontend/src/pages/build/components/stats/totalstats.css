@@ -1,0 +1,12 @@
+
+
+
+totalstats table {
+  background-color: var(--bg0) !important;
+}
+
+.table-dark.table-striped tbody tr:nth-of-type(odd) {
+   color: var(--accent1);
+    /* opacity: 0.05; */
+    /* background-color: rgba(1,255,255,.05) !important; */
+}

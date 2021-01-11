@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry excluding="com/robyng/ankama/dofusbuilder/backend/api/Build.java|com/robyng/ankama/dofusbuilder/backend/api/Builds.java|com/robyng/ankama/dofusbuilder/backend/api/Spells.java|com/robyng/ankama/dofusbuilder/backend/api/Users.java|com/robyng/ankama/dofusbuilder/backend/filters/|com/robyng/ankama/dofusbuilder/backend/jade/Classes.java|com/robyng/ankama/dofusbuilder/backend/jade/JadeBuild.java|com/robyng/ankama/dofusbuilder/backend/jade/JadeUser.java|com/robyng/ankama/dofusbuilder/backend/unneeded/Classes.java|com/robyng/ankama/dofusbuilder/backend/jade/JadeItem.java|com/robyng/ankama/dofusbuilder/backend/unneeded/|github/souchy/ankama/dofusbuilder/backend/api/Builds.java|github/souchy/ankama/dofusbuilder/backend/api/Spells.java|github/souchy/ankama/dofusbuilder/backend/api/Users.java|github/souchy/ankama/dofusbuilder/backend/api/Build.java|github/souchy/ankama/dofusbuilder/backend/jade/JadeBuild.java|github/souchy/ankama/dofusbuilder/backend/jade/JadeItem.java|github/souchy/ankama/dofusbuilder/backend/jade/JadeUser.java|github/souchy/ankama/dofusbuilder/excluded/" kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-12">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="lib" path="F:/Users/Souchy/Desktop/Robyn/Git/res/libs other/mongodb-driver-reactivestreams-1.12.0.jar" sourcepath="F:/Users/Souchy/Desktop/Robyn/Git/res/libs src/mongodb-driver-reactivestreams-1.12.0-sources.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Jersey">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/Google">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/DB">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="var" path="libs/libs other/json-20190722.jar" sourcepath="/libs/libs other/json-20190722-sources.jar">
+		<attributes>
+			<attribute name="module" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

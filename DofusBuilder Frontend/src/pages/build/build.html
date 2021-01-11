@@ -1,0 +1,57 @@
+<template>
+
+  <require from="./components/items"></require>
+  <require from="./components/spells"></require>
+  <require from="./components/sets"></require>
+  <require from="./components/options"></require>
+  <require from="./components/weapon"></require>
+  <!-- <require from="./components/itemSlot"></require> -->
+  <require from="./components/stats/totalstats"></require>
+  <require from="./components/stats/combatstats"></require>
+  <require from="./components/stats/basestats"></require>
+  <require from="./components/stats/addedstats"></require>
+
+  <div class="container">
+    <div class="row">
+
+      <!-- total stats -->
+      <totalstats class="col-3" stats.bind="stats"></totalstats>
+
+      <!-- center -->
+      <div class="col-6">
+        <div class="container">
+          <!-- items -->
+          <items class="row" items.bind="items"></items>
+          <!-- stats visibles en combat-->
+          <combatstats class="row" stats.bind="stats" style="margin-top: 20px; margin-left: 5px;"></combatstats>
+          <!-- sets -->
+          <sets class="row" sets.bind="sets" style="margin-left: 5px;"></sets>
+          <!-- weapon -->
+          <weapon class="row" data.bind="$this" style="margin-left: 5px;"></weapon>
+          <!-- spells -->
+          <spells class="row" style="margin-left: 5px;"></spells>
+        </div>
+      </div>
+
+      <!-- right -->
+      <div class="col">
+        <div class="">
+          <!-- options -->
+          <div class="">
+            <options build.bind=$this></options>
+          </div>
+          <!-- base stats & parchos -->
+          <div class="" style="margin-top: 20px;">
+            <basestats class="" stats.bind="bases"></basestats>
+          </div>
+          <!-- exos -->
+          <div class="" style="margin-top: 20px;">
+            <addedstats class="" stats.bind="exos"></addedstats>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</template>
