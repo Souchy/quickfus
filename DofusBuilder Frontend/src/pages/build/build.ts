@@ -31,7 +31,7 @@ export class build {
 	public static nextDofus: number = 1;
 	public static hash = new Hashkit();
 
-	constructor(@lazy(Router) private getRouter: () => Router) {//router: Router) {
+	constructor(@lazy(Router) private getRouter: () => Router) {
 		// console.log("ctor build");
 		// this.router = router;
 		this.api = new WebAPI();

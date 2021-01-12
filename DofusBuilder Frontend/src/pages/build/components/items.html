@@ -1,11 +1,6 @@
 <template>
   <require from="./itemSlot"></require>
 
-  <!-- <div class="col-sm">
-    <div class="container">
-      <div class="row">
- -->
-
   <div class="col-sm">
     <!-- itemsSlots[0,6,5,1,9] -->
     <item-slot repeat.for="i of 5" style="margin-bottom: 2px;" id="${data[i]}" item.bind="items.get(data[i])" slotname.bind="data[i]"></item-slot>
@@ -20,11 +15,5 @@
     <!-- dofus[1,2,3,4,5,6] -->
     <item-slot repeat.for="i of 6" style="margin-bottom: 2px;" id="${data[i+10]}" item.bind="items.get(data[i+10])" slotname.bind="data[i+10]"></item-slot>
   </div>
-
-  <!--
-      </div>
-    </div>
-  </div> -->
-
 
 </template>
