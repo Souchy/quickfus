@@ -32,6 +32,7 @@ public class DofusBuilder {
 
 	private void init() throws Exception {
 		rc = new ResourceConfig().packages(getRootPackages());
+		Log.info("" + rc.getClasses());
 		
 		var path = Paths.get("./api.conf");
 		var json = Files.readString(path);
@@ -61,7 +62,6 @@ public class DofusBuilder {
 		try {
 			// Server
 			server = NettyHttpContainerProvider.createHttp2Server(URI.create("http://" + conf.ip + ":" + conf.port + "/"), rc, null);
-			// server.pipeline().
 			Runtime.getRuntime().addShutdownHook(new Thread(() -> server.close()));
 			Thread.currentThread().join();
 			throw new InterruptedException("asdf");
@@ -71,7 +71,7 @@ public class DofusBuilder {
 	}
 	
 	protected String[] getRootPackages() {
-		return new String[] { "com.robyng.ankama.dofusbuilder.backend.api" };
+		return new String[] { "github.souchy.ankama.dofusbuilder.backend.api" };
 	}
 	
 	
