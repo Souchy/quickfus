@@ -28,7 +28,7 @@ public class Items {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Document> getItems(@QueryParam("skip") int skip, @QueryParam("limit") int limit, String json) {
 		List<Document> list = new ArrayList<>();
-//		Log.info("getItems : skip : " + skip + ", limit : " + limit + ", filter : " + json);
+		Log.info("getItems : skip : " + skip + ", limit : " + limit + ", filter : " + json);
 		try {
 			var filter = json.isBlank() ? defaultFilter : Document.parse(json);
 			
@@ -47,7 +47,7 @@ public class Items {
 		} catch(Exception e) {
 			Log.info("" + e);
 		}
-//		Log.info("getItems result size : " + list.size());
+		Log.info("getItems result size : " + list.size());
 		return list;
 	}
 	

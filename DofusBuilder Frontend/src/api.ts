@@ -9,7 +9,7 @@ export class WebAPI {
 	public client: HttpClient = new HttpClient();
 
 	public getUrl() {
-		// console.log("url : " + location.hostname);
+		console.log("url : " + location.hostname);
 		return "http://" + location.hostname + ":9696";
 	}
 
