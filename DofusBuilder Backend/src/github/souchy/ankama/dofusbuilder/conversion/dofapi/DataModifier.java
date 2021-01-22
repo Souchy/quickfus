@@ -1,4 +1,4 @@
-package github.souchy.ankama.dofusbuilder.backend.dofapi;
+package github.souchy.ankama.dofusbuilder.conversion.dofapi;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,9 +14,9 @@ import com.mongodb.client.model.Field;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 
-import github.souchy.ankama.dofusbuilder.backend.Log;
 import github.souchy.ankama.dofusbuilder.backend.emerald.Emerald;
 import github.souchy.ankama.dofusbuilder.backend.jade.JadeStatistic;
+import github.souchy.ankama.dofusbuilder.backend.main.Log;
 
 /**
  * Fixes some wrong stats and adds Pseudo stats

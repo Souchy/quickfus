@@ -1,9 +1,11 @@
 module DofusBuilder.Backend {
 
-	exports github.souchy.ankama.dofusbuilder.backend;
+	exports github.souchy.ankama.dofusbuilder.backend.main;
 	exports github.souchy.ankama.dofusbuilder.backend.api;
 	exports github.souchy.ankama.dofusbuilder.backend.emerald;
 	exports github.souchy.ankama.dofusbuilder.backend.jade;
+	exports github.souchy.ankama.dofusbuilder.conversion.dofapi;
+	exports github.souchy.ankama.dofusbuilder.conversion.dofuslab;
 	
 	
 	requires transitive org.mongodb.driver.sync.client;

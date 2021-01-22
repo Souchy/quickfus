@@ -5,7 +5,7 @@ import { Router } from 'aurelia-router';
 import { db } from '../../db';
 
 @inject(Router)
-export class itemsheet {
+export class setsheet {
 
 	// @bindable property with <element property.bind="item"></element>
 	@bindable private data: any = {};
@@ -62,5 +62,6 @@ export class itemsheet {
 		if (itemsearch.inst) itemsearch.inst.onLoadedSheet();
 		this.hidden = "";
 	}
+
 
 }

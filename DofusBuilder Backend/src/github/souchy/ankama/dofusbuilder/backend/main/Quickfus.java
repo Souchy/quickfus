@@ -1,7 +1,9 @@
-package github.souchy.ankama.dofusbuilder.backend;
+package github.souchy.ankama.dofusbuilder.backend.main;
 
+import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.glassfish.jersey.netty.httpserver.NettyHttpContainerProvider;
@@ -9,23 +11,42 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import com.google.gson.Gson;
 
-import github.souchy.ankama.dofusbuilder.backend.dofapi.ItemsConverter;
+import github.souchy.ankama.dofusbuilder.conversion.dofapi.DataModifier;
+import github.souchy.ankama.dofusbuilder.conversion.dofapi.ItemsConverter;
 import github.souchy.ankama.dofusbuilder.backend.emerald.Emerald;
 import io.netty.channel.Channel;
 
-public class DofusBuilder {
+public class Quickfus {
 
 	private static Channel server;
 	private static ResourceConfig rc;
 	
 	public static Conf conf;
 	
+	static {
+		try {
+			var path = Paths.get("./api.conf");
+			var json = Files.readString(path);
+			conf = new Gson().fromJson(json, Conf.class);
+
+			try {
+				Files.createDirectories(Paths.get(conf.imageDir));
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+			Log.info("Start DofusBuilder conf : " + json);
+		} catch (Exception e) {
+			Log.info("" + e);
+			System.exit(0);
+		}
+	}
 	
 	public static void main(String[] args) throws Exception {
-		new DofusBuilder();
+		new Quickfus();
 	}
 
-	private DofusBuilder() throws Exception {
+	private Quickfus() throws Exception {
 		init();
 		start();
 	}
@@ -34,11 +55,6 @@ public class DofusBuilder {
 		rc = new ResourceConfig().packages(getRootPackages());
 		Log.info("" + rc.getClasses());
 		
-		var path = Paths.get("./api.conf");
-		var json = Files.readString(path);
-		conf = new Gson().fromJson(json, Conf.class);
-		
-		Log.info("Start DofusBuilder conf : " + json);
 		
 		boolean executing = true;
 		

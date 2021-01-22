@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="com/robyng/ankama/dofusbuilder/backend/api/Build.java|com/robyng/ankama/dofusbuilder/backend/api/Builds.java|com/robyng/ankama/dofusbuilder/backend/api/Spells.java|com/robyng/ankama/dofusbuilder/backend/api/Users.java|com/robyng/ankama/dofusbuilder/backend/filters/|com/robyng/ankama/dofusbuilder/backend/jade/Classes.java|com/robyng/ankama/dofusbuilder/backend/jade/JadeBuild.java|com/robyng/ankama/dofusbuilder/backend/jade/JadeUser.java|com/robyng/ankama/dofusbuilder/backend/unneeded/Classes.java|com/robyng/ankama/dofusbuilder/backend/jade/JadeItem.java|com/robyng/ankama/dofusbuilder/backend/unneeded/|github/souchy/ankama/dofusbuilder/backend/api/Builds.java|github/souchy/ankama/dofusbuilder/backend/api/Spells.java|github/souchy/ankama/dofusbuilder/backend/api/Users.java|github/souchy/ankama/dofusbuilder/backend/api/Build.java|github/souchy/ankama/dofusbuilder/backend/jade/JadeBuild.java|github/souchy/ankama/dofusbuilder/backend/jade/JadeItem.java|github/souchy/ankama/dofusbuilder/backend/jade/JadeUser.java|github/souchy/ankama/dofusbuilder/excluded/" kind="src" path="src"/>
+	<classpathentry kind="src" path="i18n"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-12">
 		<attributes>
 			<attribute name="module" value="true"/>

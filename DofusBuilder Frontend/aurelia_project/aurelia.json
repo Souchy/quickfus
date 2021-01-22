@@ -88,7 +88,9 @@
         "extensions": [
           ".html",
           ".css",
-          ".less"
+          ".less",
+          ".properties",
+          ".json"
         ],
         "stub": false
       }]

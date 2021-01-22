@@ -9,7 +9,7 @@ export class WebAPI {
 	public client: HttpClient = new HttpClient();
 
 	public getUrl() {
-		console.log("url : " + location.hostname);
+		// console.log("url : " + location.hostname);
 		return "http://" + location.hostname + ":9696";
 	}
 
@@ -26,6 +26,24 @@ export class WebAPI {
 	}
 	public getItems(limit: number, skip: number, filter) {
 		var url = this.getUrl() + "/items";
+		var filt: string = JSON.stringify(filter);
+		if (limit == null) limit = 50;
+		if (skip == null) skip = 0;
+		var query: string = "?limit=" + limit + "&skip=" + skip;
+		url += query;
+
+		var req = new HttpRequestMessage("POST", url, filt);
+		var tr = (thing) => {
+			// console.log("transform " + JSON.stringify(thing));
+			return thing;
+		};
+		// console.log("req : " + JSON.stringify(req));
+		return this.client.send(req, [tr]);
+	}
+
+
+	public getSets(limit: number, skip: number, filter) {
+		var url = this.getUrl() + "/sets";
 		var filt: string = JSON.stringify(filter);
 		if (limit == null) limit = 50;
 		if (skip == null) skip = 0;

@@ -11,8 +11,8 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import github.souchy.ankama.dofusbuilder.backend.DofusBuilder;
-import github.souchy.ankama.dofusbuilder.backend.dofapi.DataModifier;
+import github.souchy.ankama.dofusbuilder.backend.main.Quickfus;
+import github.souchy.ankama.dofusbuilder.conversion.dofapi.DataModifier;
 
 /**
  * Database access
@@ -31,21 +31,22 @@ public class Emerald {
 		);
 
 		var settings = MongoClientSettings.builder()
-			.applyConnectionString(new ConnectionString(DofusBuilder.conf.mongo)) 
+			.applyConnectionString(new ConnectionString(Quickfus.conf.mongo)) 
 			.codecRegistry(registry)
 		.build();
 		clientSync = MongoClients.create(settings);
 		
-		DataModifier.modifyItems();
+//		DataModifier.modifyItems();
 	}
 	
-	private static MongoDatabase db() {
-		return clientSync.getDatabase(DofusBuilder.conf.root);
+	public static MongoDatabase db() {
+		return clientSync.getDatabase(Quickfus.conf.root);
 	}
 	
 	public static MongoCollection<Document> items() {
 		return db().getCollection("items"); 
 	}
+	
 	public static MongoCollection<Document> sets() {
 		return db().getCollection("sets"); 
 	}

@@ -1,8 +1,26 @@
 <template>
+  <require from="./setsheet"></require>
+  <require from="./setfilter"></require>
   <require from="/src/pages/sets/setsearch.css"></require>
 
-  <div>
 
+  <div class="setsearch">
+
+    <!-- Filtres -->
+    <setfilter filter.bind="filter"></setfilter>
+    <!-- <filter filter.bind="filter"></filter> -->
+
+    <p></p>
+
+    <div class="grid-wrapper">
+      <!-- items -->
+      <!-- show grid only if data is available -->
+      <div class="grid" ref="grid" onchange.call="onchange()">
+        <!-- <div class="grid-sizer"></div> -->
+        <!-- <div class="grid-item" repeat.for="item of data" data.bind="item" style="background: pink;"></div> -->
+        <setsheet class="grid-item" repeat.for="set of mason.data" data.bind="set"></setsheet>
+      </div>
+    </div>
 
   </div>
 

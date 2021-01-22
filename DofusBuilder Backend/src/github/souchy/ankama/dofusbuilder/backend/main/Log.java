@@ -1,4 +1,4 @@
-package github.souchy.ankama.dofusbuilder.backend;
+package github.souchy.ankama.dofusbuilder.backend.main;
 
 public class Log {
 

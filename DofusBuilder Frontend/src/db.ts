@@ -1,6 +1,7 @@
 
 import { inject, PLATFORM } from 'aurelia-framework';
 import { WebAPI } from 'api';
+import { i18n, EnumStat, EnumWeaponStat, EnumItemType, EnumItemSlot } from './i18n';
 
 export class db {
 
@@ -10,19 +11,52 @@ export class db {
 	}
 
 	public static init(force?: boolean) {
+		// i18n.readProperties(EnumStat, "http://127.0.0.1:9000/res/i18n/stats/stats");
+		// i18n.readProperties(EnumWeaponStat, "/res/i18n/weaponStats/weaponStats");
+		// i18n.readProperties(EnumItemType, "/res/i18n/itemTypes/itemTypes");
 		// console.log("db init " + force);
 		// if (!localStorage.getItem("statsnames") || force) db.setStatNames();
 	}
 
+	public static translateStat(str): String {
+
+		return "";
+	}
+
 	public static getImgUrl(item) {
 		if (item == null) return "";
-		if (item.type == "Montures") {
-			return "/src/res/items/" + item.type + "/" + item.ankamaId + ".png";
+		if (item.itemType == "Montures") { //} EnumItemType.MOUNT.fr || item.itemType == EnumItemType.RHINENEETLE.fr || item.itemType == EnumItemType.DRAGOTURKEY.fr || item.itemType == EnumItemType.SEEMYOL.fr) {
+			return "/src/res/items/Montures/" + item.dofusID + ".png";
 		}
-		let url0: string = item.imgUrl;
-		let name = url0.substr(url0.lastIndexOf("/"));
+		// let url0: string = item.imgUrl;
+		let name = item.imgUrl; // url0.substr(url0.lastIndexOf("/"));
 		let url1 = "/src/res/items0/" + name;
 		return url1;
+	}
+
+	public static getStatColor(name: string) {
+		switch (name) {
+			case "PA": return "color: gold;"
+			// case "Vitalité": return "color: beige;";
+			// case "Sagesse": return "color: purple;";
+			case "% Résistance Neutre":
+				return "color: gray;";
+			case "% Résistance Terre":
+			case "Force":
+				return "color: #965948;"; // brown
+			case "% Résistance Feu":
+			case "Intelligence":
+				return "color: #c42b00;" // red
+			case "% Résistance Eau":
+			case "Chance":
+				return "color: #34bdeb;" // blue
+			case "% Résistance Air":
+			case "Agilité":
+				return "color: #0d9403;" // green
+			case "Puissance":
+				return "color: purple;"; //
+			default: return "";
+		}
 	}
 
 	public static getStatNames() {

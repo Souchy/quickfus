@@ -14,4 +14,11 @@
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>i18n</name>
+			<type>2</type>
+			<location>F:/Users/Souchy/Desktop/Robyn/Git/ankama/dofusbuilder/DofusBuilder Frontend/src/res/i18n</location>
+		</link>
+	</linkedResources>
 </projectDescription>

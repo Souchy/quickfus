@@ -283,7 +283,6 @@ export class build {
 		var items: Map<string, any> = build.getItems();
 		var slot: string = item.type;
 		if (item.type == "Anneau") {
-			// console.log("anneau slot : " + build.nextRing);
 			slot = "Anneau" + build.nextRing;
 			if (build.nextRing < 2) {
 				build.nextRing++;
@@ -308,6 +307,7 @@ export class build {
 		if (db.getPetTypes().indexOf(item.type) != -1) {
 			slot = "Familier";
 		}
+		console.log("build.setItem slot : " + slot + " (" + item.type + ")");
 		if (db.getSlotNames().indexOf(slot) == -1) {
 			console.log("build.setItem bad slot : " + slot);
 			return;

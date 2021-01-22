@@ -1,0 +1,85 @@
+setsheet .items {
+display: flex-flow-root;
+}
+setsheet .items img {
+  width: 55px;
+  height: 55px;
+}
+
+
+/* class="setsheet"  */
+/* Maintenant on target l'élément "setsheet" ! */
+setsheet {
+  --sheetaccent: var(--accent1);
+  --sheetaccenthover: var(--accent0);
+  /* background: #1d3030; */
+  /* background: var(--bg1); */
+  cursor: pointer;
+  /* border: 1px solid var(--sheetaccent); */
+  border: 1px solid transparent;
+  /* box-shadow: 5px 5px 5px black; */
+}
+/* immediate child must fill the setsheet size for clicks */
+setsheet .setsheet {
+  /* width: 100%;
+  height: 100%;
+  align-items: stretch; */
+  min-height: 150px;
+
+  background-repeat: no-repeat;
+  /* background-attachment: fixed; */
+  background-position: center;
+
+}
+setsheet .setsheet::after {
+  opacity: 0.5;
+}
+
+setsheet .bgimg {
+  display: inline;
+  /* width: 100%; */
+  /* height: 100%; */
+  /* min-height: 150px; */
+  opacity: 0.5;
+  background-repeat: no-repeat;
+  /* background-attachment: fixed; */
+  background-position: center;
+}
+
+setsheet img {
+  width: 55px;
+  height: 55px;
+}
+
+setsheet .title {
+  padding: 5px;
+  /* background: var(--sheetaccent); */
+  color: var(--sheetaccent);
+  font-size: 1.1rem;
+}
+setsheet .statistics {
+  padding: 5px;
+}
+setsheet .statistics ul {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+setsheet .statistic {
+
+}
+setsheet .conditions {
+  /* border-top: 1px solid var(--sheetaccent); */
+}
+
+
+setsheet:hover {
+  border: 1px solid var(--sheetaccenthover);
+}
+setsheet:hover .title {
+  color: var(--sheetaccenthover);
+  /* background: var(--sheetaccenthover); */
+}
+setsheet:hover .conditions {
+  border-top: 1px solid var(--sheetaccenthover);
+}

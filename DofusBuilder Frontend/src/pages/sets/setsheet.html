@@ -1,9 +1,10 @@
 <template>
-  <require from="/src/pages/items/itemsheet.css"></require>
+  <require from="/src/pages/sets/setsheet.css"></require>
+  <!-- <require from="/src/pages/items/itemsheet.css"></require> -->
 
 
   <!-- englobing class div for css -->
-  <div class="itemsheet" onclick.call="test()" ${hidden}>
+  <div class="setsheet" onclick.call="test()" ${hidden}>
     <!-- <img class="bgimg" src="${getImgUrl()}"> -->
     <!-- <div class="bgimg" style="background-image: url('${getImgUrl()}');"></div> -->
 
@@ -11,35 +12,24 @@
     <!-- put the image as background ? -->
     <!-- Image and weapon stats -->
     <div class="title d-flex flex-nowrap">
-      <img src="${getImgUrl()}">
       <!-- Name and level -->
       <div>
         <span>${data.name.fr}</span><br>
-        <span>${data.level}</span>
       </div>
       <!-- ${data.description} -->
     </div>
 
+    <div class="items">
+      <div repeat.for="item of data.items">
+        <img src="/src/res/items0/${item.imgUrl}">
+      </div>
+    </div>
 
     <!-- Effects -->
-    <div class="statistics">
-      <ul if.bind="data.characteristics" style="border-bottom: 1px dashed var(--accent1);">
-        <div>
-          <span>PA</span>
-          <span>${data.characteristics[0]["PA"]}</span>
-        </div>
-        <div>
-          <span>Portée</span>
-          <span>${data.characteristics[1]["Portée"]}</span>
-        </div>
-        <div>
-          <span>CC</span>
-          <span>${data.characteristics[2]["CC"]}</span>
-        </div>
-      </ul>
+    <div class="bonuses">
       <ul>
         <!-- 1 row for each effect -->
-        <li class="row" repeat.for="effect of data.statistics" if="isntPseudo(effect)">
+        <li class="row" repeat.for="effect of data.bonuses[0]" if="isntPseudo(effect)">
           <!-- <compose view-model="./statistic" model.bind="effect"></compose> -->
           <div class="container statistic">
             ${effect.min}

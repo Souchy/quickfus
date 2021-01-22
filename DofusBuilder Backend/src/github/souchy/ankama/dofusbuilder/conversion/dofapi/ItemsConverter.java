@@ -1,4 +1,4 @@
-package github.souchy.ankama.dofusbuilder.backend.dofapi;
+package github.souchy.ankama.dofusbuilder.conversion.dofapi;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -7,8 +7,8 @@ import java.util.ArrayList;
 
 import org.json.JSONArray;
 
-import github.souchy.ankama.dofusbuilder.backend.DofusBuilder;
-import github.souchy.ankama.dofusbuilder.backend.Log;
+import github.souchy.ankama.dofusbuilder.backend.main.Quickfus;
+import github.souchy.ankama.dofusbuilder.backend.main.Log;
 
 /**
  * Takes json data taken from dofapi.fr and converts it to a format that MongoDB can import
@@ -22,7 +22,7 @@ public class ItemsConverter {
 
 	public static void convert(String filename) {
 		try {
-			var path = Path.of(DofusBuilder.conf.jsonDir + filename + ".json");
+			var path = Path.of(Quickfus.conf.jsonDir + filename + ".json");
 			var json = Files.readString(path);
 			
 			var lines = new ArrayList<String>();
@@ -80,7 +80,7 @@ public class ItemsConverter {
 				
 				lines.add(item.toString());
 			}
-			Files.write(Path.of(DofusBuilder.conf.jsonDir + filename + "-output.json"), lines);
+			Files.write(Path.of(Quickfus.conf.jsonDir + filename + "-output.json"), lines);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

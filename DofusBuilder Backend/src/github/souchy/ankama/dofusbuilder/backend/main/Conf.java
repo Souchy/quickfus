@@ -1,4 +1,7 @@
-package github.souchy.ankama.dofusbuilder.backend;
+package github.souchy.ankama.dofusbuilder.backend.main;
+
+import java.io.IOException;
+import java.nio.file.Files;
 
 public class Conf {
 
@@ -9,5 +12,6 @@ public class Conf {
 
 	public String imageDir = "";
 	public String jsonDir = "";
+	
 	
 }

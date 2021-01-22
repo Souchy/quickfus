@@ -3,8 +3,10 @@ package github.souchy.ankama.dofusbuilder.backend.api;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
@@ -13,15 +15,23 @@ import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 
-import github.souchy.ankama.dofusbuilder.backend.Log;
 import github.souchy.ankama.dofusbuilder.backend.emerald.Emerald;
+import github.souchy.ankama.dofusbuilder.backend.main.Log;
 
 @Path("/items")
 public class Items {
 	
 	private static final Document defaultFilter = Document.parse("{}");
+
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Document getSet(@PathParam("id") int id) {
+		return Emerald.items().find(Filters.eq("ankamaId", id)).first();
+	}
 	
 	@POST
 	@Path("/")
@@ -40,9 +50,10 @@ public class Items {
 
 //			Log.info(pipeline.toString());
 			
-			list = Emerald.items()
-					.aggregate(pipeline)
-					.into(new ArrayList<>());
+			Emerald.items().aggregate(pipeline).into(list);
+//			Emerald.weapons().aggregate(pipeline).into(list);
+//			Emerald.pets().aggregate(pipeline).into(list);
+//			Emerald.mounts().aggregate(pipeline).into(list);
 			
 		} catch(Exception e) {
 			Log.info("" + e);
