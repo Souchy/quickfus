@@ -37,6 +37,8 @@ export class db {
 	public static getStatColor(name: string) {
 		switch (name) {
 			case "PA": return "color: gold;"
+			case "PM": return "color: #03fc3d;"
+			case "Vitalité": return "color: #e1c699;";
 			// case "Vitalité": return "color: beige;";
 			// case "Sagesse": return "color: purple;";
 			case "% Résistance Neutre":
