@@ -1,6 +1,6 @@
 import { bindable, inject } from 'aurelia-framework';
 import { build } from '../build/build';
-import { itemsearch } from '../items/itemsearch';
+import { setsearch } from '../sets/setsearch';
 import { Router } from 'aurelia-router';
 import { db } from '../../db';
 
@@ -30,21 +30,20 @@ export class setsheet {
 		return name.includes("(isntPseudo)");
 	}
 
-	public test() {
-		// console.log("click " + this.data.name);
-		if (!build.inst) {
-			// build.inst = new build(() => this.router);
-			window.setTimeout(() => build.setItem(this.data), 300);
-		} else {
-			build.setItem(this.data);
+	// equip the set
+	public equip() {
+		for (let item of this.data.items) {
+			// console.log("equip " + item.name.fr);
+			if (!build.inst) {
+				// build.inst = new build(() => this.router);
+				window.setTimeout(() => build.setItem(item), 300);
+			} else {
+				build.setItem(item);
+			}
 		}
 		this.router.navigate("/build");
 		// console.log("after nav");
 		// window.setTimeout(() => build.setItem(this.data), 300);
-	}
-
-	public getImgUrl() {
-		return db.getImgUrl(this.data);
 	}
 
 	// when binding is done
@@ -58,8 +57,8 @@ export class setsheet {
 			});
 		}
 
-		// if (itemsearch.inst) itemsearch.inst.loadedCount++;
-		if (itemsearch.inst) itemsearch.inst.onLoadedSheet();
+		// if (setsearch.inst) setsearch.inst.loadedCount++;
+		if (setsearch.inst) setsearch.inst.onLoadedSheet();
 		this.hidden = "";
 	}
 

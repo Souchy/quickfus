@@ -1,5 +1,5 @@
 setsheet .items {
-display: flex-flow-root;
+display: flex;
 }
 setsheet .items img {
   width: 55px;

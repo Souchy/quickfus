@@ -76,12 +76,12 @@ export class Mason {
 		function onLayout(items) {
 			var gridlength = ref.obj.grid ? ref.obj.grid.children.length : 0;
 			var datalength = ref.data ? ref.data.length : 0;
-			console.log(" mason layout : " + items.length + " / " + gridlength + " / " + datalength);
-			console.log(" mason element : " + items.keys());
-			console.log(" mason element : " + JSON.stringify(items[0]));
-			for (var i = 0; i < this.msnry.getItemElements().length; i++) {
-				console.log("mason element : " + this.msnry.getItemElements()[i]);
-			}
+			// console.log(" mason layout : " + items.length + " / " + gridlength + " / " + datalength);
+			// console.log(" mason element : " + items.keys());
+			// console.log(" mason element : " + JSON.stringify(items[0]));
+			// for (var i = 0; i < this.msnry.getItemElements().length; i++) {
+			// 	console.log("mason element : " + this.msnry.getItemElements()[i]);
+			// }
 		}
 		function onLayoutOnce(items) {
 			// console.log("itemsearch mason layout once : " + items.length);
