@@ -46,7 +46,7 @@ export class setsearch {
 	// creates a mongo query then sends a request to the api and reload msnry
 	public search(filter: setfilter) {
 		var mongofilter = { "$and": [] };
-		var types = { "$or": [] };
+		var types = { "$and": [] };
 		// Level
 		if (filter.filterLevel) {
 			// mongofilter.$and.push({ "level": { "$gte": parseInt(filter.levelMin + "") } });
@@ -54,18 +54,25 @@ export class setsearch {
 			mongofilter.$and.push({ "items.level": { "$gte": parseInt(filter.levelMin + "") } });
 			mongofilter.$and.push({ "items.level": { "$lte": parseInt(filter.levelMax + "") } });
 		}
-		// Types
-		if (filter.filterType) {
-			filter.types.forEach((v, k) => {
+		if (filter.filterBonuses) {
+			filter.bonuses.forEach((v, k) => {
 				if (v)
-					types.$or.push({ "type": k });
+					mongofilter.$and.push({ "bonuses.0.name": "PA" });
 			})
 		}
 		// Types
-		if (filter.filterWeapon) {
-			filter.armes.forEach((v, k) => {
+		if (filter.filterTypeIn) {
+			filter.typesIn.forEach((v, k) => {
 				if (v)
-					types.$or.push({ "type": k });
+					types.$and.push({ "items.type": k });
+				// types["items.type"]["$in"].push(k);
+			})
+		}
+		// Types
+		if (filter.filterTypeOut) {
+			filter.typesOut.forEach((v, k) => {
+				if (v)
+					types.$and.push({ "items.type": { "$ne": k } });
 			})
 		}
 		if (filter.filterText && filter.filterText != "") {
@@ -82,7 +89,7 @@ export class setsearch {
 			);
 			// console.log("itemsearch filter text : " + new RegExp(filter.filterText, "i"));
 		}
-		if (filter.filterType || filter.filterWeapon) {
+		if (filter.filterTypeIn || filter.filterTypeOut) {
 			mongofilter.$and.push(types);
 		}
 		// console.log("filter blocks : " + JSON.stringify(filter.blocks));
@@ -141,28 +148,48 @@ export class setsearch {
 	public filterStat(m: ModFilter) {
 		let min: number = parseInt(m.min + "");
 		let max: number = parseInt(m.max + "");
+
 		// console.log("filter mod (" + min + "," + max + ") : " + JSON.stringify(m));
 		if (!m.min) min = -100000;
-		let minfilter = {
-			"name": m.name,
-			"min": { "$gte": min }
-		};
+		if (!m.max) max = 100000;
+		// let minfilter = {
+		// "name": m.name,
+		// "min": { "$gte": min }
+		// };
+
 		let maxfilter = {
 			"name": m.name
 		};
 		if (m.max) {
-			minfilter["max"] = { "$lte": max };
+			// minfilter["max"] = { "$lte": max };
 			maxfilter["max"] = { "$lte": max, "$gte": min };
 		} else {
 			maxfilter["max"] = { "$gte": min };
 		}
+
+		// filtre total
 		let mm = {
-			"bonuses": {
-				"$elemMatch": {
-					"$or": [minfilter, maxfilter]
-				}
+			"statistics": {
+				"$elemMatch": maxfilter
 			}
 		};
+
+		// filtre bonus
+		// let mm = {
+		// 	"bonuses": {
+		// 		"$elemMatch": {
+		// 			"$or": [minfilter, maxfilter]
+		// 		}
+		// 	}
+		// }
+
+		// filtre 1 item
+		// let mm = {
+		// 	"items.statistics": {
+		// 		"$elemMatch": maxfilter
+		// 	}
+		// };
+
 		return mm;
 	}
 
@@ -176,7 +203,7 @@ export class setsearch {
 			this.mason.index = 0; // reset index
 			this.mason.data = [] //.splice(0, this.data.length); // reset select data
 			this.mason.fulldata = response.content; // store full data
-			this.mason.showMore(100); // select data
+			this.mason.showMore(50); // select data
 
 			console.log("setsearch query : " + response.content.length);
 			// console.log("itemsearch query : " + response.content);

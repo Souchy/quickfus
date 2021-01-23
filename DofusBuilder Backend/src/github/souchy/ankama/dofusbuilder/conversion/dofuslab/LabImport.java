@@ -35,6 +35,7 @@ public class LabImport {
 		
 		
 		LabConvert.modifyItems();
+		LabConvert.modifySets();
 	}
 
 
@@ -62,6 +63,9 @@ public class LabImport {
 
 		for (int i = 0; i < data.length(); i++) {
 			var set = data.getJSONObject(i);
+
+			var id = set.get("id");
+			set.put("id", Long.parseLong(id + ""));
 			
 			var ranks = set.getJSONObject("bonuses");
 			var ranksArray = new JSONArray();
@@ -95,6 +99,17 @@ public class LabImport {
 			rename(item, "dofusID", "ankamaID");
 			rename(item, "itemType", "type");
 			rename(item, "imageUrl", "imgUrl");
+			
+			var ankamaID = item.get("ankamaID");
+			item.put("ankamaID", Long.parseLong(ankamaID + ""));
+
+			if(item.has("setID")) {
+				var setID = item.get("setID") + "";
+				if(!setID.isBlank() && !setID.equalsIgnoreCase("null")) {
+//					Log.info("item " + item.get("name") + ", setID " + setID);
+					item.put("setID", Long.parseLong(setID));
+				}
+			}
 			
 			if (item.has("imgUrl")) {
 				// change url

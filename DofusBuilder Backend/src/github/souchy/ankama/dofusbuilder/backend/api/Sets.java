@@ -1,6 +1,7 @@
 package github.souchy.ankama.dofusbuilder.backend.api;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.ws.rs.GET;
@@ -11,10 +12,13 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
+import org.bson.BsonArray;
+import org.bson.BsonString;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
 import com.mongodb.client.model.Aggregates;
+import com.mongodb.client.model.Field;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Sorts;
 
@@ -26,6 +30,7 @@ public class Sets {
 
 	private static final Document defaultFilter = Document.parse("{ }");
 
+	
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -48,6 +53,18 @@ public class Sets {
 			pipeline.add(Aggregates.match(filter));
 			pipeline.add(Aggregates.skip(skip));
 			pipeline.add(Aggregates.limit(limit));
+
+
+			
+			/*
+			    "stats": {
+			        $reduce: {
+			            input: "$items.statistics",
+			            initialValue: [],
+			            in: { $concatArrays: ["$$value", "$$this"] }
+			        }
+			    }
+			 */
 
 			Emerald.sets().aggregate(pipeline).into(list);
 			

@@ -14,15 +14,23 @@ export class setfilter {
 
 	// custom filter data
 	public filterText: string = "";
-	public levelMin: number = 0;
-	public levelMax: number = 200;
-	public types: Map<string, boolean>;
-	public armes: Map<string, boolean>;
+
 	public filterLevel: boolean = true;
-	@observable({ changeHandler: 'filterTypeChanged' })
-	public filterType: boolean = false;
-	@observable({ changeHandler: 'filterWeaponChanged' })
-	public filterWeapon: boolean = false;
+	public levelMin: number = 190;
+	public levelMax: number = 200;
+
+	// @observable({ changeHandler: 'filterBonusesChanged' })
+	public filterBonuses: boolean = false;
+	public bonuses: Map<string, boolean>;
+
+	@observable({ changeHandler: 'filterTypeInChanged' })
+	public filterTypeIn: boolean = false;
+	public typesIn: Map<string, boolean>;
+
+	@observable({ changeHandler: 'filterTypeOutChanged' })
+	public filterTypeOut: boolean = false;
+	public typesOut: Map<string, boolean>;
+
 	// mods blocks
 	public blocks: BlockFilter[];
 
@@ -46,13 +54,20 @@ export class setfilter {
 			this.modsSections.set(k, v);
 		});
 
-		this.types = new Map<string, boolean>();
-		this.armes = new Map<string, boolean>();
-		(db.getItemsTypes().concat(db.getPetTypes())).forEach(s => {
-			this.types.set(s, false);
-		});
-		db.getWeaponsTypes().forEach(s => {
-			this.armes.set(s, false);
+		this.bonuses = new Map<string, boolean>();
+		this.typesIn = new Map<string, boolean>();
+		this.typesOut = new Map<string, boolean>();
+
+		this.bonuses.set("PA", false);
+		this.bonuses.set("PM", false);
+		this.bonuses.set("PO", false);
+
+		let typess = db.getItemsTypes().concat(db.getPetTypes());
+		typess.push("Arme");
+		typess.forEach(s => {
+			this.typesIn.set(s, false);
+			this.typesOut.set(s, false);
+			// console.log("setfilter type " + s);
 		});
 
 		this.styleChecked = {
@@ -104,11 +119,12 @@ export class setfilter {
 			this.filterText = data.filterText;
 			this.levelMin = data.levelMin;
 			this.levelMax = data.levelMax;
-			this.types = new Map<string, boolean>(data.types);
-			this.armes = new Map<string, boolean>(data.armes);
+			this.typesIn = new Map<string, boolean>(data.typesIn);
+			this.typesOut = new Map<string, boolean>(data.typesOut);
 			this.filterLevel = data.filterLevel;
-			this.filterType = data.filterType;
-			this.filterWeapon = data.filterWeapon;
+			this.filterBonuses = data.filterBonuses;
+			this.filterTypeIn = data.filterTypeIn;
+			this.filterTypeOut = data.filterTypeOut;
 			this.blocks = data.blocks;
 		}
 	}
@@ -117,11 +133,12 @@ export class setfilter {
 			filterText: this.filterText,
 			levelMin: this.levelMin,
 			levelMax: this.levelMax,
-			types: Array.from(this.types.entries()),
-			armes: Array.from(this.armes.entries()),
+			typesIn: Array.from(this.typesIn.entries()),
+			typesOut: Array.from(this.typesOut.entries()),
 			filterLevel: this.filterLevel,
-			filterType: this.filterType,
-			filterWeapon: this.filterWeapon,
+			filterBonuses: this.filterBonuses,
+			filterTypeIn: this.filterTypeIn,
+			filterTypeOut: this.filterTypeOut,
 			blocks: this.blocks
 		};
 		localStorage.setItem("setfilter", JSON.stringify(obj));
@@ -166,22 +183,31 @@ export class setfilter {
 		}
 	}
 
-	public filterTypeClicked() {
-		var activated = this.filterType;
-		this.types.forEach((value, key) => this.types.set(key, !activated));
+	public filterBonusesClicked() {
+		var activated = this.filterBonuses;
+		this.bonuses.forEach((value, key) => this.bonuses.set(key, !activated));
 	}
-	public checkType(type) {
-		var activated = this.types.get(type);
-		this.types.set(type, !activated);
-		this.filterType = this.hasValue(this.types, true);
+	public checkBonus(type) {
+		var activated = this.bonuses.get(type);
+		this.bonuses.set(type, !activated);
+		this.filterBonuses = this.hasValue(this.bonuses, true);
 	}
-	public filterWeaponClicked() {
-		var activated = this.filterWeapon;
-		this.armes.forEach((value, key) => this.armes.set(key, !activated));
+	public filterTypeInClicked() {
+		var activated = this.filterTypeIn;
+		this.typesIn.forEach((value, key) => this.typesIn.set(key, !activated));
 	}
-	public checkWeapon(arme) {
-		this.armes.set(arme, !this.armes.get(arme));
-		this.filterWeapon = this.hasValue(this.armes, true);
+	public checkTypeIn(type) {
+		var activated = this.typesIn.get(type);
+		this.typesIn.set(type, !activated);
+		this.filterTypeIn = this.hasValue(this.typesIn, true);
+	}
+	public filterTypeOutClicked() {
+		var activated = this.filterTypeOut;
+		this.typesOut.forEach((value, key) => this.typesOut.set(key, !activated));
+	}
+	public checkTypeOut(type) {
+		this.typesOut.set(type, !this.typesOut.get(type));
+		this.filterTypeOut = this.hasValue(this.typesOut, true);
 	}
 
 

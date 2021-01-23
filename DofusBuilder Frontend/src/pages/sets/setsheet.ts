@@ -48,19 +48,20 @@ export class setsheet {
 
 	// when binding is done
 	attached() {
-		// console.log("sheet data " + this.data);
-		if (this.data && this.data.statistics) {
-			// console.log("sheet stats " + this.data.statistics);
-			this.data.statistics.forEach(element => {
-				// console.log("sheet stat : " + JSON.stringify(element));
-				element.style = db.getStatColor(element.name);
-			});
-		}
-
 		// if (setsearch.inst) setsearch.inst.loadedCount++;
 		if (setsearch.inst) setsearch.inst.onLoadedSheet();
 		this.hidden = "";
 	}
 
+	public getStatColor(stat) {
+		return db.getStatColor(stat);
+	}
+
+	public hoverSet() {
+		console.log("hover set");
+	}
+	public hoverItem() {
+		console.log("hover item");
+	}
 
 }

@@ -1,10 +1,12 @@
 <template>
+  <require from="../build/components/itemSlot"></require>
+  <require from="../items/itemsheet"></require>
   <require from="/src/pages/sets/setsheet.css"></require>
   <!-- <require from="/src/pages/items/itemsheet.css"></require> -->
 
 
   <!-- englobing class div for css -->
-  <div class="setsheet" onclick.call="equip()" ${hidden}>
+  <div class="setsheet" onclick.call="equip()" onmouseover.call="hoverSet()" ${hidden}>
     <!-- <img class="bgimg" src="${getImgUrl()}"> -->
     <!-- <div class="bgimg" style="background-image: url('${getImgUrl()}');"></div> -->
 
@@ -19,15 +21,21 @@
       <!-- ${data.description} -->
     </div>
 
+    <!-- items -->
     <div class="items">
-      <div repeat.for="item of data.items">
+      <!-- <item-slot repeat.for="item of data.items" style="margin-bottom: 2px;" id="${data[i+10]}" item.bind="item"></item-slot> -->
+      <div class="item" repeat.for="item of data.items" onmouseover.call="hoverItem()">
         <img src="/src/res/items0/${item.imgUrl}">
+        <itemsheet data.bind="item"></itemsheet>
       </div>
+      <!-- <div repeat.for="item of data.items">
+        <img src="/src/res/items0/${item.imgUrl}">
+      </div> -->
     </div>
 
     <!-- Effects -->
-    <div class="bonuses">
-      <ul>
+    <div class="statistics">
+      <ul style="padding: 0;">
         <!-- 1 row for each effect -->
         <li class="row" repeat.for="effect of data.bonuses[0]" if="isntPseudo(effect)">
           <!-- <compose view-model="./statistic" model.bind="effect"></compose> -->
@@ -35,7 +43,24 @@
             ${effect.min}
             ${effect.min == null ? "" : "à"}
             ${effect.max}
-            <span style.bind="effect.style">${effect.name}</span>
+            <span style.bind="getStatColor(effect.name)">${effect.name}</span>
+            <!-- ${effect} -->
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Effects totals -->
+    <div class="totalStats">
+      <ul style="padding: 0;">
+        <!-- 1 row for each effect -->
+        <li class="row" repeat.for="effect of data.statistics" if="isntPseudo(effect)">
+          <!-- <compose view-model="./statistic" model.bind="effect"></compose> -->
+          <div class="container statistic">
+            ${effect.min}
+            ${effect.min == null ? "" : "à"}
+            ${effect.max}
+            <span style.bind="getStatColor(effect.name)">${effect.name}</span>
             <!-- ${effect} -->
           </div>
         </li>
