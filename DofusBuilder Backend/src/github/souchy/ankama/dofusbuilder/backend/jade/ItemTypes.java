@@ -17,6 +17,7 @@ public enum ItemTypes {
 	RING,
 	BELT,
 	BOOTS,
+	SHIELD,
 	// dofus
 	DOFUS,
 	TROPHY,

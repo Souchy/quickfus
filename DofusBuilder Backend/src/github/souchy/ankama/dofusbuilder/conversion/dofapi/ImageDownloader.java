@@ -18,6 +18,10 @@ public class ImageDownloader {
 
 		var dir = Paths.get(Quickfus.conf.imageDir + localFolder);
 		var path = Paths.get(dir + "/" + localFileName + ".png");
+		
+		if(path.toFile().exists()) {
+			return;
+		}
 
 		try (InputStream in = new URL(remoteUrl).openStream()) {
 			Files.createDirectories(dir);
