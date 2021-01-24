@@ -150,7 +150,7 @@ public class LabConvert {
 				totalStats,
 				"stat", 
 				new Document()
-					.append("$gt", 
+					.append("$ne", 
 							new BsonArray(Arrays.asList(
 									new BsonString("$$stat.max"), new BsonInt32(0)
 							))
