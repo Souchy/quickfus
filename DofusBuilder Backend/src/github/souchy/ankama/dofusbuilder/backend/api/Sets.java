@@ -50,10 +50,14 @@ public class Sets {
 			var pipeline = new ArrayList<Bson>();
 //			pipeline.add(Aggregates.sort(Sorts.descending("id"))); // sort by id pour avoir les plus récents sets en premier
 			pipeline.add(Aggregates.lookup("items", "id", "setID", "items"));
-			pipeline.add(Aggregates.match(filter));
+			
+			var adds = filter.get("a", Document.class);
+			var match = filter.get("m", Document.class);
+			if(adds != null) pipeline.add(adds);
+			if(match != null) pipeline.add(match);
+			
 			pipeline.add(Aggregates.skip(skip));
 			pipeline.add(Aggregates.limit(limit));
-
 
 			
 			/*

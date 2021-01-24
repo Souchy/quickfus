@@ -386,7 +386,7 @@ export class setfilter {
 
 
 export class BlockFilter {
-	public type: string = "And";
+	public type: string = "$and";
 	public min: number;
 	public max: number;
 	public activate: boolean = true;
