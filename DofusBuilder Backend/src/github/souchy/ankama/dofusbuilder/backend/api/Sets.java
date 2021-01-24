@@ -43,7 +43,7 @@ public class Sets {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Document> getSets(@QueryParam("skip") int skip, @QueryParam("limit") int limit, String json) {
 		List<Document> list = new ArrayList<>();
-		Log.info("getSets : skip : " + skip + ", limit : " + limit + ", filter : " + json);
+//		Log.info("getSets : skip : " + skip + ", limit : " + limit + ", filter : " + json);
 		try {
 			var filter = json.isBlank() ? defaultFilter : Document.parse(json);
 			
@@ -65,7 +65,7 @@ public class Sets {
 		} catch(Exception e) {
 			Log.info("" + e);
 		}
-		Log.info("getSets result size : " + list.size());
+//		Log.info("getSets result size : " + list.size());
 		return list;
 	
 	}

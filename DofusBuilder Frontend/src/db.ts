@@ -25,11 +25,11 @@ export class db {
 
 	public static getImgUrl(item) {
 		if (item == null) return "";
-		if (item.itemType == "Montures") { //} EnumItemType.MOUNT.fr || item.itemType == EnumItemType.RHINENEETLE.fr || item.itemType == EnumItemType.DRAGOTURKEY.fr || item.itemType == EnumItemType.SEEMYOL.fr) {
-			return "/src/res/items/Montures/" + item.dofusID + ".png";
+		let name = item.imgUrl; // url0.substr(url0.lastIndexOf("/"));
+		if (item.type == "Monture") { //} EnumItemType.MOUNT.fr || item.itemType == EnumItemType.RHINENEETLE.fr || item.itemType == EnumItemType.DRAGOTURKEY.fr || item.itemType == EnumItemType.SEEMYOL.fr) {
+			return "/src/res/items/Montures/" + name; //item.dofusID + ".png";
 		}
 		// let url0: string = item.imgUrl;
-		let name = item.imgUrl; // url0.substr(url0.lastIndexOf("/"));
 		let url1 = "/src/res/items0/" + name;
 		return url1;
 	}
