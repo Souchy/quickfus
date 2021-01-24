@@ -44,16 +44,18 @@ public class Items {
 			
 			var pipeline = new ArrayList<Bson>();
 			pipeline.add(Aggregates.sort(Sorts.descending("level", "ankamaId"))); // sort by level puis par ankamaId, ce qui met les items les plus récents en premier et groupe les panos
-			pipeline.add(Aggregates.match(filter));
+//			pipeline.add(Aggregates.match(filter));
+			var adds = filter.get("a", Document.class);
+			var match = filter.get("m", Document.class);
+			if(adds != null) pipeline.add(adds);
+			if(match != null) pipeline.add(match);
+			
 			pipeline.add(Aggregates.skip(skip));
 			pipeline.add(Aggregates.limit(limit));
 
 //			Log.info(pipeline.toString());
 			
 			Emerald.items().aggregate(pipeline).into(list);
-//			Emerald.weapons().aggregate(pipeline).into(list);
-//			Emerald.pets().aggregate(pipeline).into(list);
-//			Emerald.mounts().aggregate(pipeline).into(list);
 			
 		} catch(Exception e) {
 			Log.info("" + e);

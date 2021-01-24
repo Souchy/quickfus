@@ -123,7 +123,7 @@ export class setsearch {
 		if (Object.keys(adds.$addFields).length > 0) {
 			pipeline.a = adds;
 		}
-		console.log("filter : " + JSON.stringify(pipeline));
+		// console.log("filter : " + JSON.stringify(pipeline));
 
 		this.query(pipeline);
 		// this.reloadMsnry();

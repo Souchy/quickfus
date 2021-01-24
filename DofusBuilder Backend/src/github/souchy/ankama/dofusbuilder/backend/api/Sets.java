@@ -59,16 +59,6 @@ public class Sets {
 			pipeline.add(Aggregates.skip(skip));
 			pipeline.add(Aggregates.limit(limit));
 
-			
-			/*
-			    "stats": {
-			        $reduce: {
-			            input: "$items.statistics",
-			            initialValue: [],
-			            in: { $concatArrays: ["$$value", "$$this"] }
-			        }
-			    }
-			 */
 
 			Emerald.sets().aggregate(pipeline).into(list);
 			

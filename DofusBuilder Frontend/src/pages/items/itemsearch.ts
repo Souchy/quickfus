@@ -3,7 +3,7 @@ import { inject, bindable, View, observable } from 'aurelia-framework';
 import * as Masonry from 'masonry-layout'
 import { WebAPI } from '../../api';
 
-import { filter, ModFilter } from './filter';
+import { filter, ModFilter, BlockFilter } from './filter';
 import { util, Mason } from '../../util';
 
 @inject(WebAPI)
@@ -53,8 +53,11 @@ export class itemsearch {
 	// search button on the filter component
 	// creates a mongo query then sends a request to the api and reload msnry
 	public search(filter: filter) {
-		var mongofilter = { "$and": [] };
-		var types = { "$or": [] };
+		var adds = { $addFields: {} };
+		var mongofilter = { $and: [] };
+		var types = { $or: [] };
+
+
 		// Level
 		if (filter.filterLevel) {
 			mongofilter.$and.push({ "level": { "$gte": parseInt(filter.levelMin + "") } });
@@ -93,27 +96,74 @@ export class itemsearch {
 		}
 		// console.log("filter blocks : " + JSON.stringify(filter.blocks));
 		// console.log("filter blocks[0] : " + JSON.stringify(filter.blocks[0]));
+		let bi = 0;
 		filter.blocks.forEach(block => {
 			if (block.activate) {
-				// let func = block.type.toLowerCase();
-
-				let arr = block.mods.filter(m => m.activate && m.name != undefined).map((m: ModFilter) => {
-					if (m.name.includes("Pseudo")) return this.filterStatPseudo(m);
-					else return this.filterStat(m);
-				});
-
-				// console.log("filter block : " + func + " : " + JSON.stringify(arr));
-				if (arr.length > 0) {
-					mongofilter.$and.push({
-						[block.type]: arr
+				if (block.type == "$sum") {
+					this.filterSum(mongofilter, adds, bi, block);
+				} else {
+					let arr = block.mods.filter(m => m.activate && m.name != undefined).map((m: ModFilter) => {
+						if (m.name.includes("Pseudo")) return this.filterStatPseudo(m);
+						else return this.filterStat(m);
 					});
+
+					// console.log("filter block : " + func + " : " + JSON.stringify(arr));
+					if (arr.length > 0) {
+						mongofilter.$and.push({
+							[block.type]: arr
+						});
+					}
 				}
 			}
 		});
-		// console.log("filter : " + JSON.stringify(mongofilter));
 
-		this.query(mongofilter);
+		var pipeline = { "a": null, "m": { $match: mongofilter } };
+		if (Object.keys(adds.$addFields).length > 0) {
+			pipeline.a = adds;
+		}
+		// console.log("filter : " + JSON.stringify(pipeline));
+
+		this.query(pipeline);
 		// this.reloadMsnry();
+	}
+
+	public filterSum(mongofilter, adds, bi, block: BlockFilter) {
+		let blockid = block.mods.map(m => m.name).reduce((acc, m) => acc + m) + bi;
+		// filter what stats we need to sum
+		let conds = [];
+		block.mods.forEach(m => {
+			conds.push({
+				"$eq": [
+					"$$stat.name",
+					m.name
+				]
+			});
+		});
+		// create a field with the sum of stats
+		adds.$addFields[blockid] = {
+			"$sum": {
+				"$map": {
+					"input": {
+						"$filter": {
+							"input": "$statistics",
+							"as": "stat",
+							"cond": {
+								"$or": conds
+							}
+						}
+					},
+					"as": "stat",
+					"in": "$$stat.max"
+				}
+			}
+		};
+		// filter match on that sum
+		mongofilter.$and.push({
+			[blockid]: {
+				$gte: parseInt((block.mods[0].min || -100000) + ""),
+				$lte: parseInt((block.mods[0].max || 100000) + "")
+			}
+		});
 	}
 
 	private filterStatPseudo(m: ModFilter) {
