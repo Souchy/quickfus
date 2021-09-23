@@ -71,7 +71,7 @@ export class db {
 		sections.set("Dommages", [
 			"Dommages", "Dommages neutre", "Dommages Terre", "Dommages Feu", "Dommages Eau", "Dommages Air",
 			"Dommages aux pièges", "Puissance aux pièges",
-			"Dommages Critiques", "Dommages Poussée",
+			"Dommages Critiques", "Dommages de poussée",
 			"% Dommages distance", "% Dommages mêlée", "% Dommages aux sorts", "% Dommages d'armes"
 		]);
 		sections.set("Caractéristiques secondaires", ["Prospection", "Tacle", "Fuite", "Retrait PA", "Retrait PM", "Esquive PA", "Esquive PM", "Soins"])
