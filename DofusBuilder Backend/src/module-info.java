@@ -39,7 +39,8 @@ module DofusBuilder.Backend {
 	requires java.xml.bind;
 	requires com.google.common;
 	requires java.json;
-	requires gson;
+//	requires gson;
 	requires org.json;
+	requires com.google.gson;
 	
 }
