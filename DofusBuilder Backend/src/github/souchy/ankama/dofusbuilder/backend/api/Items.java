@@ -40,6 +40,7 @@ public class Items {
 		List<Document> list = new ArrayList<>();
 //		Log.info("getItems : skip : " + skip + ", limit : " + limit + ", filter : " + json);
 		try {
+			if(limit == 0) limit = 100;
 			var filter = json.isBlank() ? defaultFilter : Document.parse(json);
 			
 			var pipeline = new ArrayList<Bson>();

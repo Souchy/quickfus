@@ -65,7 +65,8 @@ public class LabImport {
 			var set = data.getJSONObject(i);
 
 			var id = set.get("id");
-			set.put("id", Long.parseLong(id + ""));
+//			set.put("id", Long.parseLong(id + ""));
+			set.put("id", id);
 			
 			var ranks = set.getJSONObject("bonuses");
 			var ranksArray = new JSONArray();
@@ -101,13 +102,15 @@ public class LabImport {
 			rename(item, "imageUrl", "imgUrl");
 			
 			var ankamaID = item.get("ankamaID");
-			item.put("ankamaID", Long.parseLong(ankamaID + ""));
+//			item.put("ankamaID", Long.parseLong(ankamaID + ""));
+			item.put("ankamaID", ankamaID);
 
 			if(item.has("setID")) {
 				var setID = item.get("setID") + "";
 				if(!setID.isBlank() && !setID.equalsIgnoreCase("null")) {
 //					Log.info("item " + item.get("name") + ", setID " + setID);
-					item.put("setID", Long.parseLong(setID));
+//					item.put("setID", Long.parseLong(setID));
+					item.put("setID", setID);
 				}
 			}
 			

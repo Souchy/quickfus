@@ -18,7 +18,13 @@
 		<link>
 			<name>i18n</name>
 			<type>2</type>
-			<location>F:/Users/Souchy/Desktop/Robyn/Git/ankama/dofusbuilder/DofusBuilder Frontend/src/res/i18n</location>
+			<locationURI>PROJECT_ROOT/DofusBuilder%20Frontend/src/res/i18n</locationURI>
 		</link>
 	</linkedResources>
+	<variableList>
+		<variable>
+			<name>PROJECT_ROOT</name>
+			<value>$%7BPARENT-1-PROJECT_LOC%7D</value>
+		</variable>
+	</variableList>
 </projectDescription>

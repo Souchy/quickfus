@@ -65,12 +65,13 @@ public class Quickfus {
 		// or convert/upload data to mongo
 		if(executing) 
 			return;
-
-		ItemsConverter.convert("sets");
-		ItemsConverter.convert("pets");
-		ItemsConverter.convert("mounts");
-		ItemsConverter.convert("weapons");
-		ItemsConverter.convert("equipments");
+		
+		// This is old conversion from dofapi. Run LabImport insteadnow
+//		ItemsConverter.convert("sets");
+//		ItemsConverter.convert("pets");
+//		ItemsConverter.convert("mounts");
+//		ItemsConverter.convert("weapons");
+//		ItemsConverter.convert("equipments");
 		System.exit(0);
 	}
 
