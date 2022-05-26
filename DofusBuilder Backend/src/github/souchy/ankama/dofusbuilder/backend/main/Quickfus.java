@@ -3,7 +3,6 @@ package github.souchy.ankama.dofusbuilder.backend.main;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 
 import org.glassfish.jersey.netty.httpserver.NettyHttpContainerProvider;
@@ -11,8 +10,6 @@ import org.glassfish.jersey.server.ResourceConfig;
 
 import com.google.gson.Gson;
 
-import github.souchy.ankama.dofusbuilder.conversion.dofapi.DataModifier;
-import github.souchy.ankama.dofusbuilder.conversion.dofapi.ItemsConverter;
 import github.souchy.ankama.dofusbuilder.backend.emerald.Emerald;
 import io.netty.channel.Channel;
 
