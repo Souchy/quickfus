@@ -8,9 +8,9 @@ on:
   pull_request:
     branches: [ master ]
     
-#defaults:
-#  run:
-#    working-directory: './DofusBuilder Frontend/'
+defaults:
+  run:
+    working-directory: './DofusBuilder Frontend/'
     
 jobs:
   build:
