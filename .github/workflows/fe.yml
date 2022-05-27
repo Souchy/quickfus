@@ -37,27 +37,22 @@ jobs:
       run: |
         npm install aurelia-cli -g
         au build
-
-  web-deploy:
-    name: 🎉 Deploy
-    runs-on: ubuntu-latest
-    steps:
-    - name: 🚚 Get latest code
-      uses: actions/checkout@v2
-    
-    - run: echo ${{ secrets.ftp_url }}
-    - run: echo ${{ secrets.ftp_user }}
-    - run: echo ${{ secrets.ftp_pass }}
-    
-    - name: 📂 Sync files
-      uses: SamKirkland/web-deploy@1.0.0
-      with:
-        ftp-server: ${{ secrets.ftp_url }}
-        ftp-username: ${{ secrets.ftp_user }}
-        ftp-password: ${{ secrets.ftp_pass }}
-        git-ftp-args: --dry-run
-        destination-path: '/var/www/html/quickfus.ddns.net/'
-        source-path: './DofusBuilder Frontend/'
   
-      
+  upload_files:
+    runs-on: ubuntu-latest
+    name: Upload a builded file.
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2.3.4
+    - name: Upload Files
+      id: upload
+      uses: Creepios/sftp-action@v1.0.3
+      with:
+        port: 22
+        host: ${{ secrets.ftp_url }}
+        username: ${{ secrets.ftp_user }}
+        password: ${{ secrets.ftp_pass }}
+        remotePath: '/var/www/html/quickfus.ddns.net/scripts'
+        localPath: './DofusBuilder Frontend/scripts/'
+        additionalPaths: '{"./DofusBuilder Frontend/src":"/var/www/html/quickfus.ddns.net/src"}'
 
