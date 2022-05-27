@@ -45,13 +45,17 @@ jobs:
     - name: 🚚 Get latest code
       uses: actions/checkout@v2
     
+    - run: echo ${{ secrets.ftp_url }}
+    - run: echo ${{ secrets.ftp_user }}
+    - run: echo ${{ secrets.ftp_pass }}
+    
     - name: 📂 Sync files
       uses: SamKirkland/FTP-Deploy-Action@4.3.0
       with:
         server: ${{ secrets.ftp_url }}
         username: ${{ secrets.ftp_user }}
         password: ${{ secrets.ftp_pass }}
-        protocol: sftp
+        protocol: ftps
         port: 22
         server-dir: '/var/www/html/quickfus.ddns.net/'
         local-dir: './DofusBuilder Frontend/'
