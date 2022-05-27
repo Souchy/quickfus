@@ -51,7 +51,7 @@ jobs:
         server: ${{ secrets.ftp_url }}
         username: ${{ secrets.ftp_user }}
         password: ${{ secrets.ftp_pass }}
-        protocol: ftps
+        protocol: sftp
         port: 22
         server-dir: '/var/www/html/quickfus.ddns.net/'
         local-dir: './DofusBuilder Frontend/'
