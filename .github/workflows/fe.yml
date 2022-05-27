@@ -39,6 +39,7 @@ jobs:
         au build
   
   upload_files:
+    needs: build
     runs-on: ubuntu-latest
     name: Upload a builded file.
     steps:
@@ -57,7 +58,7 @@ jobs:
         host: ${{ secrets.ftp_url }}
         username: ${{ secrets.ftp_user }}
         password: ${{ secrets.ftp_pass }}
-        remotePath: '/var/www/html/quickfus.ddns.net/scripts'
-        localPath: '/home/runner/work/quickfus/quickfus/DofusBuilder Frontend/src/'
+        remotePath: '/var/www/html/quickfus.ddns.net/src'
+        localPath: 'src/'
         additionalPaths: '{"/home/runner/work/quickfus/quickfus/DofusBuilder Frontend/scripts":"/var/www/html/quickfus.ddns.net/scripts/"}'
 
