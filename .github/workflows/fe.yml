@@ -54,6 +54,6 @@ jobs:
         username: ${{ secrets.ftp_user }}
         password: ${{ secrets.ftp_pass }}
         remotePath: '/var/www/html/quickfus.ddns.net/scripts'
-        localPath: 'scripts/'
-        additionalPaths: '{"src":"/var/www/html/quickfus.ddns.net/src"}'
+        localPath: 'runner/work/quickfus/quickfus/DofusBuilder Frontend/scripts/'
+        additionalPaths: '{"runner/work/quickfus/quickfus/DofusBuilder Frontend/src":"/var/www/html/quickfus.ddns.net/src"}'
 
