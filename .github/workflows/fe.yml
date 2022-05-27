@@ -41,7 +41,7 @@ jobs:
   upload_files:
     needs: build
     runs-on: ubuntu-latest
-    name: Upload a builded file.
+    name: 🎉 Deploy frontend
     steps:
     - name: Checkout
       uses: actions/checkout@v2.3.4
@@ -50,15 +50,26 @@ jobs:
     - run: cd "/home/runner/work/quickfus/quickfus/DofusBuilder Frontend"
     - run: ls
     
-    - name: Upload Files
-      id: upload
+    - name: 📂 Deploy sources
+      id: uploadsrc
       uses: Creepios/sftp-action@v1.0.3
       with:
         port: 22
         host: ${{ secrets.ftp_url }}
         username: ${{ secrets.ftp_user }}
         password: ${{ secrets.ftp_pass }}
-        remotePath: '/var/www/html/quickfus.ddns.net/src'
+        remotePath: '/var/www/html/quickfus.ddns.net/src/'
         localPath: '/home/runner/work/quickfus/quickfus/DofusBuilder Frontend/src/'
-        additionalPaths: '{"/home/runner/work/quickfus/quickfus/DofusBuilder Frontend/scripts":"/var/www/html/quickfus.ddns.net/scripts/"}'
+        
+    
+    - name: 📂 Deploy scripts
+      id: uploadscript
+      uses: Creepios/sftp-action@v1.0.3
+      with:
+        port: 22
+        host: ${{ secrets.ftp_url }}
+        username: ${{ secrets.ftp_user }}
+        password: ${{ secrets.ftp_pass }}
+        remotePath: '/var/www/html/quickfus.ddns.net/scripts/'
+        localPath: '/home/runner/work/quickfus/quickfus/DofusBuilder Frontend/scripts/'
 
