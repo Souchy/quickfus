@@ -37,3 +37,36 @@ jobs:
       run: |
         npm install aurelia-cli -g
         au build
+
+  web-deploy:
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v2
+    
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      with:
+        server: ${{ secrets.ftp_url }}
+        username: ${{ secrets.ftp_user }}
+        password: ${{ secrets.ftp_pass }}
+        protocol: ftps
+        port: 22
+        server-dir: '/var/www/html/quickfus.ddns.net/'
+        local-dir: './DofusBuilder Frontend/'
+        exclude: |
+          **/.git*
+          **/.git*/**
+          **/node_modules/**
+          **/aurelia_project/**
+          package.json
+          package-lock.json
+          README.md
+          tsconfig.json
+          tslint.json
+          .editorconfig
+          favicon.ico
+          
+        
+      
