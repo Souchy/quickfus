@@ -50,28 +50,14 @@ jobs:
     - run: echo ${{ secrets.ftp_pass }}
     
     - name: 📂 Sync files
-      uses: SamKirkland/FTP-Deploy-Action@4.3.0
+      uses: SamKirkland/web-deploy@1.0.0
       with:
-        server: ${{ secrets.ftp_url }}
-        username: ${{ secrets.ftp_user }}
-        password: ${{ secrets.ftp_pass }}
-        protocol: ftp
-        port: 22
-        server-dir: '/var/www/html/quickfus.ddns.net/'
-        local-dir: './DofusBuilder Frontend/'
-        exclude: |
-          **/.git*
-          **/.git*/**
-          **/node_modules/**
-          **/aurelia_project/**
-          package.json
-          package-lock.json
-          README.md
-          tsconfig.json
-          tslint.json
-          .editorconfig
-          favicon.ico
-          
-        
+        ftp-server: ${{ secrets.ftp_url }}
+        ftp-username: ${{ secrets.ftp_user }}
+        ftp-password: ${{ secrets.ftp_pass }}
+        git-ftp-args: --dry-run
+        destination-path: '/var/www/html/quickfus.ddns.net/'
+        source-path: './DofusBuilder Frontend/'
+  
       
 
