@@ -56,7 +56,7 @@ jobs:
         username: ${{ secrets.ftp_user }}
         password: ${{ secrets.ftp_pass }}
         protocol: ftp
-        port: 21
+        port: 22
         server-dir: '/var/www/html/quickfus.ddns.net/'
         local-dir: './DofusBuilder Frontend/'
         exclude: |
@@ -72,3 +72,6 @@ jobs:
           .editorconfig
           favicon.ico
           
+        
+      
+
