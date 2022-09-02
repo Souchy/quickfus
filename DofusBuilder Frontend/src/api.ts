@@ -1,4 +1,4 @@
-import { HttpClient, HttpRequestMessage, HttpResponseMessage, RequestTransformer } from 'aurelia-http-client';
+import { Headers, HttpClient, HttpRequestMessage, HttpResponseMessage, RequestTransformer } from 'aurelia-http-client';
 import { HttpClient as FetchClient } from 'aurelia-fetch-client';
 import { App } from 'app';
 import { MongoClient } from 'mongodb';
@@ -21,8 +21,14 @@ export class WebAPI {
       "collection": collection,
       "filter": { "_id": id }
     });
-		var req = new HttpRequestMessage("POST", url, body);
-    req.headers.add("api-key", "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI")
+    var headers = new Headers({
+      "Content-Type": "application/json",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Accept": "*/*",
+      "Access-Control-Allow-Origin": "*",
+      "api-key": "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI"
+    });
+		var req = new HttpRequestMessage("POST", url, body, headers);
 		return this.client.send(req, []);
   }
 
@@ -34,8 +40,14 @@ export class WebAPI {
       "collection": collection,
       "pipeline": pipeline
     });
-		var req = new HttpRequestMessage("POST", url, body);
-    req.headers.add("api-key", "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI")
+    var headers = new Headers({
+      "Content-Type": "application/json",
+      "Accept-Encoding": "gzip, deflate, br",
+      "Accept": "*/*",
+      "Access-Control-Allow-Origin": "*",
+      "api-key": "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI"
+    });
+		var req = new HttpRequestMessage("POST", url, body, headers);
 		return this.client.send(req, []);
   }
 
