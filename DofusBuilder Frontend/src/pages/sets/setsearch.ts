@@ -119,10 +119,26 @@ export class setsearch {
 		});
 
 
-		var pipeline = { "a": null, "m": { $match: mongofilter } };
-		if (Object.keys(adds.$addFields).length > 0) {
-			pipeline.a = adds;
-		}
+		// var pipeline = { "a": null, "m": { $match: mongofilter } };
+		// if (Object.keys(adds.$addFields).length > 0) {
+		// 	pipeline.a = adds;
+		// }
+    
+    var pipeline = [];
+    {
+      // sort
+      pipeline.push({ $sort: { "level": -1, "ankamaID": -1 } })
+      // sums
+      if(Object.keys(adds.$addFields).length > 0)
+        pipeline.push(adds);
+      // actual filter
+      pipeline.push({ $match: mongofilter } );
+      // limit
+      pipeline.push({ $limit: 100 });
+      // skip
+      pipeline.push({ $skip: 0 });
+    }
+    
 		// console.log("filter : " + JSON.stringify(pipeline));
 
 		this.query(pipeline);
@@ -251,7 +267,7 @@ export class setsearch {
 		// default filter
 		// if (!filter) filter = { "$or": [{ "level": { "$gte": 190 } }, { "type": "Dofus" }] };
 		// call
-		this.api.getSets(100, 0, filter).then(response => {
+		this.api.getSets(filter).then(response => {
 			this.mason.index = 0; // reset index
 			this.mason.data = [] //.splice(0, this.data.length); // reset select data
 			this.mason.fulldata = response.content; // store full data
