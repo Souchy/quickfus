@@ -26,7 +26,8 @@
   },
   "cssProcessor": {
     "source": [
-      "src/**/*.less"
+      "src/**/*.less",
+      "src/**/*.css"
     ]
   },
   "jsonProcessor": {
