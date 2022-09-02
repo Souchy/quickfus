@@ -57,26 +57,9 @@ jobs:
     - run: cd "/home/runner/work/quickfus/quickfus/DofusBuilder Frontend"
     - run: ls
     
-    - name: 📂 Deploy sources
-      id: uploadsrc
-      uses: Creepios/sftp-action@v1.0.3
+    - name: Deploy To Branch
+      uses: peaceiris/actions-gh-pages@v3
       with:
-        port: 22
-        host: ${{ secrets.ftp_url }}
-        username: ${{ secrets.ftp_user }}
-        password: ${{ secrets.ftp_pass }}
-        remotePath: '/var/www/html/quickfus.ddns.net/src/'
-        localPath: '/home/runner/work/quickfus/quickfus/DofusBuilder Frontend/src/'
-        
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: "./DofusBuilder Frontend"
     
-    - name: 📂 Deploy scripts
-      id: uploadscript
-      uses: Creepios/sftp-action@v1.0.3
-      with:
-        port: 22
-        host: ${{ secrets.ftp_url }}
-        username: ${{ secrets.ftp_user }}
-        password: ${{ secrets.ftp_pass }}
-        remotePath: '/var/www/html/quickfus.ddns.net/scripts/'
-        localPath: '/home/runner/work/quickfus/quickfus/DofusBuilder Frontend/scripts/'
-
