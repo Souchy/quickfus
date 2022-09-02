@@ -44,15 +44,7 @@ jobs:
       run: |
         npm install aurelia-cli -g
         au build
-  
-  upload_files:
-    needs: build
-    runs-on: ubuntu-latest
-    name: 🎉 Deploy frontend
-    steps:
-    - name: Checkout
-      uses: actions/checkout@v2.3.4
-    
+      
     - run: pwd
     - run: cd "/home/runner/work/quickfus/quickfus/DofusBuilder Frontend"
     - run: ls
@@ -63,4 +55,4 @@ jobs:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: "/home/runner/work/quickfus/quickfus/DofusBuilder Frontend"
         #//"./DofusBuilder Frontend"
-    
+  
