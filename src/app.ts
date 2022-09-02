@@ -18,9 +18,9 @@ export class App {
 
 	public configureRouter(config: RouterConfiguration, router: Router) {
 		console.log("configure router");
-		// config.title = 'Contacts';
+		config.title = 'Quickfus';
 		config.options.pushState = true;
-		config.options.root = '/';
+		// config.options.root = '/';
 		config.addPipelineStep('postcomplete', PostCompleteStep);
 		config.map([
 			// { route: '', moduleId: PLATFORM.moduleName('no-selection'), title: 'Select' },
