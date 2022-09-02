@@ -1,0 +1,14 @@
+{
+    "app_id": "data-ewvjc",
+    "config_version": 20210101,
+    "name": "data",
+    "location": "US-VA",
+    "provider_region": "aws-us-east-1",
+    "deployment_model": "GLOBAL",
+    "environment": "production",
+    "allowed_request_origins": [
+        "https://souchy.github.io",
+        "http://localhost:9000",
+        "https://localhost:9000"
+    ]
+}
