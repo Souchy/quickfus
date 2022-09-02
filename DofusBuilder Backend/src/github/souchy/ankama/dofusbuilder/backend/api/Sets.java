@@ -1,27 +1,24 @@
 package github.souchy.ankama.dofusbuilder.backend.api;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import org.bson.BsonArray;
-import org.bson.BsonString;
+import org.bson.BsonValue;
 import org.bson.Document;
+import org.bson.codecs.BsonArrayCodec;
+import org.bson.codecs.DecoderContext;
 import org.bson.conversions.Bson;
+import org.bson.json.JsonReader;
 
-import com.mongodb.client.model.Aggregates;
-import com.mongodb.client.model.Field;
 import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.Sorts;
-
 import github.souchy.ankama.dofusbuilder.backend.emerald.Emerald;
 import github.souchy.ankama.dofusbuilder.backend.main.Log;
 
@@ -30,7 +27,6 @@ public class Sets {
 
 	private static final Document defaultFilter = Document.parse("{ }");
 
-	
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -41,27 +37,20 @@ public class Sets {
 	@POST
 	@Path("/")
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Document> getSets(@QueryParam("skip") int skip, @QueryParam("limit") int limit, String json) {
+	public List<Document> getSets(String jsonPipeline) { //@QueryParam("skip") int skip, @QueryParam("limit") int limit, String json) {
 		List<Document> list = new ArrayList<>();
 //		Log.info("getSets : skip : " + skip + ", limit : " + limit + ", filter : " + json);
 		try {
-			var filter = json.isBlank() ? defaultFilter : Document.parse(json);
-			
 			var pipeline = new ArrayList<Bson>();
-//			pipeline.add(Aggregates.sort(Sorts.descending("id"))); // sort by id pour avoir les plus récents sets en premier
-			pipeline.add(Aggregates.lookup("items", "id", "setID", "items"));
-			
-			var adds = filter.get("a", Document.class);
-			var match = filter.get("m", Document.class);
-			if(adds != null) pipeline.add(adds);
-			if(match != null) pipeline.add(match);
-			
-			pipeline.add(Aggregates.skip(skip));
-			pipeline.add(Aggregates.limit(limit));
-
-
+			if(jsonPipeline.isBlank()) {
+				pipeline.add(defaultFilter);
+			} else {
+				pipeline.addAll(
+						new BsonArrayCodec().decode(new JsonReader(jsonPipeline), DecoderContext.builder().build())
+						.stream().map(BsonValue::asDocument).collect(Collectors.toList())
+			    );
+			}
 			Emerald.sets().aggregate(pipeline).into(list);
-			
 		} catch(Exception e) {
 			Log.info("" + e);
 		}

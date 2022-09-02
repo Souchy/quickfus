@@ -12,7 +12,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
 import github.souchy.ankama.dofusbuilder.backend.main.Quickfus;
-import github.souchy.ankama.dofusbuilder.conversion.dofapi.DataModifier;
 
 /**
  * Database access
@@ -30,13 +29,17 @@ public class Emerald {
 				CodecRegistries.fromProviders(PojoCodecProvider.builder().automatic(true).build())
 		);
 
+		ConnectionString connectionString = new ConnectionString(Quickfus.conf.mongo);
+//		connectionString = new ConnectionString("mongodb+srv://visitor:9lRz32NeFXqkq8lf@souchyatlascluster0.bbs5alz.mongodb.net/?retryWrites=true&w=majority");
+		
 		var settings = MongoClientSettings.builder()
-			.applyConnectionString(new ConnectionString(Quickfus.conf.mongo)) 
+			.applyConnectionString(connectionString) //new ConnectionString(Quickfus.conf.mongo)) 
 			.codecRegistry(registry)
 		.build();
 		clientSync = MongoClients.create(settings);
 		
 //		DataModifier.modifyItems();
+		
 	}
 	
 	public static MongoDatabase db() {
