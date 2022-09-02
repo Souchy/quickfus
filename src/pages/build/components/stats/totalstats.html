@@ -1,0 +1,24 @@
+<template>
+  <require from="/src/pages/build/components/stats/totalstats.css"></require>
+
+  <!-- <h2>Total Stats</h2> -->
+
+  <table class="table table-sm table-striped table-borderless table-dark" repeat.for="[section, mods] of sections">
+    <thead>
+      <th>${section}</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <tr repeat.for="name of mods">
+        <td>
+          <span style.bind="getIcon(name)"></span>
+          ${name}
+        </td>
+        <td style="text-align: right;" innerHtml.bind="stats.get(name) || 0"></td>
+        <!-- <td if.bind="stats" style="text-align: right;" innerHtml.bind="stats.get(name) || 0"></td> -->
+        <!-- <td if.bind="stats == null" style="text-align: right;" innerHtml.bind="stats.get(name) || 0"></td> -->
+      </tr>
+    </tbody>
+  </table>
+
+</template>

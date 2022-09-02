@@ -1,0 +1,66 @@
+<template>
+  <require from="/src/pages/items/itemsheet.css"></require>
+
+
+  <!-- englobing class div for css -->
+  <div class="itemsheet" onclick.call="test()" ${hidden}>
+    <!-- <img class="bgimg" src="${getImgUrl()}"> -->
+    <!-- <div class="bgimg" style="background-image: url('${getImgUrl()}');"></div> -->
+
+    <!-- style="background-image: '${data.imgUrl}';" -->
+    <!-- put the image as background ? -->
+    <!-- Image and weapon stats -->
+    <div class="title d-flex flex-nowrap">
+      <img src="${getImgUrl()}">
+      <!-- Name and level -->
+      <div>
+        <span>${data.name.fr}</span><br>
+        <span>${data.level}</span>
+      </div>
+      <!-- ${data.description} -->
+    </div>
+
+
+    <!-- Effects -->
+    <div class="statistics">
+      <ul if.bind="data.characteristics" style="border-bottom: 1px dashed var(--accent1);">
+        <div>
+          <span>PA</span>
+          <span>${data.characteristics[0]["PA"]}</span>
+        </div>
+        <div>
+          <span>Portée</span>
+          <span>${data.characteristics[1]["Portée"]}</span>
+        </div>
+        <div>
+          <span>CC</span>
+          <span>${data.characteristics[2]["CC"]}</span>
+        </div>
+      </ul>
+      <ul>
+        <!-- 1 row for each effect -->
+        <li class="row" repeat.for="effect of data.statistics" if="isntPseudo(effect)">
+          <!-- <compose view-model="./statistic" model.bind="effect"></compose> -->
+          <div class="container statistic">
+            ${effect.min}
+            ${effect.min == null ? "" : "à"}
+            ${effect.max}
+            <span style.bind="effect.style">${effect.name}</span>
+            <!-- ${effect} -->
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Conditions -->
+    <!-- <div class="conditions" if.bind="data.conditions" style="border-top: 1px dashed var(--accent1);">
+      <ul style="list-style: none; margin: 0px; padding: 0px;">
+        <li repeat.for="cond of data.conditions">
+          ${cond}
+        </li>
+      </ul>
+    </div> -->
+
+  </div>
+
+</template>

@@ -1,0 +1,81 @@
+<template>
+  <require from="../build/components/itemSlot"></require>
+  <require from="../items/itemsheet"></require>
+  <require from="/src/pages/sets/setsheet.less"></require>
+  <!-- <require from="/src/pages/items/itemsheet.css"></require> -->
+
+
+  <!-- englobing class div for css -->
+  <div class="setsheet" onclick.call="equip()" onmouseover.call="hoverSet()" ${hidden}>
+    <!-- <img class="bgimg" src="${getImgUrl()}"> -->
+    <!-- <div class="bgimg" style="background-image: url('${getImgUrl()}');"></div> -->
+
+    <!-- style="background-image: '${data.imgUrl}';" -->
+    <!-- put the image as background ? -->
+    <!-- Image and weapon stats -->
+    <div class="title d-flex flex-nowrap">
+      <!-- Name and level -->
+      <div>
+        <span>${data.name.fr}</span><br>
+      </div>
+      <!-- ${data.description} -->
+    </div>
+
+    <!-- items -->
+    <div class="items">
+      <!-- <item-slot repeat.for="item of data.items" style="margin-bottom: 2px;" id="${data[i+10]}" item.bind="item"></item-slot> -->
+      <div class="item" repeat.for="item of data.items" onmouseover.call="hoverItem()">
+        <img src="/src/res/items0/${item.imgUrl}">
+        <itemsheet data.bind="item"></itemsheet>
+      </div>
+      <!-- <div repeat.for="item of data.items">
+        <img src="/src/res/items0/${item.imgUrl}">
+      </div> -->
+    </div>
+
+    <!-- Effects -->
+    <div class="statistics">
+      <ul style="padding: 0;">
+        <!-- 1 row for each effect -->
+        <li class="row" repeat.for="effect of data.bonuses[0]" if="isntPseudo(effect)">
+          <!-- <compose view-model="./statistic" model.bind="effect"></compose> -->
+          <div class="container statistic">
+            ${effect.min}
+            ${effect.min == null ? "" : "à"}
+            ${effect.max}
+            <span style.bind="getStatColor(effect.name)">${effect.name}</span>
+            <!-- ${effect} -->
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Effects totals -->
+    <div class="totalStats">
+      <ul style="padding: 0;">
+        <!-- 1 row for each effect -->
+        <li class="row" repeat.for="effect of data.statistics" if="isntPseudo(effect)">
+          <!-- <compose view-model="./statistic" model.bind="effect"></compose> -->
+          <div class="container statistic">
+            ${effect.min}
+            ${effect.min == null ? "" : "à"}
+            ${effect.max}
+            <span style.bind="getStatColor(effect.name)">${effect.name}</span>
+            <!-- ${effect} -->
+          </div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Conditions -->
+    <!-- <div class="conditions" if.bind="data.conditions" style="border-top: 1px dashed var(--accent1);">
+      <ul style="list-style: none; margin: 0px; padding: 0px;">
+        <li repeat.for="cond of data.conditions">
+          ${cond}
+        </li>
+      </ul>
+    </div> -->
+
+  </div>
+
+</template>

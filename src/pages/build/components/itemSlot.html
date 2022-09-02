@@ -1,0 +1,17 @@
+<template>
+  <require from="/src/pages/build/components/itemSlot.css"></require>
+  <require from="../../items/itemsheet"></require>
+
+
+  <div class="itemSlot" style="margin: 0 auto;" onclick.call="onclick()">
+
+    <img if.bind="item" src.bind="imgUrl" alt="${slotname}">
+    <div if.bind="item == null" innerHTML.bind="slotname"></div>
+
+    <!-- need a hover as well -->
+    <itemsheet data.bind="item"></itemsheet>
+
+    <!-- need a click to search items -->
+
+  </div>
+</template>

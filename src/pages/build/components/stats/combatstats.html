@@ -1,0 +1,51 @@
+<template>
+  <require from="/src/pages/build/components/stats/combatstats.css"></require>
+
+  <div style="width: 100%;">
+    <!-- <h2>Combat Stats</h2> -->
+
+    <table class="table table-sm table-borderless" style="color: var(--front0);">
+      <colgroup>
+        <col style="width: 16.6666%;">
+        <col style="width: 16.6666%;">
+        <col style="width: 16.6666%;">
+        <col style="width: 16.6666%;">
+        <col style="width: 16.6666%;">
+        <col style="width: 16.6666%;">
+      </colgroup>
+      <tbody>
+        <tr>
+          <td>
+            <span style.bind="getIcon('Vie')"></span>
+            ${stats.get('Vie') || 0}
+          </td>
+          <td repeat.for="key of combatkeys">
+            <span style.bind="getIcon(key)"></span>
+            ${stats.get(key) || 0}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style.bind="getIcon('PA')"></span>
+            ${stats.get('PA') || 0}
+          </td>
+          <td repeat.for="key of elements">
+            <span style.bind="getIcon(key)" style="margin-top: 7px;"></span>
+            <span>${stats.get("Résistance " + key) || 0}</span>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <span style.bind="getIcon('PM')"></span>
+            ${stats.get('PM') || 0}
+          </td>
+          <td repeat.for="key of elements">
+            <span style.bind="getIcon(key)"></span>
+            ${stats.get("% Résistance " + key) || 0}%
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</template>

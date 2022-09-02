@@ -1,0 +1,41 @@
+<template>
+  <div style="margin-top: 10px;">
+    <!-- <h6></h6> -->
+    <div if.bind="hasWeapon">
+      <!-- weapon info -->
+      <div class="title d-flex flex-nowrap">
+        <!-- Name and level -->
+        <div class="title d-flex flex-nowrap mr-3">
+          <img src="${getImgUrl()}" width="60px" height="60px">
+          <!-- <div>
+            <span>${item.name}</span><br>
+            <span>${item.level}</span>
+          </div> -->
+        </div>
+        <!-- characteristics -->
+        <div>
+          <div>
+            <span>PA :</span>
+            <span>${item.characteristics[0]["PA"]}</span>
+          </div>
+          <div>
+            <span>Portée :</span>
+            <span>${item.characteristics[1]["Portée"]}</span>
+          </div>
+          <div>
+            <span>CC :</span>
+            <span>${item.characteristics[2]["CC"]}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- dmg -->
+      <div>
+        <div>Total : ${total.min} à ${total.max} (${total.minCrit} à ${total.maxCrit})</div>
+        <div repeat.for="dmg of damages">${dmg.name} : ${dmg.min} à ${dmg.max} (${dmg.minCrit} à ${dmg.maxCrit})</div>
+      </div>
+    </div>
+
+
+  </div>
+</template>
