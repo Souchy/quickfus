@@ -20,7 +20,7 @@ export class App {
 		console.log("configure router");
 		config.title = 'Quickfus';
 		config.options.pushState = true;
-		// config.options.root = '/';
+		config.options.root = '/quickfus';
 		config.addPipelineStep('postcomplete', PostCompleteStep);
 		config.map([
 			// { route: '', moduleId: PLATFORM.moduleName('no-selection'), title: 'Select' },
