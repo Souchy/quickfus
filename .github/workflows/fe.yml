@@ -4,9 +4,9 @@ name: Aurelia CI
 
 on:
   push:
-    branches: [ master ]
+    branches: [ atlasapi ]
   pull_request:
-    branches: [ master ]
+    branches: [ atlasapi ]
     
 defaults:
   run:
