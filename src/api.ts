@@ -10,7 +10,7 @@ export class WebAPI {
 
 	public getUrl() {
 		// console.log("url : " + location.hostname);
-		return "https://data.mongodb-api.com/app/data-ewvjc/endpoint/data/v1/"; // return "http://" + location.hostname + ":9696";
+		return "https://data.mongodb-api.com/app/data-ewvjc/endpoint/data/v1"; // return "http://" + location.hostname + ":9696";
 	}
 
   public findOne(collection: string, id: string): Promise<HttpResponseMessage> {

@@ -6,7 +6,7 @@ define('api',["require", "exports", "aurelia-http-client"], function (require, e
             this.client = new aurelia_http_client_1.HttpClient();
         }
         WebAPI.prototype.getUrl = function () {
-            return "https://data.mongodb-api.com/app/data-ewvjc/endpoint/data/v1/";
+            return "https://data.mongodb-api.com/app/data-ewvjc/endpoint/data/v1";
         };
         WebAPI.prototype.findOne = function (collection, id) {
             var url = this.getUrl() + "/findOne";
@@ -79,6 +79,7 @@ define('app',["require", "exports", "aurelia-framework", "./api", "./db"], funct
             console.log("configure router");
             config.title = 'Quickfus';
             config.options.pushState = true;
+            config.options.root = '/quickfus';
             config.addPipelineStep('postcomplete', PostCompleteStep);
             config.map([
                 { route: '', moduleId: "pages/build/build", name: 'index' },
