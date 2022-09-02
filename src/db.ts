@@ -27,10 +27,10 @@ export class db {
 		if (item == null) return "";
 		let name = item.imgUrl; // url0.substr(url0.lastIndexOf("/"));
 		if (item.type == "Monture") { //} EnumItemType.MOUNT.fr || item.itemType == EnumItemType.RHINENEETLE.fr || item.itemType == EnumItemType.DRAGOTURKEY.fr || item.itemType == EnumItemType.SEEMYOL.fr) {
-			return "/src/res/items/Montures/" + name; //item.dofusID + ".png";
+			return "./src/res/items/Montures/" + name; //item.dofusID + ".png";
 		}
 		// let url0: string = item.imgUrl;
-		let url1 = "/src/res/items0/" + name;
+		let url1 = "./src/res/items0/" + name;
 		return url1;
 	}
 
@@ -190,7 +190,7 @@ export class db {
 		return "";
 	}
 	private static sprite(x: number, y: number) {
-		return "display: inline-block; width: 22px; height: 22px; background-image: url('/src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;"
+		return "display: inline-block; width: 22px; height: 22px; background-image: url('./src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;"
 	}
 
 

@@ -16,8 +16,14 @@ define('api',["require", "exports", "aurelia-http-client"], function (require, e
                 "collection": collection,
                 "filter": { "_id": id }
             });
-            var req = new aurelia_http_client_1.HttpRequestMessage("POST", url, body);
-            req.headers.add("api-key", "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI");
+            var headers = new aurelia_http_client_1.Headers({
+                "Content-Type": "application/json",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Accept": "*/*",
+                "Access-Control-Allow-Origin": "*",
+                "api-key": "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI"
+            });
+            var req = new aurelia_http_client_1.HttpRequestMessage("POST", url, body, headers);
             return this.client.send(req, []);
         };
         WebAPI.prototype.aggregate = function (collection, pipeline) {
@@ -28,8 +34,14 @@ define('api',["require", "exports", "aurelia-http-client"], function (require, e
                 "collection": collection,
                 "pipeline": pipeline
             });
-            var req = new aurelia_http_client_1.HttpRequestMessage("POST", url, body);
-            req.headers.add("api-key", "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI");
+            var headers = new aurelia_http_client_1.Headers({
+                "Content-Type": "application/json",
+                "Accept-Encoding": "gzip, deflate, br",
+                "Accept": "*/*",
+                "Access-Control-Allow-Origin": "*",
+                "api-key": "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI"
+            });
+            var req = new aurelia_http_client_1.HttpRequestMessage("POST", url, body, headers);
             return this.client.send(req, []);
         };
         WebAPI.prototype.getSet = function (id) {
@@ -202,9 +214,9 @@ define('db',["require", "exports"], function (require, exports) {
                 return "";
             var name = item.imgUrl;
             if (item.type == "Monture") {
-                return "/src/res/items/Montures/" + name;
+                return "./src/res/items/Montures/" + name;
             }
-            var url1 = "/src/res/items0/" + name;
+            var url1 = "./src/res/items0/" + name;
             return url1;
         };
         db.getStatColor = function (name) {
@@ -355,7 +367,7 @@ define('db',["require", "exports"], function (require, exports) {
             return "";
         };
         db.sprite = function (x, y) {
-            return "display: inline-block; width: 22px; height: 22px; background-image: url('/src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;";
+            return "display: inline-block; width: 22px; height: 22px; background-image: url('./src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;";
         };
         db.save = function (build) {
         };
