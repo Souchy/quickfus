@@ -22,10 +22,10 @@ export class WebAPI {
       "filter": { "_id": id }
     });
     var headers = new Headers({
-      "Content-Type": "application/json",
-      "Accept-Encoding": "gzip, deflate, br",
-      "Accept": "*/*",
-      "Access-Control-Allow-Origin": "*",
+      // "Content-Type": "application/json",
+      // "Accept-Encoding": "gzip, deflate, br",
+      // "Accept": "*/*",
+      // "Access-Control-Allow-Origin": "*",
       "api-key": "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI"
     });
 		var req = new HttpRequestMessage("POST", url, body, headers);
@@ -41,10 +41,10 @@ export class WebAPI {
       "pipeline": pipeline
     });
     var headers = new Headers({
-      "Content-Type": "application/json",
-      "Accept-Encoding": "gzip, deflate, br",
-      "Accept": "*/*",
-      "Access-Control-Allow-Origin": "*",
+      // "Content-Type": "application/json",
+      // "Accept-Encoding": "gzip, deflate, br",
+      // "Accept": "*/*",
+      // "Access-Control-Allow-Origin": "*",
       "api-key": "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI"
     });
 		var req = new HttpRequestMessage("POST", url, body, headers);
