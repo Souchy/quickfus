@@ -10,53 +10,53 @@ export class WebAPI {
 
 	public getUrl() {
 		// console.log("url : " + location.hostname);
-		return "http://" + location.hostname + ":9696";
+		return "https://data.mongodb-api.com/app/data-ewvjc/endpoint/data/v1/"; // return "http://" + location.hostname + ":9696";
 	}
 
-	public getSet(id) {
-		var url = this.getUrl() + "/sets/" + id;
-		return this.client.get(url);
+  public findOne(collection: string, id: string): Promise<HttpResponseMessage> {
+		var url = this.getUrl() + "/findOne";
+		var body: string = JSON.stringify({
+      "dataSource": "SouchyAtlasCluster0",
+      "database": "quickfus",
+      "collection": collection,
+      "filter": { "_id": id }
+    });
+		var req = new HttpRequestMessage("POST", url, body);
+    req.headers.add("api-key", "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI")
+		return this.client.send(req, []);
+  }
+
+  public aggregate(collection: string, pipeline: any[]): Promise<HttpResponseMessage> {
+		var url = this.getUrl() + "/aggregate";
+		var body: string = JSON.stringify({
+      "dataSource": "SouchyAtlasCluster0",
+      "database": "quickfus",
+      "collection": collection,
+      "pipeline": pipeline
+    });
+		var req = new HttpRequestMessage("POST", url, body);
+    req.headers.add("api-key", "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI")
+		return this.client.send(req, []);
+  }
+
+	public getSet(id): Promise<HttpResponseMessage> {
+		return this.findOne("sets", id);
 	}
-	public getItem(id) {
-		var url = this.getUrl() + "/item/" + id;
-		return this.client.get(url);
+
+	public getItem(id): Promise<HttpResponseMessage> {
+		return this.findOne("items", id);
 	}
-	public findItems(itemfilters) {
+
+	public findItems(itemfilters): Promise<HttpResponseMessage> {
 		return null;
 	}
-	public getItems(limit: number, skip: number, filter) {
-		var url = this.getUrl() + "/items";
-		var filt: string = JSON.stringify(filter);
-		if (limit == null) limit = 50;
-		if (skip == null) skip = 0;
-		var query: string = "?limit=" + limit + "&skip=" + skip;
-		url += query;
 
-		var req = new HttpRequestMessage("POST", url, filt);
-		var tr = (thing) => {
-			// console.log("transform " + JSON.stringify(thing));
-			return thing;
-		};
-		// console.log("req : " + JSON.stringify(req));
-		return this.client.send(req, [tr]);
+	public getItems(pipeline: any[]): Promise<HttpResponseMessage> {
+    return this.aggregate("items", pipeline);
 	}
 
-
-	public getSets(limit: number, skip: number, filter) {
-		var url = this.getUrl() + "/sets";
-		var filt: string = JSON.stringify(filter);
-		if (limit == null) limit = 50;
-		if (skip == null) skip = 0;
-		var query: string = "?limit=" + limit + "&skip=" + skip;
-		url += query;
-
-		var req = new HttpRequestMessage("POST", url, filt);
-		var tr = (thing) => {
-			// console.log("transform " + JSON.stringify(thing));
-			return thing;
-		};
-		// console.log("req : " + JSON.stringify(req));
-		return this.client.send(req, [tr]);
+	public getSets(pipeline: any[]): Promise<HttpResponseMessage> {
+    return this.aggregate("sets", pipeline);
 	}
 
 	public hash(password: string, salt: any) {

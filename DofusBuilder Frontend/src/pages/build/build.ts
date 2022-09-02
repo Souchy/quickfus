@@ -55,9 +55,9 @@ export class build {
 		let items = split.slice(7).map(i => build.hash.decode(i));
 		// let obj = JSON.parse(data);
 		// get all items
-		this.api.getItems(100, 0, {
+		this.api.getItems([{
 			ankamaId: { $in: items }
-		}).then(r => {
+		}]).then(r => {
 			// name
 			this.name = name;
 			build.setName(this.name);
