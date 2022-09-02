@@ -48,6 +48,8 @@ jobs:
     - run: pwd
     - run: cd "/home/runner/work/quickfus/quickfus/DofusBuilder Frontend"
     - run: ls
+    - run: rm '.gitignore'
+    - run: ls
     
     - name: Deploy To Branch
       uses: peaceiris/actions-gh-pages@v3
