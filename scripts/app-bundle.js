@@ -6,34 +6,15 @@ define('api',["require", "exports", "aurelia-http-client"], function (require, e
             this.client = new aurelia_http_client_1.HttpClient();
         }
         WebAPI.prototype.getUrl = function () {
-            return "https://data.mongodb-api.com/app/data-ewvjc/endpoint/data/v1";
+            return "http://" + location.hostname + ":9696";
         };
         WebAPI.prototype.findOne = function (collection, id) {
-            var url = this.getUrl() + "/findOne";
-            var body = JSON.stringify({
-                "dataSource": "SouchyAtlasCluster0",
-                "database": "quickfus",
-                "collection": collection,
-                "filter": { "_id": id }
-            });
-            var headers = new aurelia_http_client_1.Headers({
-                "api-key": "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI"
-            });
-            var req = new aurelia_http_client_1.HttpRequestMessage("POST", url, body, headers);
-            return this.client.send(req, []);
+            var url = this.getUrl() + "/" + collection + "/" + id;
+            return this.client.get(url);
         };
         WebAPI.prototype.aggregate = function (collection, pipeline) {
-            var url = this.getUrl() + "/aggregate";
-            var body = JSON.stringify({
-                "dataSource": "SouchyAtlasCluster0",
-                "database": "quickfus",
-                "collection": collection,
-                "pipeline": pipeline
-            });
-            var headers = new aurelia_http_client_1.Headers({
-                "api-key": "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI"
-            });
-            var req = new aurelia_http_client_1.HttpRequestMessage("POST", url, body, headers);
+            var url = this.getUrl() + "/" + collection;
+            var req = new aurelia_http_client_1.HttpRequestMessage("POST", url, pipeline);
             return this.client.send(req, []);
         };
         WebAPI.prototype.getSet = function (id) {
