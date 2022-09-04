@@ -1,0 +1,47 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"type": "java",
+			"name": "Launch LabImport",
+			"request": "launch",
+			"mainClass": "github.souchy.ankama.dofuslab.LabImport",
+			"projectName": "Backend",
+			"cwd": "${workspaceFolder}/Backend/"
+		},
+		{
+			"type": "java",
+			"name": "Launch Quickfus",
+			"request": "launch",
+			"mainClass": "github.souchy.ankama.quickfus.Quickfus",
+			"projectName": "Backend",
+			"cwd": "${workspaceFolder}/Backend/"
+		},
+		{
+			"type": "java",
+			"name": "Launch Current File",
+			"request": "launch",
+			"mainClass": "${file}",
+			"cwd": "${fileDirname}"
+		},
+		{
+			"type": "java",
+			"name": "Launch Quickfus",
+			"request": "launch",
+			"mainClass": "DofusBuilder.Backend/github.souchy.ankama.dofusbuilder.backend.main.Quickfus",
+			"projectName": "DofusBuilder Backend",
+			"cwd": "${workspaceFolder}/DofusBuilder Backend/"
+		},
+		{
+			"type": "java",
+			"name": "Launch LabImport",
+			"request": "launch",
+			"mainClass": "DofusBuilder.Backend/github.souchy.ankama.dofusbuilder.conversion.dofuslab.LabImport",
+			"projectName": "DofusBuilder Backend",
+			"cwd": "${workspaceFolder}/DofusBuilder Backend/"
+		}
+	]
+}
