@@ -48,6 +48,7 @@ itemsheet .bgimg {
 itemsheet img {
   width: 55px;
   height: 55px;
+  margin-right: 5px;
 }
 
 itemsheet .title {
@@ -55,6 +56,10 @@ itemsheet .title {
   /* background: var(--sheetaccent); */
   color: var(--sheetaccent);
   font-size: 1.1rem;
+}
+itemsheet:hover .title {
+  color: var(--sheetaccenthover);
+  /* background: var(--sheetaccenthover); */
 }
 itemsheet .statistics {
   padding: 5px;
@@ -68,19 +73,45 @@ itemsheet .statistic {
 
 }
 itemsheet .conditions {
-  /* border-top: 1px solid var(--sheetaccent); */
+  border-top: 1px dashed var(--sheetaccent);
+  /* width: 90%;
+  margin: auto; */
+  opacity: 0.5;
+}
+itemsheet:hover .conditions {
+  /* border-top: 1px dashed var(--sheetaccenthover); */
+  border-color: var(--sheetaccenthover);
+}
+itemsheet .conditionsBlock {
+  /* margin-bottom: 5px; */
+}
+
+itemsheet .customStats {
+  border-top: 1px dashed var(--sheetaccent);
+  opacity: 0.5;
+}
+itemsheet:hover .customStats {
+  border-color: var(--sheetaccenthover);
+}
+
+itemsheet .weaponStatsSeparator {
+  border-bottom: 1px dashed var(--accent1);
+  opacity: 0.5;
+}
+itemsheet:hover .weaponStatsSeparator {
+  border-color: var(--sheetaccenthover);
 }
 
 
 itemsheet:hover {
   border: 1px solid var(--sheetaccenthover);
 }
-itemsheet:hover .title {
-  color: var(--sheetaccenthover);
-  /* background: var(--sheetaccenthover); */
-}
-itemsheet:hover .conditions {
-  border-top: 1px solid var(--sheetaccenthover);
-}
 
 /* .grid-item { width: 200px; } */
+
+.dotted-spaced {
+  background-image: linear-gradient(to right, #333 10%, rgba(255, 255, 255, 0) 0%);
+  background-position: top;
+  background-size: 10px 1px;
+  background-repeat: repeat-x;
+}

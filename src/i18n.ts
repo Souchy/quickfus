@@ -1,60 +1,54 @@
-
-// import { StatEnumEn, ItemTypeEn, ItemSlotEn } from './constants_en';
-// import { StatEnumFr, ItemTypeFr, ItemSlotFr } from './constants_fr';
-
-// import * as PropertiesReader from 'properties-reader';
-// import PropertiesReader = require('properties-reader');
-
-// import * as fs from 'fs';
-// import * as path from 'path';
-
-// import * as properties from 'properties';
-// import properties = require("properties");
-
-// import * as stats_fr from 'stats.properties';
+import {HttpClient} from 'aurelia-fetch-client';
+import * as javaprop from 'java-properties';
 
 export class i18n {
 
-	// public static stats = new Map<string, string>();
-	// public static itemType = new Map<string, string>();
-	// public static itemSlot = new Map<string, string>();
-	//
-	// public constructor() {
-	// 	let keysEn = Object.keys(StatEnumEn.inst);
-	// 	for (let key in keysEn) {
-	// 		i18n.stats[StatEnumEn.inst[key]] = StatEnumFr.inst[key];
-	// 	}
-	// }
-	//
-	// public static statByKey(key) {
-	// 	return StatEnumFr.inst[key];
-	// }
-	// public static statByName(str) {
-	// 	return this.stats[str];
-	// }
+  public static client: HttpClient = new HttpClient();
 
 	public static readProperties(clazz, bundle) {
-		// properties("");
-		// properties.parse("myprop = hello", { path: true }, function(error, obj) {
-		// 	if (error) return console.error(error);
-		//
-		// 	console.log(obj);
-		// 	//{ a: 1, b: 2 }
-		// });
+    // console.log("i18n ctor");
+    let path = bundle + "_fr.properties";
+    // console.log("check path: " + path);
+                            // "./src/res/i18n/itemTypes/itemTypes");
+    i18n.client.fetch(path) // "./src/res/i18n/itemTypes/itemTypes_fr.properties")
+    .then(response => response.text())
+    .then(data => {
+      // console.log(data);
+      // console.log("read properties " + bundle);
+      let me = i18n.makePropertiesFile(data);
+      clazz["props"] = me;
 
-		// console.log("i18n file : " + file);
-		// var bundle_fr = PropertiesReader(bundle + "_fr.properties");
-		// var bundle_en = PropertiesReader(bundle + "_en.properties");
-
-		// let keys = Object.keys(clazz);
-		// for (let key in keys) {
-		// 	let o = clazz[key];
-		// 	o.key = key;
-		// 	o.fr = bundle_fr.get(key);
-		// 	o.en = bundle_en.get(key);
-		// 	clazz.en_to_fr[o.en] = o.fr;
-		// }
+      let keys = Object.keys(clazz);
+      for (let key of keys) {
+        let o = clazz[key];
+        if(!o) continue;
+        o.key = key;
+        o.fr = me.get(key);
+        // o.fr = bundle_fr.get(key);
+        // o.en = bundle_en.get(key);
+        // clazz.en_to_fr[o.en] = o.fr;
+        // console.log("key in clazz: " + key + " = " + o + " -> " + o.key + " = " + o.fr);
+      }
+      // console.log("set properties for " + bundle + ", in " + clazz);
+      return true;
+    });
 	}
+
+  private static makePropertiesFile(data): javaprop.PropertiesFile { //file) {
+    var me = new javaprop.PropertiesFile();
+    let items = data.split(/\r?\n/);
+    for (let i = 0; i < items.length; i++) {
+      let line = items[i];
+      while (line.substring(line.length - 1) === '\\') {
+        line = line.slice(0, -1);
+        let nextLine = items[i + 1];
+        line = line + nextLine.trim();
+        i++;
+      }
+      me.makeKeys(line);
+    }
+    return me;
+  }
 
 }
 
@@ -80,14 +74,31 @@ export class EnumItemSlot {
 }
 
 export class EnumItemType {
-	public key: String;
-	public fr: String;
-	public en: String;
-
-	public constructor() {
-	}
+	public key: string;
+	public fr: string;
+	public en: string;
 
 	public static en_to_fr = {};
+  public static values: EnumItemType[] = [];
+  public static props: javaprop.PropertiesFile;
+
+	public constructor() {
+    EnumItemType.values.push(this);
+    // console.log("ItemType ctor pushed to values " + this);
+	}
+
+  public static findKeyFrench(french: string) {
+    for(let i of EnumItemType.values) {
+      // let type = EnumItemType.values[i];
+      // console.log("find key i="+i); // + ", type="+type);
+      if(!i.fr) continue;
+      if(i.fr == french) {
+        return i.key;
+      }
+    }
+    console.log("null key for french: " + french);
+    return null;
+  }
 
 	// items
 	public static HAT = new EnumItemType();
@@ -97,6 +108,7 @@ export class EnumItemType {
 	public static RING = new EnumItemType();
 	public static BELT = new EnumItemType();
 	public static BOOTS = new EnumItemType();
+	public static SHIELD = new EnumItemType();
 	// dofus
 	public static DOFUS = new EnumItemType();
 	public static TROPHY = new EnumItemType();
@@ -125,14 +137,30 @@ export class EnumItemType {
 }
 
 export class EnumWeaponStat {
-	public key: String;
-	public fr: String;
-	public en: String;
-
-	public constructor() {
-	}
+	public key: string;
+	public fr: string;
+	public en: string;
 
 	public static en_to_fr = {};
+  public static values: EnumWeaponStat[] = [];
+  public static props: javaprop.PropertiesFile;
+
+	public constructor() {
+    EnumWeaponStat.values.push(this);
+	}
+
+  public static findKeyFrench(french: string) {
+    for(let i of EnumWeaponStat.values) {
+      // let type = EnumItemType.values[i];
+      // console.log("find key i="+i); // + ", type="+type);
+      if(!i.fr) continue;
+      if(i.fr == french) {
+        return i.key;
+      }
+    }
+    console.log("null key for french: " + french);
+    return null;
+  }
 
 	// properties
 	public static USES_PER_TURN = new EnumWeaponStat();
@@ -157,18 +185,47 @@ export class EnumWeaponStat {
 	public static STEAL_EARTH = new EnumWeaponStat();
 	public static STEAL_WATER = new EnumWeaponStat();
 	public static STEAL_AIR = new EnumWeaponStat();
+  
+	public static HEAL = new EnumWeaponStat();
 }
 
 export class EnumStat {
-	public key: String;
-	public fr: String;
-	public en: String;
-
-	public constructor() {
-	}
+	public key: string;
+	public fr: string;
+	public en: string;
 
 	public static en_to_fr = {};
+  public static values: EnumStat[] = [];
+  public static props: javaprop.PropertiesFile;
 
+	public constructor() {
+    EnumStat.values.push(this);
+	}
+
+  public static findKeyFrench(french: string) {
+    for(let i of EnumStat.values) {
+      // let type = EnumItemType.values[i];
+      // console.log("find key i="+i); // + ", type="+type);
+      if(!i.fr) continue;
+      if(i.fr == french) {
+        return i.key;
+      }
+    }
+    console.log("null key for french: " + french);
+    return null;
+  }
+  public static getKeyIdFrench(french: string) {
+    let id = 0;
+    for(let i of EnumStat.values) {
+      if(!i.fr) continue;
+      if(i.fr == french) {
+        return id;
+      }
+      id++;
+    }
+    console.log("null key for french: " + french);
+    return null;
+  }
 
 	public static LIFE = new EnumStat();
 

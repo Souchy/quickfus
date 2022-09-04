@@ -9,7 +9,7 @@
     <div if.bind="item == null" innerHTML.bind="slotname"></div>
 
     <!-- need a hover as well -->
-    <itemsheet data.bind="item"></itemsheet>
+    <itemsheet if.bind="item" data.bind="item"></itemsheet>
 
     <!-- need a click to search items -->
 

@@ -1,5 +1,6 @@
 import { bindable } from 'aurelia-framework';
 import { db } from '../../../../db';
+import { build } from '../../build';
 
 export class addedstats {
 
@@ -27,6 +28,13 @@ export class addedstats {
 		// $(event.target).closest(".searchable").find("input").focus();
 	}
 	*/
+
+	public onChangeExo(name) {
+		console.log("onChangeExo stat : " + name + "=" + doc.valueAsNumber);
+		var doc = document.getElementById("exostat-" + name) as HTMLInputElement;
+    build.setExo(name, doc.valueAsNumber);
+    build.inst.save();
+	}
 
 	public onModInputFocus(that, event, blockid, modid) {
 		console.log("onFocusModInput [" + blockid + "," + modid + "] : " + that);

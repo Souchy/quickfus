@@ -64,7 +64,6 @@ define('app',["require", "exports", "aurelia-framework", "./api", "./db"], funct
             console.log("configure router");
             config.title = 'Quickfus';
             config.options.pushState = true;
-            config.options.root = '/quickfus';
             config.addPipelineStep('postcomplete', PostCompleteStep);
             config.map([
                 { route: '', moduleId: "pages/build/build", name: 'index' },
@@ -170,7 +169,7 @@ define('components/statmod',["require", "exports"], function (require, exports) 
 });
 ;
 define('text!components/statmod.html',[],function(){return "<template>\n\n  <div name=\"modsearch\" class=\"searchable\">\n    <input name=\"modsearchinput\" type=\"text\" autocomplete=\"off\" placeholder=\"+Add Stat Mod\" value.bind=\"name\" onkeyup.call=\"filterFunction2($this,$event)\" onchange.call=\"oninput($this, $event)\" onfocus.call=\"onModInputFocus($this, $event, i, j)\"\n      onblur.call=\"onModInputBlur($this, $event, i, j)\">\n    <dl name=\"modsearchlist\" class=\"modlist\">\n      <section repeat.for=\"[section, mods] of modsSections\">\n        <dt>${section}</dt>\n        <dd repeat.for=\"modname of mods\" onmouseover.call=\"onDDHover($this, $event, i, j, modname)\" onclick.call=\"onDDClick($this, $event, i, j, modname)\">${modname}</dd>\n      </section>\n    </dl>\n  </div>\n\n</template>";});;
-define('db',["require", "exports"], function (require, exports) {
+define('db',["require", "exports", "./i18n"], function (require, exports, i18n_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var db = (function () {
@@ -178,6 +177,9 @@ define('db',["require", "exports"], function (require, exports) {
             db.init(true);
         }
         db.init = function (force) {
+            i18n_1.i18n.readProperties(i18n_1.EnumStat, "./src/res/i18n/stats/stats");
+            i18n_1.i18n.readProperties(i18n_1.EnumWeaponStat, "./src/res/i18n/weaponStats/weaponStats");
+            i18n_1.i18n.readProperties(i18n_1.EnumItemType, "./src/res/i18n/itemTypes/itemTypes");
         };
         db.translateStat = function (str) {
             return "";
@@ -186,11 +188,8 @@ define('db',["require", "exports"], function (require, exports) {
             if (item == null)
                 return "";
             var name = item.imgUrl;
-            if (item.type == "Monture") {
-                return "./src/res/items/Montures/" + name;
-            }
-            var url1 = "./src/res/items0/" + name;
-            return url1;
+            var type = i18n_1.EnumItemType.findKeyFrench(item.type);
+            return "./src/res/items/" + type + "/" + name;
         };
         db.getStatColor = function (name) {
             switch (name) {
@@ -262,7 +261,7 @@ define('db',["require", "exports"], function (require, exports) {
             ];
         };
         db.getItemsTypes = function () {
-            return ["Amulette", "Anneau", "Chapeau", "Cape", "Sac à dos", "Ceinture", "Bottes", "Bouclier", "Dofus", "Trophée"];
+            return ["Amulette", "Anneau", "Chapeau", "Cape", "Sac à dos", "Ceinture", "Bottes", "Bouclier", "Dofus", "Trophée", "Prysmaradite"];
         };
         db.getWeaponsTypes = function () {
             return ["Épée", "Marteau", "Pelle", "Hache", "Bâton", "Dague", "Arc", "Baguette", "Faux", "Pioche", "Arme magique", "Outil"];
@@ -277,6 +276,10 @@ define('db',["require", "exports"], function (require, exports) {
             return ["PA", "Portée", "CC", "LoS"];
         };
         db.getIconStyle = function (mod) {
+            if (!mod)
+                return "";
+            if (mod == "")
+                return "";
             if (mod == "PA")
                 return db.sprite(97, 243);
             if (mod == "PM")
@@ -327,6 +330,8 @@ define('db',["require", "exports"], function (require, exports) {
                 return db.sprite(97, 1340);
             if (mod.toLowerCase().includes("soin"))
                 return db.sprite(97, 966);
+            if (mod.toLowerCase().includes("pv rendus"))
+                return db.sprite(97, 966);
             if (mod == "Dommages")
                 return db.sprite(97, 1156);
             if (mod == "Dommages Poussée")
@@ -342,10 +347,6 @@ define('db',["require", "exports"], function (require, exports) {
         db.sprite = function (x, y) {
             return "display: inline-block; width: 22px; height: 22px; background-image: url('./src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;";
         };
-        db.save = function (build) {
-        };
-        db.load = function (buildname) {
-        };
         return db;
     }());
     exports.db = db;
@@ -360,14 +361,48 @@ define('environment',["require", "exports"], function (require, exports) {
     };
 });
 ;
-define('i18n',["require", "exports"], function (require, exports) {
+define('fs',[],function(){});;
+define('i18n',["require", "exports", "aurelia-fetch-client", "java-properties"], function (require, exports, aurelia_fetch_client_1, javaprop) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var i18n = (function () {
         function i18n() {
         }
         i18n.readProperties = function (clazz, bundle) {
+            var path = bundle + "_fr.properties";
+            i18n.client.fetch(path)
+                .then(function (response) { return response.text(); })
+                .then(function (data) {
+                var me = i18n.makePropertiesFile(data);
+                clazz["props"] = me;
+                var keys = Object.keys(clazz);
+                for (var _i = 0, keys_1 = keys; _i < keys_1.length; _i++) {
+                    var key = keys_1[_i];
+                    var o = clazz[key];
+                    if (!o)
+                        continue;
+                    o.key = key;
+                    o.fr = me.get(key);
+                }
+                return true;
+            });
         };
+        i18n.makePropertiesFile = function (data) {
+            var me = new javaprop.PropertiesFile();
+            var items = data.split(/\r?\n/);
+            for (var i = 0; i < items.length; i++) {
+                var line = items[i];
+                while (line.substring(line.length - 1) === '\\') {
+                    line = line.slice(0, -1);
+                    var nextLine = items[i + 1];
+                    line = line + nextLine.trim();
+                    i++;
+                }
+                me.makeKeys(line);
+            }
+            return me;
+        };
+        i18n.client = new aurelia_fetch_client_1.HttpClient();
         return i18n;
     }());
     exports.i18n = i18n;
@@ -395,8 +430,22 @@ define('i18n',["require", "exports"], function (require, exports) {
     exports.EnumItemSlot = EnumItemSlot;
     var EnumItemType = (function () {
         function EnumItemType() {
+            EnumItemType.values.push(this);
         }
+        EnumItemType.findKeyFrench = function (french) {
+            for (var _i = 0, _a = EnumItemType.values; _i < _a.length; _i++) {
+                var i = _a[_i];
+                if (!i.fr)
+                    continue;
+                if (i.fr == french) {
+                    return i.key;
+                }
+            }
+            console.log("null key for french: " + french);
+            return null;
+        };
         EnumItemType.en_to_fr = {};
+        EnumItemType.values = [];
         EnumItemType.HAT = new EnumItemType();
         EnumItemType.CAPE = new EnumItemType();
         EnumItemType.BACKPACK = new EnumItemType();
@@ -404,6 +453,7 @@ define('i18n',["require", "exports"], function (require, exports) {
         EnumItemType.RING = new EnumItemType();
         EnumItemType.BELT = new EnumItemType();
         EnumItemType.BOOTS = new EnumItemType();
+        EnumItemType.SHIELD = new EnumItemType();
         EnumItemType.DOFUS = new EnumItemType();
         EnumItemType.TROPHY = new EnumItemType();
         EnumItemType.PRYSMARADITE = new EnumItemType();
@@ -430,8 +480,22 @@ define('i18n',["require", "exports"], function (require, exports) {
     exports.EnumItemType = EnumItemType;
     var EnumWeaponStat = (function () {
         function EnumWeaponStat() {
+            EnumWeaponStat.values.push(this);
         }
+        EnumWeaponStat.findKeyFrench = function (french) {
+            for (var _i = 0, _a = EnumWeaponStat.values; _i < _a.length; _i++) {
+                var i = _a[_i];
+                if (!i.fr)
+                    continue;
+                if (i.fr == french) {
+                    return i.key;
+                }
+            }
+            console.log("null key for french: " + french);
+            return null;
+        };
         EnumWeaponStat.en_to_fr = {};
+        EnumWeaponStat.values = [];
         EnumWeaponStat.USES_PER_TURN = new EnumWeaponStat();
         EnumWeaponStat.RANGE_MIN = new EnumWeaponStat();
         EnumWeaponStat.RANGE_MAX = new EnumWeaponStat();
@@ -450,13 +514,42 @@ define('i18n',["require", "exports"], function (require, exports) {
         EnumWeaponStat.STEAL_EARTH = new EnumWeaponStat();
         EnumWeaponStat.STEAL_WATER = new EnumWeaponStat();
         EnumWeaponStat.STEAL_AIR = new EnumWeaponStat();
+        EnumWeaponStat.HEAL = new EnumWeaponStat();
         return EnumWeaponStat;
     }());
     exports.EnumWeaponStat = EnumWeaponStat;
     var EnumStat = (function () {
         function EnumStat() {
+            EnumStat.values.push(this);
         }
+        EnumStat.findKeyFrench = function (french) {
+            for (var _i = 0, _a = EnumStat.values; _i < _a.length; _i++) {
+                var i = _a[_i];
+                if (!i.fr)
+                    continue;
+                if (i.fr == french) {
+                    return i.key;
+                }
+            }
+            console.log("null key for french: " + french);
+            return null;
+        };
+        EnumStat.getKeyIdFrench = function (french) {
+            var id = 0;
+            for (var _i = 0, _a = EnumStat.values; _i < _a.length; _i++) {
+                var i = _a[_i];
+                if (!i.fr)
+                    continue;
+                if (i.fr == french) {
+                    return id;
+                }
+                id++;
+            }
+            console.log("null key for french: " + french);
+            return null;
+        };
         EnumStat.en_to_fr = {};
+        EnumStat.values = [];
         EnumStat.LIFE = new EnumStat();
         EnumStat.AP = new EnumStat();
         EnumStat.MP = new EnumStat();
@@ -545,7 +638,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-define('pages/build/build',["require", "exports", "aurelia-framework", "../builds/builds", "../../db", "../../api", "aurelia-router", "hashkit"], function (require, exports, aurelia_framework_1, builds_1, db_1, api_1, aurelia_router_1, Hashkit) {
+define('pages/build/build',["require", "exports", "./../../i18n", "aurelia-framework", "../builds/builds", "../../db", "../../api", "aurelia-router", "hashkit"], function (require, exports, i18n_1, aurelia_framework_1, builds_1, db_1, api_1, aurelia_router_1, Hashkit) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var build = (function () {
@@ -567,23 +660,40 @@ define('pages/build/build',["require", "exports", "aurelia-framework", "../build
             var _this = this;
             var split = data.split("-");
             var name = split[0];
-            var bases = split.slice(1, 6).map(function (i) { return build_1.hash.decode(i); });
-            var items = split.slice(7).map(function (i) { return build_1.hash.decode(i); });
-            this.api.getItems([{
-                    ankamaId: { $in: items }
-                }]).then(function (r) {
+            var scrolls = split.slice(1, 7).map(function (i) { return build_1.hash.decode(i); });
+            var bases = split.slice(7, 13).map(function (i) { return build_1.hash.decode(i); });
+            var exoCount = +split[13];
+            var exos = split.slice(14, 14 + exoCount).map(function (i) { return build_1.hash.decode(i); });
+            var items = split.slice(14 + exoCount).map(function (i) { return i; });
+            console.log("parse url items: " + items);
+            this.api.getItems([{ $match: {
+                        "ankamaID": { "$in": items }
+                    } }]).then(function (r) {
                 _this.name = name;
                 build_1.setName(_this.name);
-                r.content.forEach(function (i) { return build_1.setItem(i, true); });
+                console.log("response content: " + r.response);
+                r.content.forEach(function (i) {
+                    console.log("parse url set item: " + i);
+                    build_1.setItem(i, true);
+                });
                 build_1.setItems(_this.items);
+                for (var e = 0; e < scrolls.length; e++) {
+                    _this.scrolls.set(db_1.db.getBaseStatNames()[e], scrolls[e]);
+                }
+                build_1.setScrolls(_this.scrolls);
                 for (var e = 0; e < bases.length; e++) {
                     _this.bases.set(db_1.db.getBaseStatNames()[e], bases[e]);
                 }
                 build_1.setBases(_this.bases);
-                var exos = new Map();
-                exos.set("PA", 1);
-                exos.set("PM", 1);
-                build_1.setExos(exos);
+                console.log("parse exos length: " + exos.length);
+                for (var e = 0; e < exos.length; e += 2) {
+                    var id = exos[e];
+                    var val = exos[e + 1];
+                    var key = i18n_1.EnumStat.values[id].fr;
+                    console.log("parse exos: e=" + e + ", id=" + id + ", key=" + key + ", val=" + val);
+                    _this.exos.set(key, val);
+                }
+                build_1.setExos(_this.exos);
                 build_1.calcSets(_this.items);
             });
         };
@@ -594,14 +704,24 @@ define('pages/build/build',["require", "exports", "aurelia-framework", "../build
                 build_1.setSets([]);
             if (!localStorage.getItem("build.items") || force)
                 build_1.setItems(new Map());
+            if (!localStorage.getItem("build.scrolls") || force) {
+                var scrolls = new Map();
+                scrolls.set("Vitalité", 100);
+                scrolls.set("Sagesse", 100);
+                scrolls.set("Force", 100);
+                scrolls.set("Intelligence", 100);
+                scrolls.set("Chance", 100);
+                scrolls.set("Agilité", 100);
+                build_1.setScrolls(scrolls);
+            }
             if (!localStorage.getItem("build.bases") || force) {
                 var bases = new Map();
-                bases.set("Vitalité", 100);
-                bases.set("Sagesse", 100);
-                bases.set("Force", 100);
-                bases.set("Intelligence", 100);
-                bases.set("Chance", 100);
-                bases.set("Agilité", 100);
+                bases.set("Vitalité", 0);
+                bases.set("Sagesse", 0);
+                bases.set("Force", 0);
+                bases.set("Intelligence", 0);
+                bases.set("Chance", 0);
+                bases.set("Agilité", 0);
                 build_1.setBases(bases);
             }
             if (!localStorage.getItem("build.exos") || force) {
@@ -614,6 +734,7 @@ define('pages/build/build',["require", "exports", "aurelia-framework", "../build
             build_1.inst.stats = build_1.getStats();
             build_1.inst.sets = build_1.getSets();
             build_1.inst.items = build_1.getItems();
+            build_1.inst.scrolls = build_1.getScrolls();
             build_1.inst.bases = build_1.getBases();
             build_1.inst.exos = build_1.getExos();
             this.reloadTotalStats();
@@ -626,6 +747,7 @@ define('pages/build/build',["require", "exports", "aurelia-framework", "../build
                 "name": this.name,
                 "items": Array.from(this.items.entries()),
                 "stats": Array.from(this.stats.entries()),
+                "scrolls": Array.from(this.scrolls.entries()),
                 "bases": Array.from(this.bases.entries()),
                 "exos": Array.from(this.exos.entries()),
                 "sets": this.sets
@@ -641,6 +763,7 @@ define('pages/build/build',["require", "exports", "aurelia-framework", "../build
                 "name": b.name,
                 "items": new Map(b.items),
                 "stats": new Map(b.stats),
+                "scrolls": new Map(b.scrolls),
                 "bases": new Map(b.bases),
                 "exos": new Map(b.exos),
                 "sets": b.sets,
@@ -649,6 +772,7 @@ define('pages/build/build',["require", "exports", "aurelia-framework", "../build
             build_1.setSets(obj.sets);
             build_1.setItems(obj.items);
             build_1.setStats(obj.stats);
+            build_1.setScrolls(obj.scrolls);
             build_1.setBases(obj.bases);
             build_1.setExos(obj.exos);
         };
@@ -662,6 +786,9 @@ define('pages/build/build',["require", "exports", "aurelia-framework", "../build
             build_1.addTotalStat("Prospection", 100);
             this.items.forEach(function (v, k) {
                 build_1.addItemStats(v);
+            });
+            this.scrolls.forEach(function (v, k) {
+                build_1.addTotalStat(k, v);
             });
             this.bases.forEach(function (v, k) {
                 build_1.addTotalStat(k, v);
@@ -824,6 +951,12 @@ define('pages/build/build',["require", "exports", "aurelia-framework", "../build
             bases.set(name, value);
             build_1.setBases(bases);
         };
+        build.setScrollStat = function (name, value) {
+            var scrolls = build_1.getScrolls();
+            build_1.addTotalStat(name, value - (scrolls.get(name) || 0));
+            scrolls.set(name, value);
+            build_1.setScrolls(scrolls);
+        };
         build.setExo = function (name, value) {
             var exos = build_1.getExos();
             build_1.addTotalStat(name, value - (exos.get(name) || 0));
@@ -866,6 +999,14 @@ define('pages/build/build',["require", "exports", "aurelia-framework", "../build
                 build_1.inst.bases = bases;
             localStorage.setItem("build.bases", JSON.stringify(Array.from(bases.entries())));
         };
+        build.getScrolls = function () {
+            return new Map(JSON.parse(localStorage.getItem("build.scrolls")));
+        };
+        build.setScrolls = function (scrolls) {
+            if (build_1.inst)
+                build_1.inst.scrolls = scrolls;
+            localStorage.setItem("build.scrolls", JSON.stringify(Array.from(scrolls.entries())));
+        };
         build.getExos = function () {
             return new Map(JSON.parse(localStorage.getItem("build.exos")));
         };
@@ -907,7 +1048,7 @@ define('pages/build/build',["require", "exports", "aurelia-framework", "../build
     exports.build = build;
 });
 ;
-define('text!pages/build/build.html',[],function(){return "<template>\n\n  <require from=\"./components/items\"></require>\n  <require from=\"./components/spells\"></require>\n  <require from=\"./components/sets\"></require>\n  <require from=\"./components/options\"></require>\n  <require from=\"./components/weapon\"></require>\n  <!-- <require from=\"./components/itemSlot\"></require> -->\n  <require from=\"./components/stats/totalstats\"></require>\n  <require from=\"./components/stats/combatstats\"></require>\n  <require from=\"./components/stats/basestats\"></require>\n  <require from=\"./components/stats/addedstats\"></require>\n\n  <div class=\"container\">\n    <div class=\"row\">\n\n      <!-- total stats -->\n      <totalstats class=\"col-3\" stats.bind=\"stats\"></totalstats>\n\n      <!-- center -->\n      <div class=\"col-6\">\n        <div class=\"container\">\n          <!-- items -->\n          <items class=\"row\" items.bind=\"items\"></items>\n          <!-- stats visibles en combat-->\n          <combatstats class=\"row\" stats.bind=\"stats\" style=\"margin-top: 20px; margin-left: 5px;\"></combatstats>\n          <!-- sets -->\n          <sets class=\"row\" sets.bind=\"sets\" style=\"margin-left: 5px;\"></sets>\n          <!-- weapon -->\n          <weapon class=\"row\" data.bind=\"$this\" style=\"margin-left: 5px;\"></weapon>\n          <!-- spells -->\n          <spells class=\"row\" style=\"margin-left: 5px;\"></spells>\n        </div>\n      </div>\n\n      <!-- right -->\n      <div class=\"col\">\n        <div class=\"\">\n          <!-- options -->\n          <div class=\"\">\n            <options build.bind=$this></options>\n          </div>\n          <!-- base stats & parchos -->\n          <div class=\"\" style=\"margin-top: 20px;\">\n            <basestats class=\"\" stats.bind=\"bases\"></basestats>\n          </div>\n          <!-- exos -->\n          <div class=\"\" style=\"margin-top: 20px;\">\n            <addedstats class=\"\" stats.bind=\"exos\"></addedstats>\n          </div>\n        </div>\n      </div>\n\n    </div>\n  </div>\n\n</template>";});;
+define('text!pages/build/build.html',[],function(){return "<template>\n\n  <require from=\"./components/items\"></require>\n  <require from=\"./components/spells\"></require>\n  <require from=\"./components/sets\"></require>\n  <require from=\"./components/options\"></require>\n  <require from=\"./components/weapon\"></require>\n  <!-- <require from=\"./components/itemSlot\"></require> -->\n  <require from=\"./components/stats/totalstats\"></require>\n  <require from=\"./components/stats/combatstats\"></require>\n  <require from=\"./components/stats/basestats\"></require>\n  <require from=\"./components/stats/addedstats\"></require>\n\n  <div class=\"container\">\n    <div class=\"row\">\n\n      <!-- total stats -->\n      <totalstats class=\"col-3\" stats.bind=\"stats\"></totalstats>\n\n      <!-- center -->\n      <div class=\"col-6\">\n        <div class=\"container\">\n          <!-- items -->\n          <items class=\"row\" items.bind=\"items\"></items>\n          <!-- stats visibles en combat-->\n          <combatstats class=\"row\" stats.bind=\"stats\" style=\"margin-top: 20px; margin-left: 5px;\"></combatstats>\n          <!-- sets -->\n          <sets class=\"row\" sets.bind=\"sets\" style=\"margin-left: 5px;\"></sets>\n          <!-- weapon -->\n          <weapon class=\"row\" data.bind=\"$this\" style=\"margin-left: 5px;\"></weapon>\n          <!-- spells -->\n          <spells class=\"row\" style=\"margin-left: 5px;\"></spells>\n        </div>\n      </div>\n\n      <!-- right -->\n      <div class=\"col\">\n        <div class=\"\">\n          <!-- options -->\n          <div class=\"\">\n            <options build.bind=$this></options>\n          </div>\n          <!-- base stats & scrolls -->\n          <div class=\"\" style=\"margin-top: 20px;\">\n            <basestats class=\"\" stats.bind=\"bases\" scrolls.bind=\"scrolls\"></basestats>\n          </div>\n          <!-- exos -->\n          <div class=\"\" style=\"margin-top: 20px;\">\n            <addedstats class=\"\" stats.bind=\"exos\"></addedstats>\n          </div>\n        </div>\n      </div>\n\n    </div>\n  </div>\n\n</template>\n";});;
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -964,7 +1105,7 @@ define('pages/build/components/itemSlot',["require", "exports", "aurelia-router"
 });
 ;
 define('text!pages/build/components/itemSlot.css',[],function(){return ".itemSlot {\n  height: 80px;\n  width: 80px;\n  /* color: var(--front1); */\n  /* background-color: #555555; */\n  /* background-color: var(--accent1); */\n  border: 1px solid var(--accent1);\n  z-index: 0;\n}\n.itemSlot img {\n  height: 80px;\n  width: 80px;\n  z-index: 0;\n}\n.itemSlot:hover {\n  border: 1px solid var(--accent0);\n}\n.itemSlot itemsheet {\n  position: relative;\n  /* float: */\n  display: inline-block;\n  visibility: collapse;\n  width: 260px;\n  background-color: var(--bg0);\n  z-index: 94561239 !important;\n  pointer-events: none;\n  cursor: default;\n}\n.itemSlot:hover itemsheet {\n  /* display: flex; */\n  visibility: visible;\n  opacity: 95%;\n}\n";});;
-define('text!pages/build/components/itemSlot.html',[],function(){return "<template>\n  <require from=\"./itemSlot.css\"></require>\n  <require from=\"../../items/itemsheet\"></require>\n\n\n  <div class=\"itemSlot\" style=\"margin: 0 auto;\" onclick.call=\"onclick()\">\n\n    <img if.bind=\"item\" src.bind=\"imgUrl\" alt=\"${slotname}\">\n    <div if.bind=\"item == null\" innerHTML.bind=\"slotname\"></div>\n\n    <!-- need a hover as well -->\n    <itemsheet data.bind=\"item\"></itemsheet>\n\n    <!-- need a click to search items -->\n\n  </div>\n</template>\n";});;
+define('text!pages/build/components/itemSlot.html',[],function(){return "<template>\n  <require from=\"./itemSlot.css\"></require>\n  <require from=\"../../items/itemsheet\"></require>\n\n\n  <div class=\"itemSlot\" style=\"margin: 0 auto;\" onclick.call=\"onclick()\">\n\n    <img if.bind=\"item\" src.bind=\"imgUrl\" alt=\"${slotname}\">\n    <div if.bind=\"item == null\" innerHTML.bind=\"slotname\"></div>\n\n    <!-- need a hover as well -->\n    <itemsheet if.bind=\"item\" data.bind=\"item\"></itemsheet>\n\n    <!-- need a click to search items -->\n\n  </div>\n</template>\n";});;
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1002,7 +1143,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define('pages/build/components/options',["require", "exports", "aurelia-framework", "../build", "../../../db"], function (require, exports, aurelia_framework_1, build_1, db_1) {
+define('pages/build/components/options',["require", "exports", "./../../../i18n", "aurelia-framework", "../build", "../../../db"], function (require, exports, i18n_1, aurelia_framework_1, build_1, db_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var options = (function () {
@@ -1019,15 +1160,25 @@ define('pages/build/components/options',["require", "exports", "aurelia-framewor
         Object.defineProperty(options.prototype, "copyUrl", {
             get: function () {
                 var _this = this;
-                var data = { name: this.build.name, items: [], bases: [] };
+                var data = { name: this.build.name, items: [], scrolls: [], bases: [], exos: [] };
                 this.build.items.forEach(function (item, slot) {
-                    data.items.push(build_1.build.hash.encode(item.ankamaId));
+                    data.items.push(item.ankamaID);
                 });
                 db_1.db.getBaseStatNames().forEach(function (e) {
                     data.bases.push(build_1.build.hash.encode(_this.build.bases.get(e) || 0));
                 });
+                db_1.db.getBaseStatNames().forEach(function (e) {
+                    data.scrolls.push(build_1.build.hash.encode(_this.build.scrolls.get(e) || 0));
+                });
+                this.build.exos.forEach(function (val, key, map) {
+                    var id = i18n_1.EnumStat.getKeyIdFrench(key);
+                    data.exos.push(build_1.build.hash.encode(id));
+                    data.exos.push(build_1.build.hash.encode(val));
+                });
                 var output = data.name + "-";
+                output += data.scrolls.join("-") + "-";
                 output += data.bases.join("-") + "-";
+                output += data.exos.length + "-" + data.exos.join("-") + "-";
                 output += data.items.join("-");
                 output = "http://" + location.host + "/build?data=" + output;
                 return output;
@@ -1055,7 +1206,7 @@ define('pages/build/components/options',["require", "exports", "aurelia-framewor
             __metadata("design:type", build_1.build)
         ], options.prototype, "build", void 0);
         __decorate([
-            aurelia_framework_1.computedFrom('build'),
+            aurelia_framework_1.computedFrom('build.name', 'build.items', 'build.scrolls', 'build.bases', 'build.exos'),
             __metadata("design:type", String),
             __metadata("design:paramtypes", [])
         ], options.prototype, "copyUrl", null);
@@ -1114,13 +1265,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define('pages/build/components/stats/addedstats',["require", "exports", "aurelia-framework", "../../../../db"], function (require, exports, aurelia_framework_1, db_1) {
+define('pages/build/components/stats/addedstats',["require", "exports", "aurelia-framework", "../../../../db", "../../build"], function (require, exports, aurelia_framework_1, db_1, build_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var addedstats = (function () {
         function addedstats() {
             this.modsSections = db_1.db.getStatNames();
         }
+        addedstats.prototype.onChangeExo = function (name) {
+            console.log("onChangeExo stat : " + name + "=" + doc.valueAsNumber);
+            var doc = document.getElementById("exostat-" + name);
+            build_1.build.setExo(name, doc.valueAsNumber);
+            build_1.build.inst.save();
+        };
         addedstats.prototype.onModInputFocus = function (that, event, blockid, modid) {
             console.log("onFocusModInput [" + blockid + "," + modid + "] : " + that);
             $(event.target).closest(".searchable").find("dl").show();
@@ -1165,7 +1322,7 @@ define('pages/build/components/stats/addedstats',["require", "exports", "aurelia
     exports.addedstats = addedstats;
 });
 ;
-define('text!pages/build/components/stats/addedstats.html',[],function(){return "<template>\n  <!-- <require from=\"/src/pages/items/filter.less\"></require> -->\n  <require from=\"../../../items/filter.less\"></require>\n\n  <!-- <h2>Added Stats</h2> -->\n\n  <ul style=\"list-style-type: none; padding-left: 0px;\">\n\n    <li class=\"d-flex\" repeat.for=\"[name, val] of stats\" style=\"flex-wrap: nowrap;\">\n      <!-- <input type=\"text\" value.bind=\"name\" disabled class=\"mr-2\" /> -->\n      <div class=\"mr-auto\">${name}</div>\n      <input type=\"number\" value.bind=\"val\" disabled />\n      <!-- <button class=\"btnDelete\" onclick.call=\"deleteExo(name)\">x</button> -->\n    </li>\n\n    <!--\n    <li class=\"row\" repeat.for=\"[name, val] of stats\">\n      <div name=\"modsearch\" class=\"searchable\">\n        <input name=\"modsearchinput\" type=\"text\" autocomplete=\"off\" placeholder=\"+Add Stat Mod\" value.bind=\"name\" onkeyup.call=\"filterFunction2($this, $event)\" onchange.call=\"oninput($this, $event)\" onfocus.call=\"onModInputFocus($this, $event)\"\n          onblur.call=\"onModInputBlur($this, $event)\">\n        <dl name=\"modsearchlist\" class=\"modlist\">\n          <section repeat.for=\"[section, mods] of modsSections\">\n            <dt>${section}</dt>\n            <dd repeat.for=\"modname of mods\" onmouseover.call=\"onDDHover($this, $event, modname)\" onclick.call=\"onDDClick($this, $event, name, modname)\">${modname}</dd>\n          </section>\n        </dl>\n      </div>\n\n      <input id=\"exostat-${name}\" type=\"number\" value.bind=\"val\" />\n\n      <button class=\"btnDelete\" onclick.call=\"deleteExo(name)\">x</button>\n    </li>\n\n    <div name=\"modsearch\" class=\"searchable\">\n      <input name=\"modsearchinput\" type=\"text\" autocomplete=\"off\" placeholder=\"+Add Stat Mod\" onkeyup.call=\"filterFunction2($this, $event)\" onchange.call=\"oninput($this, $event)\" onfocus.call=\"onModInputFocus($this, $event)\"\n        onblur.call=\"onModInputBlur($this, $event)\">\n      <dl name=\"modsearchlist\" class=\"modlist\">\n        <section repeat.for=\"[section, mods] of modsSections\">\n          <dt>${section}</dt>\n          <dd repeat.for=\"modname of mods\" onmouseover.call=\"onDDHover($this, $event, modname)\" onclick.call=\"onDDClick($this, $event, 'new', modname)\">${modname}</dd>\n        </section>\n      </dl>\n    </div>\n    -->\n\n  </ul>\n\n  <!-- <button class=\"btnAdd\">Add Stat</button> -->\n\n</template>\n";});;
+define('text!pages/build/components/stats/addedstats.html',[],function(){return "<template>\n  <!-- <require from=\"/src/pages/items/filter.less\"></require> -->\n  <require from=\"../../../items/filter.less\"></require>\n\n  <!-- <h6>Caractéristiques exotiques</h6> -->\n  <!-- <th>Caractéristiques exotiques</th> -->\n  <div style=\"font-weight: bold;\">Caractéristiques exotiques</div>\n\n  <ul style=\"list-style-type: none; padding-left: 0px;\">\n\n    <li class=\"d-flex\" repeat.for=\"[name, val] of stats\" style=\"flex-wrap: nowrap;\">\n      <!-- <input type=\"text\" value.bind=\"name\" disabled class=\"mr-2\" /> -->\n      <button class=\"btnDelete\" style=\"width: 30px;\" onclick.call=\"deleteExo(name)\">✕</button>\n\n      <div class=\"mr-auto mt-auto mb-auto\">${name}</div>\n      <!-- <input type=\"number\" value.bind=\"val\" /> -->\n\n      <!-- <input id=\"exostat-${name}\" type=\"number\" model.bind=\"stats.get(name)\" value=\"${stats.get(name)}\" onchange.call=\"onchange(name)\" /> -->\n      <input id=\"exostat-${name}\" type=\"number\" model.bind=\"val\" value=\"${val}\" onchange.call=\"onChangeExo(name)\" />\n    </li>\n\n\n\n    <!-- <li class=\"row\" repeat.for=\"[name, val] of stats\">\n      <div name=\"modsearch\" class=\"searchable\">\n        <input name=\"modsearchinput\" type=\"text\" autocomplete=\"off\" placeholder=\"+Add Stat Mod\" value.bind=\"name\" onkeyup.call=\"filterFunction2($this, $event)\" onchange.call=\"oninput($this, $event)\" onfocus.call=\"onModInputFocus($this, $event)\"\n          onblur.call=\"onModInputBlur($this, $event)\">\n        <dl name=\"modsearchlist\" class=\"modlist\">\n          <section repeat.for=\"[section, mods] of modsSections\">\n            <dt>${section}</dt>\n            <dd repeat.for=\"modname of mods\" onmouseover.call=\"onDDHover($this, $event, modname)\" onclick.call=\"onDDClick($this, $event, name, modname)\">${modname}</dd>\n          </section>\n        </dl>\n      </div>\n\n      <input id=\"exostat-${name}\" type=\"number\" value.bind=\"val\" />\n\n      <button class=\"btnDelete\" onclick.call=\"deleteExo(name)\">x</button>\n    </li> -->\n\n    <div name=\"modsearch\" class=\"searchable\">\n      <input name=\"modsearchinput\" type=\"text\" autocomplete=\"off\" placeholder=\"+Add Stat Mod\" onkeyup.call=\"filterFunction2($this, $event)\" onchange.call=\"oninput($this, $event)\" onfocus.call=\"onModInputFocus($this, $event)\"\n        onblur.call=\"onModInputBlur($this, $event)\">\n      <dl name=\"modsearchlist\" class=\"modlist\">\n        <section repeat.for=\"[section, mods] of modsSections\">\n          <dt>${section}</dt>\n          <dd repeat.for=\"modname of mods\" onmouseover.call=\"onDDHover($this, $event, modname)\" onclick.call=\"onDDClick($this, $event, 'new', modname)\">${modname}</dd>\n        </section>\n      </dl>\n    </div>\n    \n\n  </ul>\n\n  <!-- <button class=\"btnAdd\">Add Stat</button> -->\n\n</template>\n";});;
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1182,20 +1339,30 @@ define('pages/build/components/stats/basestats',["require", "exports", "aurelia-
         function basestats() {
             this.statnames = db_1.db.getBaseStatNames();
         }
-        basestats.prototype.onchange = function (name) {
+        basestats.prototype.onChangeBase = function (name) {
             var doc = document.getElementById("basestat-" + name);
             build_1.build.setBaseStat(name, doc.valueAsNumber);
+            build_1.build.inst.save();
+        };
+        basestats.prototype.onChangeScroll = function (name) {
+            var doc = document.getElementById("scrollstat-" + name);
+            build_1.build.setScrollStat(name, doc.valueAsNumber);
+            build_1.build.inst.save();
         };
         __decorate([
             aurelia_framework_1.bindable,
             __metadata("design:type", Map)
         ], basestats.prototype, "stats", void 0);
+        __decorate([
+            aurelia_framework_1.bindable,
+            __metadata("design:type", Map)
+        ], basestats.prototype, "scrolls", void 0);
         return basestats;
     }());
     exports.basestats = basestats;
 });
 ;
-define('text!pages/build/components/stats/basestats.html',[],function(){return "<template>\n  <!-- <h2>Base Stats</h2> -->\n\n  <ul style=\"list-style-type: none; padding-left: 0px;\">\n    <!-- <li repeat.for=\"line of data\"> -->\n    <li class=\"d-flex\" repeat.for=\"name of statnames\">\n      <!-- class=\"row\" -->\n      <!-- <div class=\"col-sm\">${stats[i].icon}</div> -->\n      <div class=\"mr-auto\">${name}</div>\n      <!-- <div class=\"col-sm\">${value}</div> -->\n      <!-- <input id=\"basestat-${name}\" type=\"number\" value.bind=\"value\" style=\"width: 50px;\" change.delegate=\"onchange(name, value)\" /> -->\n      <!-- onchange.call=\"onchange(name, value)\" -->\n      <!-- change.bind=\"onchange(name, value)\" /> -->\n\n      <input id=\"basestat-${name}\" type=\"number\" model.bind=\"stats.get(name)\" value=\"${stats.get(name)}\" onchange.call=\"onchange(name)\" />\n      <!-- value.bind=\"val\" -->\n\n      <!-- <input type=\"number\" oninput.call=\"test()\" /> -->\n\n      <!-- hidden div just to get the same spacing as addedstats.html -->\n      <!-- <div class=\"btnDelete\" style=\"visibility: hidden;\"></div> -->\n    </li>\n\n  </ul>\n\n</template>";});;
+define('text!pages/build/components/stats/basestats.html',[],function(){return "<template>\n  <!-- <h2>Base Stats</h2> -->\n\n  <div style=\"font-weight: bold;\">Caractéristiques de base</div>\n\n  <ul style=\"list-style-type: none; padding-left: 0px;\">\n    <li class=\"d-flex\" repeat.for=\"name of statnames\">\n      <div class=\"mr-auto\" >${name}</div>\n      <!-- style=\"margin-left: 30px;\" -->\n\n      <input id=\"scrollstat-${name}\" type=\"number\" model.bind=\"scrolls.get(name)\" value=\"${scrolls.get(name)}\" onchange.call=\"onChangeScroll(name)\" />\n      <input id=\"basestat-${name}\" type=\"number\" model.bind=\"stats.get(name)\" value=\"${stats.get(name)}\" onchange.call=\"onChangeBase(name)\" />\n    </li>\n  </ul>\n\n</template>\n";});;
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1391,7 +1558,7 @@ define('pages/build/components/weapon',["require", "exports", "aurelia-framework
     exports.weapon = weapon;
 });
 ;
-define('text!pages/build/components/weapon.html',[],function(){return "<template>\n  <div style=\"margin-top: 10px;\">\n    <!-- <h6></h6> -->\n    <div if.bind=\"hasWeapon\">\n      <!-- weapon info -->\n      <div class=\"title d-flex flex-nowrap\">\n        <!-- Name and level -->\n        <div class=\"title d-flex flex-nowrap mr-3\">\n          <img src=\"${getImgUrl()}\" width=\"60px\" height=\"60px\">\n          <!-- <div>\n            <span>${item.name}</span><br>\n            <span>${item.level}</span>\n          </div> -->\n        </div>\n        <!-- characteristics -->\n        <div>\n          <div>\n            <span>PA :</span>\n            <span>${item.characteristics[0][\"PA\"]}</span>\n          </div>\n          <div>\n            <span>Portée :</span>\n            <span>${item.characteristics[1][\"Portée\"]}</span>\n          </div>\n          <div>\n            <span>CC :</span>\n            <span>${item.characteristics[2][\"CC\"]}</span>\n          </div>\n        </div>\n      </div>\n\n      <!-- dmg -->\n      <div>\n        <div>Total : ${total.min} à ${total.max} (${total.minCrit} à ${total.maxCrit})</div>\n        <div repeat.for=\"dmg of damages\">${dmg.name} : ${dmg.min} à ${dmg.max} (${dmg.minCrit} à ${dmg.maxCrit})</div>\n      </div>\n    </div>\n\n\n  </div>\n</template>";});;
+define('text!pages/build/components/weapon.html',[],function(){return "<template>\n  <div style=\"margin-top: 10px;\">\n    <!-- <h6></h6> -->\n    <div if.bind=\"hasWeapon\">\n      <!-- weapon info -->\n      <div class=\"title d-flex flex-nowrap\">\n        <!-- Name and level -->\n        <div class=\"title d-flex flex-nowrap mr-3\">\n          <img src=\"${getImgUrl()}\" width=\"60px\" height=\"60px\">\n          <!-- <div>\n            <span>${item.name}</span><br>\n            <span>${item.level}</span>\n          </div> -->\n        </div>\n        <!-- characteristics -->\n        <!-- <div>\n          <div>\n            <span>PA :</span>\n            <span>${item.characteristics[0][\"PA\"]}</span>\n          </div>\n          <div>\n            <span>Portée :</span>\n            <span>${item.characteristics[1][\"Portée\"]}</span>\n          </div>\n          <div>\n            <span>CC :</span>\n            <span>${item.characteristics[2][\"CC\"]}</span>\n          </div>\n        </div> -->\n      </div>\n\n      <!-- dmg -->\n      <div>\n        <div>Total : ${total.min} à ${total.max} (${total.minCrit} à ${total.maxCrit})</div>\n        <div repeat.for=\"dmg of damages\">${dmg.name} : ${dmg.min} à ${dmg.max} (${dmg.minCrit} à ${dmg.maxCrit})</div>\n      </div>\n    </div>\n\n\n  </div>\n</template>\n";});;
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -1501,7 +1668,7 @@ define('pages/items/filter',["require", "exports", "aurelia-framework", "./items
             });
             this.types = new Map();
             this.armes = new Map();
-            (db_1.db.getItemsTypes().concat(db_1.db.getPetTypes())).forEach(function (s) {
+            db_1.db.getItemsTypes().concat(db_1.db.getPetTypes()).forEach(function (s) {
                 _this.types.set(s, false);
             });
             db_1.db.getWeaponsTypes().forEach(function (s) {
@@ -1999,7 +2166,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-define('pages/items/itemsheet',["require", "exports", "aurelia-framework", "../build/build", "../items/itemsearch", "aurelia-router", "../../db"], function (require, exports, aurelia_framework_1, build_1, itemsearch_1, aurelia_router_1, db_1) {
+define('pages/items/itemsheet',["require", "exports", "./../../i18n", "aurelia-framework", "../build/build", "../items/itemsearch", "aurelia-router", "../../db"], function (require, exports, i18n_1, aurelia_framework_1, build_1, itemsearch_1, aurelia_router_1, db_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var itemsheet = (function () {
@@ -2025,6 +2192,10 @@ define('pages/items/itemsheet',["require", "exports", "aurelia-framework", "../b
         itemsheet.prototype.getImgUrl = function () {
             return db_1.db.getImgUrl(this.data);
         };
+        itemsheet.prototype.bind = function (bindingContext, overrideContext) {
+            this.compiledConditions = this.getConditions();
+            this.compiledWeaponStats = this.getWeaponStats();
+        };
         itemsheet.prototype.attached = function () {
             if (this.data && this.data.statistics) {
                 this.data.statistics.forEach(function (element) {
@@ -2034,6 +2205,64 @@ define('pages/items/itemsheet',["require", "exports", "aurelia-framework", "../b
             if (itemsearch_1.itemsearch.inst)
                 itemsearch_1.itemsearch.inst.onLoadedSheet();
             this.hidden = "";
+        };
+        itemsheet.prototype.getIcon = function (mod) {
+            var style = db_1.db.getIconStyle(mod);
+            return style;
+        };
+        itemsheet.prototype.getConditions = function () {
+            var root = this.data.conditions.conditions;
+            var str = "";
+            if (Object.keys(root).length > 0)
+                str = this.writeConditionNode(root);
+            str = str.substring(1, str.lastIndexOf(")"));
+            return str;
+        };
+        itemsheet.prototype.writeConditionNode = function (n) {
+            var str = "";
+            if (n.and) {
+                str += this.writeConditionArray(n.and, " et ");
+            }
+            else if (n.or) {
+                str += this.writeConditionArray(n.or, " ou ");
+            }
+            else {
+                str += i18n_1.EnumStat.props.get(n.stat) + " " + n.operator + " " + n.value;
+            }
+            return str;
+        };
+        itemsheet.prototype.writeConditionArray = function (nodes, separator) {
+            var str = "";
+            var first = true;
+            for (var _i = 0, nodes_1 = nodes; _i < nodes_1.length; _i++) {
+                var n = nodes_1[_i];
+                if (first)
+                    first = false;
+                else
+                    str += separator;
+                str += this.writeConditionNode(n);
+            }
+            str = "(" + str + ")";
+            return str;
+        };
+        itemsheet.prototype.getWeaponStats = function () {
+            var stats = this.data.weaponStats;
+            if (!stats)
+                return;
+            var str = "";
+            var separator = " • ";
+            var arr = new Array();
+            arr.push(stats.apCost + " " + i18n_1.EnumStat.AP.fr);
+            if (stats.minRange) {
+                arr.push(stats.minRange + "-" + stats.maxRange + " " + i18n_1.EnumStat.RANGE.fr);
+            }
+            else {
+                arr.push(stats.maxRange + " " + i18n_1.EnumStat.RANGE.fr);
+            }
+            arr.push(stats.baseCritChance + "" + i18n_1.EnumStat.CRITICAL.fr + " " + "(+" + stats.critBonusDamage + ")");
+            arr.push(stats.usesPerTurn + " " + "par tour");
+            str = arr.join(separator);
+            return str;
         };
         __decorate([
             aurelia_framework_1.bindable,
@@ -2048,8 +2277,8 @@ define('pages/items/itemsheet',["require", "exports", "aurelia-framework", "../b
     exports.itemsheet = itemsheet;
 });
 ;
-define('text!pages/items/itemsheet.css',[],function(){return "/* .alignleft {\n\tfloat: left;\n}\n.alignright {\n\tfloat: right;\n  } */\n/* class=\"itemsheet\"  */\n/* Maintenant on target l'élément \"itemsheet\" ! */\nitemsheet {\n  --sheetaccent: var(--accent1);\n  --sheetaccenthover: var(--accent0);\n  /* background: #1d3030; */\n  /* background: var(--bg1); */\n  cursor: pointer;\n  /* border: 1px solid var(--sheetaccent); */\n  border: 1px solid transparent;\n  /* box-shadow: 5px 5px 5px black; */\n}\n/* immediate child must fill the itemsheet size for clicks */\nitemsheet .itemsheet {\n  /* width: 100%;\n  height: 100%;\n  align-items: stretch; */\n  min-height: 150px;\n  background-repeat: no-repeat;\n  /* background-attachment: fixed; */\n  background-position: center;\n}\nitemsheet .itemsheet::after {\n  opacity: 0.5;\n}\nitemsheet .bgimg {\n  display: inline;\n  /* width: 100%; */\n  /* height: 100%; */\n  /* min-height: 150px; */\n  opacity: 0.5;\n  background-repeat: no-repeat;\n  /* background-attachment: fixed; */\n  background-position: center;\n}\nitemsheet img {\n  width: 55px;\n  height: 55px;\n}\nitemsheet .title {\n  padding: 5px;\n  /* background: var(--sheetaccent); */\n  color: var(--sheetaccent);\n  font-size: 1.1rem;\n}\nitemsheet .statistics {\n  padding: 5px;\n}\nitemsheet .statistics ul {\n  list-style: none;\n  margin: 0px;\n  padding: 0px;\n}\nitemsheet .conditions {\n  /* border-top: 1px solid var(--sheetaccent); */\n}\nitemsheet:hover {\n  border: 1px solid var(--sheetaccenthover);\n}\nitemsheet:hover .title {\n  color: var(--sheetaccenthover);\n  /* background: var(--sheetaccenthover); */\n}\nitemsheet:hover .conditions {\n  border-top: 1px solid var(--sheetaccenthover);\n}\n/* .grid-item { width: 200px; } */\n";});;
-define('text!pages/items/itemsheet.html',[],function(){return "<template>\n  <require from=\"./itemsheet.css\"></require>\n\n\n  <!-- englobing class div for css -->\n  <div class=\"itemsheet\" onclick.call=\"test()\" ${hidden}>\n    <!-- <img class=\"bgimg\" src=\"${getImgUrl()}\"> -->\n    <!-- <div class=\"bgimg\" style=\"background-image: url('${getImgUrl()}');\"></div> -->\n\n    <!-- style=\"background-image: '${data.imgUrl}';\" -->\n    <!-- put the image as background ? -->\n    <!-- Image and weapon stats -->\n    <div class=\"title d-flex flex-nowrap\">\n      <img src=\"${getImgUrl()}\">\n      <!-- Name and level -->\n      <div>\n        <span>${data.name.fr}</span><br>\n        <span>${data.level}</span>\n      </div>\n      <!-- ${data.description} -->\n    </div>\n\n\n    <!-- Effects -->\n    <div class=\"statistics\">\n      <ul if.bind=\"data.characteristics\" style=\"border-bottom: 1px dashed var(--accent1);\">\n        <div>\n          <span>PA</span>\n          <span>${data.characteristics[0][\"PA\"]}</span>\n        </div>\n        <div>\n          <span>Portée</span>\n          <span>${data.characteristics[1][\"Portée\"]}</span>\n        </div>\n        <div>\n          <span>CC</span>\n          <span>${data.characteristics[2][\"CC\"]}</span>\n        </div>\n      </ul>\n      <ul>\n        <!-- 1 row for each effect -->\n        <li class=\"row\" repeat.for=\"effect of data.statistics\" if=\"isntPseudo(effect)\">\n          <!-- <compose view-model=\"./statistic\" model.bind=\"effect\"></compose> -->\n          <div class=\"container statistic\">\n            ${effect.min}\n            ${effect.min == null ? \"\" : \"à\"}\n            ${effect.max}\n            <span style.bind=\"effect.style\">${effect.name}</span>\n            <!-- ${effect} -->\n          </div>\n        </li>\n      </ul>\n    </div>\n\n    <!-- Conditions -->\n    <!-- <div class=\"conditions\" if.bind=\"data.conditions\" style=\"border-top: 1px dashed var(--accent1);\">\n      <ul style=\"list-style: none; margin: 0px; padding: 0px;\">\n        <li repeat.for=\"cond of data.conditions\">\n          ${cond}\n        </li>\n      </ul>\n    </div> -->\n\n  </div>\n\n</template>\n";});;
+define('text!pages/items/itemsheet.css',[],function(){return "/* .alignleft {\n\tfloat: left;\n}\n.alignright {\n\tfloat: right;\n  } */\n/* class=\"itemsheet\"  */\n/* Maintenant on target l'élément \"itemsheet\" ! */\nitemsheet {\n  --sheetaccent: var(--accent1);\n  --sheetaccenthover: var(--accent0);\n  /* background: #1d3030; */\n  /* background: var(--bg1); */\n  cursor: pointer;\n  /* border: 1px solid var(--sheetaccent); */\n  border: 1px solid transparent;\n  /* box-shadow: 5px 5px 5px black; */\n}\n/* immediate child must fill the itemsheet size for clicks */\nitemsheet .itemsheet {\n  /* width: 100%;\n  height: 100%;\n  align-items: stretch; */\n  min-height: 150px;\n  background-repeat: no-repeat;\n  /* background-attachment: fixed; */\n  background-position: center;\n}\nitemsheet .itemsheet::after {\n  opacity: 0.5;\n}\nitemsheet .bgimg {\n  display: inline;\n  /* width: 100%; */\n  /* height: 100%; */\n  /* min-height: 150px; */\n  opacity: 0.5;\n  background-repeat: no-repeat;\n  /* background-attachment: fixed; */\n  background-position: center;\n}\nitemsheet img {\n  width: 55px;\n  height: 55px;\n  margin-right: 5px;\n}\nitemsheet .title {\n  padding: 5px;\n  /* background: var(--sheetaccent); */\n  color: var(--sheetaccent);\n  font-size: 1.1rem;\n}\nitemsheet:hover .title {\n  color: var(--sheetaccenthover);\n  /* background: var(--sheetaccenthover); */\n}\nitemsheet .statistics {\n  padding: 5px;\n}\nitemsheet .statistics ul {\n  list-style: none;\n  margin: 0px;\n  padding: 0px;\n}\nitemsheet .conditions {\n  border-top: 1px dashed var(--sheetaccent);\n  /* width: 90%;\n  margin: auto; */\n  opacity: 0.5;\n}\nitemsheet:hover .conditions {\n  /* border-top: 1px dashed var(--sheetaccenthover); */\n  border-color: var(--sheetaccenthover);\n}\nitemsheet .conditionsBlock {\n  /* margin-bottom: 5px; */\n}\nitemsheet .customStats {\n  border-top: 1px dashed var(--sheetaccent);\n  opacity: 0.5;\n}\nitemsheet:hover .customStats {\n  border-color: var(--sheetaccenthover);\n}\nitemsheet .weaponStatsSeparator {\n  border-bottom: 1px dashed var(--accent1);\n  opacity: 0.5;\n}\nitemsheet:hover .weaponStatsSeparator {\n  border-color: var(--sheetaccenthover);\n}\nitemsheet:hover {\n  border: 1px solid var(--sheetaccenthover);\n}\n/* .grid-item { width: 200px; } */\n.dotted-spaced {\n  background-image: linear-gradient(to right, #333 10%, rgba(255, 255, 255, 0) 0%);\n  background-position: top;\n  background-size: 10px 1px;\n  background-repeat: repeat-x;\n}\n";});;
+define('text!pages/items/itemsheet.html',[],function(){return "<template>\n  <require from=\"./itemsheet.css\"></require>\n\n\n  <!-- englobing class div for css -->\n  <div class=\"itemsheet\" onclick.call=\"test()\" ${hidden}>\n    <!-- <img class=\"bgimg\" src=\"${getImgUrl()}\"> -->\n    <!-- <div class=\"bgimg\" style=\"background-image: url('${getImgUrl()}');\"></div> -->\n\n    <!-- style=\"background-image: '${data.imgUrl}';\" -->\n    <!-- put the image as background ? -->\n    <!-- Image and weapon stats -->\n    <div class=\"title d-flex flex-nowrap\">\n      <img src=\"${getImgUrl()}\">\n      <!-- Name and level -->\n      <div>\n        <span>${data.name.fr}</span><br>\n        <span>${data.level}</span>\n      </div>\n      <!-- ${data.description} -->\n    </div>\n\n\n    <!-- Effects -->\n    <div class=\"statistics\">\n      <!-- <ul if.bind=\"data.characteristics\" style=\"border-bottom: 1px dashed var(--accent1);\">\n        <div>\n          <span>PA</span>\n          <span>${data.characteristics[0][\"PA\"]}</span>\n        </div>\n        <div>\n          <span>Portée</span>\n          <span>${data.characteristics[1][\"Portée\"]}</span>\n        </div>\n        <div>\n          <span>CC</span>\n          <span>${data.characteristics[2][\"CC\"]}</span>\n        </div>\n      </ul> -->\n\n      <!-- weapon effects -->\n      <div if.bind=\"data.weaponStats\">\n        <!-- <div>${compiledWeaponStats}</div>\n        <div class=\"weaponStatsSeparator\">\n        </div> -->\n        <ul>\n          <li class=\"row\" repeat.for=\"effect of data.weaponStats.effects\" if=\"isntPseudo(effect)\">\n            <div class=\"container statistic\">\n              <span style.bind=\"getIcon(effect.name)\"></span>\n              ${effect.min}\n              ${effect.min == null ? \"\" : \"à\"}\n              ${effect.max}\n              <span>${effect.name}</span>\n            </div>\n          </li>\n          <!-- <div class=\"weaponStatsSeparator\"></div> -->\n        </ul>\n      </div>\n\n      <!-- normal effects -->\n      <ul>\n        <!-- 1 row for each effect -->\n        <li class=\"row\" repeat.for=\"effect of data.statistics\" if=\"isntPseudo(effect)\">\n          <!-- <compose view-model=\"./statistic\" model.bind=\"effect\"></compose> -->\n          <div class=\"container statistic\">\n            ${effect.min}\n            ${effect.min == null ? \"\" : \"à\"}\n            ${effect.max}\n            <span style.bind=\"effect.style\">${effect.name}</span>\n            <!-- ${effect} -->\n          </div>\n        </li>\n\n        <!-- custom effects (ex: jahash, crocobur...) -->\n        <li class=\"row\">\n          <div class=\"container statistic\" if.bind=\"data.customStats.fr\">\n            <!-- <div class=\"customStats\">\n            </div> -->\n            ${data.customStats.fr}\n          </div>\n        </li>\n      </ul>\n      \n      <!-- weapon effects -->\n      <div if.bind=\"data.weaponStats\">\n        <div class=\"weaponStatsSeparator\"></div>\n        <div style=\"opacity: 80%;\">${compiledWeaponStats}</div>\n      </div>\n    </div>\n\n    <div class=\"conditionsBlock\" if.bind=\"compiledConditions\">\n      <div class=\"conditions\"></div>\n      <div style=\"opacity: 80%;\">\n        ${compiledConditions}\n      </div>\n    </div>\n    <!-- Conditions -->\n    <!-- <div class=\"conditions\" if.bind=\"data.conditions\" style=\"border-top: 1px dashed var(--accent1);\">\n      <ul style=\"list-style: none; margin: 0px; padding: 0px;\">\n        <li repeat.for=\"cond of data.conditions\">\n          ${cond}\n        </li>\n      </ul>\n    </div> -->\n\n  </div>\n\n</template>\n";});;
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -2659,6 +2888,10 @@ define('resources/index',["require", "exports"], function (require, exports) {
     }
     exports.configure = configure;
 });
+;
+define('text!test.json',[],function(){return "{\n  \"hello\": \"hi\"\n}\n";});
+define('test.json',['text!test.json'],function(m){return JSON.parse(m);});
+define('json!test.json',['test.json'],function(m){return m;});
 ;
 define('util',["require", "exports", "masonry-layout"], function (require, exports, Masonry) {
     "use strict";

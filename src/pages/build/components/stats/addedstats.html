@@ -2,19 +2,26 @@
   <!-- <require from="/src/pages/items/filter.less"></require> -->
   <require from="../../../items/filter.less"></require>
 
-  <!-- <h2>Added Stats</h2> -->
+  <!-- <h6>Caractéristiques exotiques</h6> -->
+  <!-- <th>Caractéristiques exotiques</th> -->
+  <div style="font-weight: bold;">Caractéristiques exotiques</div>
 
   <ul style="list-style-type: none; padding-left: 0px;">
 
     <li class="d-flex" repeat.for="[name, val] of stats" style="flex-wrap: nowrap;">
       <!-- <input type="text" value.bind="name" disabled class="mr-2" /> -->
-      <div class="mr-auto">${name}</div>
-      <input type="number" value.bind="val" disabled />
-      <!-- <button class="btnDelete" onclick.call="deleteExo(name)">x</button> -->
+      <button class="btnDelete" style="width: 30px;" onclick.call="deleteExo(name)">✕</button>
+
+      <div class="mr-auto mt-auto mb-auto">${name}</div>
+      <!-- <input type="number" value.bind="val" /> -->
+
+      <!-- <input id="exostat-${name}" type="number" model.bind="stats.get(name)" value="${stats.get(name)}" onchange.call="onchange(name)" /> -->
+      <input id="exostat-${name}" type="number" model.bind="val" value="${val}" onchange.call="onChangeExo(name)" />
     </li>
 
-    <!--
-    <li class="row" repeat.for="[name, val] of stats">
+
+
+    <!-- <li class="row" repeat.for="[name, val] of stats">
       <div name="modsearch" class="searchable">
         <input name="modsearchinput" type="text" autocomplete="off" placeholder="+Add Stat Mod" value.bind="name" onkeyup.call="filterFunction2($this, $event)" onchange.call="oninput($this, $event)" onfocus.call="onModInputFocus($this, $event)"
           onblur.call="onModInputBlur($this, $event)">
@@ -29,7 +36,7 @@
       <input id="exostat-${name}" type="number" value.bind="val" />
 
       <button class="btnDelete" onclick.call="deleteExo(name)">x</button>
-    </li>
+    </li> -->
 
     <div name="modsearch" class="searchable">
       <input name="modsearchinput" type="text" autocomplete="off" placeholder="+Add Stat Mod" onkeyup.call="filterFunction2($this, $event)" onchange.call="oninput($this, $event)" onfocus.call="onModInputFocus($this, $event)"
@@ -41,7 +48,7 @@
         </section>
       </dl>
     </div>
-    -->
+    
 
   </ul>
 

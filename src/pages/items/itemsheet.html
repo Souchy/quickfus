@@ -23,7 +23,7 @@
 
     <!-- Effects -->
     <div class="statistics">
-      <ul if.bind="data.characteristics" style="border-bottom: 1px dashed var(--accent1);">
+      <!-- <ul if.bind="data.characteristics" style="border-bottom: 1px dashed var(--accent1);">
         <div>
           <span>PA</span>
           <span>${data.characteristics[0]["PA"]}</span>
@@ -36,7 +36,28 @@
           <span>CC</span>
           <span>${data.characteristics[2]["CC"]}</span>
         </div>
-      </ul>
+      </ul> -->
+
+      <!-- weapon effects -->
+      <div if.bind="data.weaponStats">
+        <!-- <div>${compiledWeaponStats}</div>
+        <div class="weaponStatsSeparator">
+        </div> -->
+        <ul>
+          <li class="row" repeat.for="effect of data.weaponStats.effects" if="isntPseudo(effect)">
+            <div class="container statistic">
+              <span style.bind="getIcon(effect.name)"></span>
+              ${effect.min}
+              ${effect.min == null ? "" : "à"}
+              ${effect.max}
+              <span>${effect.name}</span>
+            </div>
+          </li>
+          <!-- <div class="weaponStatsSeparator"></div> -->
+        </ul>
+      </div>
+
+      <!-- normal effects -->
       <ul>
         <!-- 1 row for each effect -->
         <li class="row" repeat.for="effect of data.statistics" if="isntPseudo(effect)">
@@ -49,9 +70,30 @@
             <!-- ${effect} -->
           </div>
         </li>
+
+        <!-- custom effects (ex: jahash, crocobur...) -->
+        <li class="row">
+          <div class="container statistic" if.bind="data.customStats.fr">
+            <!-- <div class="customStats">
+            </div> -->
+            ${data.customStats.fr}
+          </div>
+        </li>
       </ul>
+      
+      <!-- weapon effects -->
+      <div if.bind="data.weaponStats">
+        <div class="weaponStatsSeparator"></div>
+        <div style="opacity: 80%;">${compiledWeaponStats}</div>
+      </div>
     </div>
 
+    <div class="conditionsBlock" if.bind="compiledConditions">
+      <div class="conditions"></div>
+      <div style="opacity: 80%;">
+        ${compiledConditions}
+      </div>
+    </div>
     <!-- Conditions -->
     <!-- <div class="conditions" if.bind="data.conditions" style="border-top: 1px dashed var(--accent1);">
       <ul style="list-style: none; margin: 0px; padding: 0px;">

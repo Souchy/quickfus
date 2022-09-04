@@ -1,3 +1,4 @@
+import { EnumStat } from './../../../i18n';
 import { bindable, computedFrom } from 'aurelia-framework';
 import { build } from '../build';
 import { db } from '../../../db';
@@ -26,19 +27,36 @@ export class options {
 		build.inst.save();
 	}
 
-	@computedFrom('build')
+  // this tag makes the binding update every time those properties are updated
+	@computedFrom('build.name', 'build.items', 'build.scrolls', 'build.bases', 'build.exos')
 	public get copyUrl(): string {
-		let data = { name: this.build.name, items: [], bases: [] };
+		let data = { name: this.build.name, items: [], scrolls: [], bases: [], exos: [] };
 
 		this.build.items.forEach((item, slot) => {
-			data.items.push(build.hash.encode(item.ankamaId));
+      // let id = item.ankamaID;
+      // let has = build.hash.encode(id);
+      // let dec = +build.hash.decode(has);
+      // console.log("encode url item id="+id+", hash="+has+", dec="+dec);
+			// data.items.push(has);
+      data.items.push(item.ankamaID);
 		});
 		db.getBaseStatNames().forEach(e => {
 			data.bases.push(build.hash.encode(this.build.bases.get(e) || 0));
 		});
+		db.getBaseStatNames().forEach(e => {
+			data.scrolls.push(build.hash.encode(this.build.scrolls.get(e) || 0));
+		});
+    this.build.exos.forEach((val, key, map) => {
+      let id = EnumStat.getKeyIdFrench(key);
+      // console.log("key=" + key + ", id=" + id)
+      data.exos.push(build.hash.encode(id)); 
+      data.exos.push(build.hash.encode(val)); 
+    });
 
 		let output: string = data.name + "-";
+		output += data.scrolls.join("-") + "-";
 		output += data.bases.join("-") + "-";
+		output += data.exos.length + "-" + data.exos.join("-") + "-";
 		output += data.items.join("-");
 		output = "http://" + location.host + "/build?data=" + output;
 		return output;
