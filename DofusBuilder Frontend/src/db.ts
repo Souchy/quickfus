@@ -6,16 +6,13 @@ import { i18n, EnumStat, EnumWeaponStat, EnumItemType, EnumItemSlot } from './i1
 export class db {
 
 	public constructor() {
-		// console.log("db ctor");
 		db.init(true);
 	}
 
 	public static init(force?: boolean) {
-		// i18n.readProperties(EnumStat, "http://127.0.0.1:9000/res/i18n/stats/stats");
-		// i18n.readProperties(EnumWeaponStat, "/res/i18n/weaponStats/weaponStats");
-		// i18n.readProperties(EnumItemType, "/res/i18n/itemTypes/itemTypes");
-		// console.log("db init " + force);
-		// if (!localStorage.getItem("statsnames") || force) db.setStatNames();
+		i18n.readProperties(EnumStat, "./src/res/i18n/stats/stats");
+		i18n.readProperties(EnumWeaponStat, "./src/res/i18n/weaponStats/weaponStats");
+		i18n.readProperties(EnumItemType, "./src/res/i18n/itemTypes/itemTypes");
 	}
 
 	public static translateStat(str): String {
@@ -25,13 +22,10 @@ export class db {
 
 	public static getImgUrl(item) {
 		if (item == null) return "";
-		let name = item.imgUrl; // url0.substr(url0.lastIndexOf("/"));
-		if (item.type == "Monture") { //} EnumItemType.MOUNT.fr || item.itemType == EnumItemType.RHINENEETLE.fr || item.itemType == EnumItemType.DRAGOTURKEY.fr || item.itemType == EnumItemType.SEEMYOL.fr) {
-			return "./src/res/items/Montures/" + name; //item.dofusID + ".png";
-		}
-		// let url0: string = item.imgUrl;
-		let url1 = "./src/res/items0/" + name;
-		return url1;
+		let name = item.imgUrl;
+    let type = EnumItemType.findKeyFrench(item.type);
+    return "./src/res/items/" + type + "/" + name;
+    // return "./src/res/items1/" + name;
 	}
 
 	public static getStatColor(name: string) {
@@ -83,28 +77,7 @@ export class db {
 		]);
 		return sections;
 	}
-	/*
-	private static setStatNames() {
-		console.log("db setStatNames");
-		var sections = new Map<string, string[]>();
-		sections.set("", ["Vie", "Initiative", "PA", "PM", "Portée", "Invocation", "% Critique"]);
-		sections.set("Caractéristiques primaires", ["Vitalité", "Sagesse", "Force", "Intelligence", "Chance", "Agilité", "Puissance"]);
-		sections.set("Dommages", [
-			"Dommages", "Dommages neutre", "Dommages Terre", "Dommages Feu", "Dommages Eau", "Dommages Air",
-			"Dommages aux pièges", "Puissance aux pièces",
-			"Dommages Critiques", "Dommages de poussée",
-			"% Dommages distance", "% Dommages mêlée", "% Dommages aux sorts", "% Dommages d'armes"
-		]);
-		sections.set("Caractéristiques secondaires", ["Prospection", "Tacle", "Fuite", "Retrait PA", "Retrait PM", "Esquive PA", "Esquive PM", "Soins"])
-		sections.set("Résistances", [
-			"% Résistance Neutre", "% Résistance Terre", "% Résistance Feu", "% Résistance Eau", "% Résistance Air",
-			"Résistance Neutre", "Résistance Terre", "Résistance Feu", "Résistance Eau", "Résistance Air",
-			"Résistance Critiques", "Résistance Poussée",
-			"% Résistance distance", "% Résistance mêlée"
-		]);
-		localStorage.setItem("statsnames", JSON.stringify(Array.from(sections.entries())));
-	}
-	*/
+  
 	public static getElementsStats() {
 		return ["Force", "Intelligence", "Chance", "Agilité"];
 	}
@@ -121,6 +94,7 @@ export class db {
 	public static getCombatStatsNames() {
 		return [
 			"Tacle", "Esquive PA", "Esquive PM", "Résistance Critiques", "Résistance Poussée",
+      // les résistances sont fetched par les noms d'éléments
 			// "Résistance Neutre", "Résistance Terre", "Résistance Feu", "Résistance Eau", "Résistance Air",
 			// "% Résistance Neutre", "% Résistance Terre", "% Résistance Feu", "% Résistance Eau", "% Résistance Air",
 		];
@@ -134,7 +108,7 @@ export class db {
 		];
 	}
 	public static getItemsTypes() {
-		return ["Amulette", "Anneau", "Chapeau", "Cape", "Sac à dos", "Ceinture", "Bottes", "Bouclier", "Dofus", "Trophée"]
+		return ["Amulette", "Anneau", "Chapeau", "Cape", "Sac à dos", "Ceinture", "Bottes", "Bouclier", "Dofus", "Trophée", "Prysmaradite"]
 	}
 	public static getWeaponsTypes() {
 		return ["Épée", "Marteau", "Pelle", "Hache", "Bâton", "Dague", "Arc", "Baguette", "Faux", "Pioche", "Arme magique", "Outil"]
@@ -150,6 +124,8 @@ export class db {
 	}
 
 	public static getIconStyle(mod: string) {
+    if(!mod) return "";
+    if(mod == "") return "";
 		if (mod == "PA") return db.sprite(97, 243);
 		if (mod == "PM") return db.sprite(97, 52);
 		if (mod.toLowerCase().includes("portée")) return db.sprite(97, 128);
@@ -181,6 +157,7 @@ export class db {
 		if (mod.toLowerCase().includes("retrait pm")) return db.sprite(97, 1340);
 
 		if (mod.toLowerCase().includes("soin")) return db.sprite(97, 966);
+		if (mod.toLowerCase().includes("pv rendus")) return db.sprite(97, 966);
 		if (mod == "Dommages") return db.sprite(97, 1156);
 		if (mod == "Dommages Poussée") return db.sprite(97, 872);
 		if (mod == "Dommages Critiques") return db.sprite(97, 1248);
@@ -191,14 +168,6 @@ export class db {
 	}
 	private static sprite(x: number, y: number) {
 		return "display: inline-block; width: 22px; height: 22px; background-image: url('./src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;"
-	}
-
-
-	public static save(build) {
-
-	}
-	public static load(buildname) {
-
 	}
 
 

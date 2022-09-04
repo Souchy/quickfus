@@ -1,3 +1,4 @@
+import { EnumStat } from './../../i18n';
 import { inject, PLATFORM, lazy } from 'aurelia-framework';
 import { builds } from '../builds/builds';
 import { db } from '../../db';
@@ -23,9 +24,10 @@ export class build {
 	public stats: Map<string, number>;
 	// base stats
 	public bases: Map<string, number>;
+	// scrolls stats
+	public scrolls: Map<string, number>;
 	// exo stats
 	public exos: Map<string, number>;
-	// faudrait faire une map parchos aussi
 
 	public static nextRing: number = 1;
 	public static nextDofus: number = 1;
@@ -47,34 +49,57 @@ export class build {
 		}
 	}
 
+  // http://localhost:9000/build?data=hello-bM-bM-bp-bM-l-bM-x-a-a-a-a-a-PA-b-PM-b-dclrS9El120Ei
 	public importsmol(data: string) {
 		// data = { name: "", items: [], bases: [] };
 		let split = data.split("-");
 		let name = split[0];
-		let bases = split.slice(1, 6).map(i => build.hash.decode(i));
-		let items = split.slice(7).map(i => build.hash.decode(i));
+		let scrolls = split.slice(1, 7).map(i => build.hash.decode(i));
+		let bases = split.slice(7, 13).map(i => build.hash.decode(i));
+    let exoCount: number = +split[13];
+		let exos = split.slice(14, 14 + exoCount).map(i => build.hash.decode(i));
+		// let items = split.slice(14 + exoCount).map(i => +build.hash.decode(i));
+		let items = split.slice(14 + exoCount).map(i => i);
+    console.log("parse url items: " + items);
 		// let obj = JSON.parse(data);
 		// get all items
-		this.api.getItems([{
-			ankamaId: { $in: items }
-		}]).then(r => {
+		this.api.getItems([{$match: {
+      "ankamaID": { "$in": items }
+    }}]).then(r => {
 			// name
 			this.name = name;
 			build.setName(this.name);
 			// set all items from returned array
-			r.content.forEach(i => build.setItem(i, true));
+      console.log("response content: " + r.response);
+			r.content.forEach(i => {
+        console.log("parse url set item: " + i)
+        build.setItem(i, true);
+      });
 			// save items
 			build.setItems(this.items);
+			// save scrolls
+			for (let e = 0; e < scrolls.length; e++) {
+				this.scrolls.set(db.getBaseStatNames()[e], scrolls[e]);
+			}
+			build.setScrolls(this.scrolls);
 			// save bases
 			for (let e = 0; e < bases.length; e++) {
 				this.bases.set(db.getBaseStatNames()[e], bases[e]);
 			}
 			build.setBases(this.bases);
 			// save exos
-			var exos = new Map<string, number>();
-			exos.set("PA", 1);
-			exos.set("PM", 1);
-			build.setExos(exos);
+			// var exos = new Map<string, number>();
+      console.log("parse exos length: " + exos.length);
+      for(let e = 0; e < exos.length; e += 2) {
+        let id = exos[e];
+        let val = exos[e + 1];
+        let key = EnumStat.values[id].fr;
+        console.log("parse exos: e="+e+", id="+id+", key="+key+", val="+val)
+        this.exos.set(key, val);
+      }
+			// exos.set("PA", 1);
+			// exos.set("PM", 1);
+			build.setExos(this.exos);
 			// save sets
 			build.calcSets(this.items);
 			// this.save();
@@ -88,14 +113,25 @@ export class build {
 		if (!localStorage.getItem("build.name") || force) build.setName("unnamed build");
 		if (!localStorage.getItem("build.sets") || force) build.setSets([]);
 		if (!localStorage.getItem("build.items") || force) build.setItems(new Map<string, any>());
+
+		if (!localStorage.getItem("build.scrolls") || force) {
+			var scrolls = new Map<string, number>();
+			scrolls.set("Vitalité", 100);
+			scrolls.set("Sagesse", 100);
+			scrolls.set("Force", 100);
+			scrolls.set("Intelligence", 100);
+			scrolls.set("Chance", 100);
+			scrolls.set("Agilité", 100);
+			build.setScrolls(scrolls);
+		}
 		if (!localStorage.getItem("build.bases") || force) {
 			var bases = new Map<string, number>();
-			bases.set("Vitalité", 100);
-			bases.set("Sagesse", 100);
-			bases.set("Force", 100);
-			bases.set("Intelligence", 100);
-			bases.set("Chance", 100);
-			bases.set("Agilité", 100);
+			bases.set("Vitalité", 0);
+			bases.set("Sagesse", 0);
+			bases.set("Force", 0);
+			bases.set("Intelligence", 0);
+			bases.set("Chance", 0);
+			bases.set("Agilité", 0);
 			build.setBases(bases);
 		}
 		if (!localStorage.getItem("build.exos") || force) {
@@ -110,6 +146,7 @@ export class build {
 		build.inst.stats = build.getStats();
 		build.inst.sets = build.getSets();
 		build.inst.items = build.getItems();
+		build.inst.scrolls = build.getScrolls();
 		build.inst.bases = build.getBases();
 		build.inst.exos = build.getExos();
 
@@ -130,6 +167,7 @@ export class build {
 			"name": this.name,
 			"items": Array.from(this.items.entries()),
 			"stats": Array.from(this.stats.entries()),
+			"scrolls": Array.from(this.scrolls.entries()),
 			"bases": Array.from(this.bases.entries()),
 			"exos": Array.from(this.exos.entries()),
 			"sets": this.sets
@@ -147,6 +185,7 @@ export class build {
 			"name": b.name,
 			"items": new Map<string, any>(b.items),
 			"stats": new Map<string, number>(b.stats),
+			"scrolls": new Map<string, number>(b.scrolls),
 			"bases": new Map<string, number>(b.bases),
 			"exos": new Map<string, number>(b.exos),
 			"sets": b.sets,
@@ -155,6 +194,7 @@ export class build {
 		build.setSets(obj.sets);
 		build.setItems(obj.items);
 		build.setStats(obj.stats);
+		build.setScrolls(obj.scrolls);
 		build.setBases(obj.bases);
 		build.setExos(obj.exos);
 	}
@@ -181,6 +221,9 @@ export class build {
 		this.items.forEach((v, k) => {
 			build.addItemStats(v);
 			// build.setItem(v, true);
+		});
+		this.scrolls.forEach((v, k) => {
+			build.addTotalStat(k, v);
 		});
 		this.bases.forEach((v, k) => {
 			build.addTotalStat(k, v);
@@ -371,6 +414,16 @@ export class build {
 		build.setBases(bases);
 	}
 
+
+	public static setScrollStat(name: string, value: number) {
+		var scrolls: Map<string, number> = build.getScrolls() as Map<string, number>;
+		// console.log("bases " + JSON.stringify(bases));
+		build.addTotalStat(name, value - (scrolls.get(name) || 0));
+		scrolls.set(name, value);
+		build.setScrolls(scrolls);
+	}
+  
+
 	public static setExo(name: string, value: number) {
 		var exos: Map<string, number> = build.getExos();
 		build.addTotalStat(name, value - (exos.get(name) || 0));
@@ -421,6 +474,17 @@ export class build {
 		if (build.inst) build.inst.bases = bases;
 		localStorage.setItem("build.bases", JSON.stringify(Array.from(bases.entries())));
 	}
+
+	private static getScrolls() {
+		return new Map<string, number>(JSON.parse(localStorage.getItem("build.scrolls")));
+	}
+	private static setScrolls(scrolls) {
+		// if (!build.inst) build.inst = new build();
+		// update view and localStorage
+		if (build.inst) build.inst.scrolls = scrolls;
+		localStorage.setItem("build.scrolls", JSON.stringify(Array.from(scrolls.entries())));
+	}
+  
 
 	private static getExos() {
 		return new Map<string, number>(JSON.parse(localStorage.getItem("build.exos")));

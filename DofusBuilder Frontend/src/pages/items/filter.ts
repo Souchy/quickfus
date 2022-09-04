@@ -48,7 +48,7 @@ export class filter {
 
 		this.types = new Map<string, boolean>();
 		this.armes = new Map<string, boolean>();
-		(db.getItemsTypes().concat(db.getPetTypes())).forEach(s => {
+		db.getItemsTypes().concat(db.getPetTypes()).forEach(s => {
 			this.types.set(s, false);
 		});
 		db.getWeaponsTypes().forEach(s => {
