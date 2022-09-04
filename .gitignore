@@ -1,5 +1,5 @@
-DofusBuilder Frontend/src/res/items0/*.png
-DofusBuilder Frontend/src/res/items/**/*.png
+# DofusBuilder Frontend/src/res/items0/*.png
+# DofusBuilder Frontend/src/res/items/**/*.png
 api.conf
 .remote-sync.json
 bin/
