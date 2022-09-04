@@ -9,6 +9,7 @@
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
+  	id("com.energizedwork.heroku-buildpack-runnable-jar") version "1.3"
 }
 
 repositories {
