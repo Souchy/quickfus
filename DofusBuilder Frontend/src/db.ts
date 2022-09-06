@@ -11,9 +11,9 @@ export class db {
 	}
 
 	public static init(force?: boolean) {
-		i18n.readProperties(EnumStat, "/src/res/i18n/stats/stats");
-		i18n.readProperties(EnumWeaponStat, "/src/res/i18n/weaponStats/weaponStats");
-		i18n.readProperties(EnumItemType, "/src/res/i18n/itemTypes/itemTypes");
+		i18n.readProperties(EnumStat, App.root2 + "/src/res/i18n/stats/stats");
+		i18n.readProperties(EnumWeaponStat, App.root2 + "/src/res/i18n/weaponStats/weaponStats");
+		i18n.readProperties(EnumItemType, App.root2 + "/src/res/i18n/itemTypes/itemTypes");
 	}
 
 	public static translateStat(str): String {
@@ -27,7 +27,7 @@ export class db {
     let type = EnumItemType.findKeyFrench(item.type);
 
     // let path = window.location.pathname.split("/")[1];
-    return "/src/res/items/" + type + "/" + name;
+    return App.root2 + "/src/res/items/" + type + "/" + name;
     // return "./src/res/items1/" + name;
 	}
 
@@ -170,7 +170,7 @@ export class db {
 		return "";
 	}
 	private static sprite(x: number, y: number) {
-		return "display: inline-block; width: 22px; height: 22px; background-image: url('/src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;"
+		return "display: inline-block; width: 22px; height: 22px; background-image: url(" + App.root2 +  "'/src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;"
 	}
 
 
