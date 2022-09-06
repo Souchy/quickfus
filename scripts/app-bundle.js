@@ -80,8 +80,8 @@ define('app',["require", "exports", "aurelia-framework", "./api", "./db"], funct
             this.router = router;
         };
         var App_1;
-        App.root = "";
-        App.root2 = "";
+        App.root = "quickfus";
+        App.root2 = "quickfus";
         App = App_1 = __decorate([
             aurelia_framework_1.inject(api_1.WebAPI),
             __metadata("design:paramtypes", [api_1.WebAPI])
