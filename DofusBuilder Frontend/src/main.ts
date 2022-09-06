@@ -2,7 +2,7 @@ import { Aurelia } from 'aurelia-framework';
 import environment from './environment';
 
 export function configure(aurelia: Aurelia) {
-	console.log("configure main1");
+	// console.log("configure main1");
 
 	aurelia.use
 		.standardConfiguration()

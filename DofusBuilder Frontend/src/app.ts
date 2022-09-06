@@ -38,7 +38,14 @@ export class App {
 			// { route: 'build/:data', moduleId: "pages/build/build", name: 'buildimport' },
 			{ route: 'builds', moduleId: "pages/builds/builds", name: 'builds' },
 			{ route: 'items', moduleId: "pages/items/itemsearch", name: 'items' },
-			{ route: 'sets', moduleId: "pages/sets/setsearch", name: 'sets' }
+			{ route: 'sets', moduleId: "pages/sets/setsearch", name: 'sets' },
+      
+			{ route: 'quickfus/', moduleId: "pages/build/build", name: 'index' },
+			{ route: 'quickfus/build', moduleId: "pages/build/build", name: 'build' },
+			// { route: 'build/:data', moduleId: "pages/build/build", name: 'buildimport' },
+			{ route: 'quickfus/builds', moduleId: "pages/builds/builds", name: 'builds' },
+			{ route: 'quickfus/items', moduleId: "pages/items/itemsearch", name: 'items' },
+			{ route: 'quickfus/sets', moduleId: "pages/sets/setsearch", name: 'sets' }
 		]);
 
 		config.mapUnknownRoutes((instruction: NavigationInstruction): RouteConfig => {
