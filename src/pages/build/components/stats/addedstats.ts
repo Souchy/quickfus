@@ -36,6 +36,12 @@ export class addedstats {
     build.setExo(name, doc.valueAsNumber);
     build.inst.save();
 	}
+  public deleteExo(name) {
+    var doc = document.getElementById("exostat-" + name) as HTMLInputElement;
+		console.log("deleteExo stat : " + name + "=" + doc.valueAsNumber);
+    build.setExo(name, 0);
+    build.inst.save();
+  }
 
 	public onModInputFocus(that, event, blockid, modid) {
 		console.log("onFocusModInput [" + blockid + "," + modid + "] : " + that);
