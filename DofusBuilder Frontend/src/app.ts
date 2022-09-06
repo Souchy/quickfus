@@ -8,8 +8,8 @@ import { db } from './db';
 
 @inject(WebAPI)
 export class App {
-  public static root: string = "quickfus"; // quickfus
-  public static root2: string = "quickfus"; // quickfus
+  public static root: string = "quickfus/"; // quickfus
+  public static root2: string = ""; // quickfus
 	public router: Router;
 	public body: string = "";
 
