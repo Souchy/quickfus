@@ -30,6 +30,7 @@ node_modules
 
 # Compiled files
 /scripts
+/quickfus/scripts
 /src/environment.js
 /src/environment.ts
 /dist

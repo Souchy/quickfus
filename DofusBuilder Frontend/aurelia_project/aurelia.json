@@ -41,14 +41,16 @@
     "open": false,
     "index": "index.html",
     "baseDir": ".",
-    "output": "scripts"
+    "output": "quickfus/scripts",
+    "baseUrl": "../quickfus/scripts"
   },
   "build": {
     "targets": [{
       "port": 9000,
       "index": "index.html",
       "baseDir": ".",
-      "output": "scripts"
+      "output": "quickfus/scripts",
+      "baseUrl": "../quickfus/scripts"
     }],
     "options": {
       "minify": "stage & prod",

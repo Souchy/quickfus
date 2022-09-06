@@ -8,6 +8,7 @@ import { db } from './db';
 
 @inject(WebAPI)
 export class App {
+  public static root: string = "/quickfus";
 	public router: Router;
 	public body: string = "";
 
@@ -20,8 +21,9 @@ export class App {
 		console.log("configure router");
 		config.title = 'Quickfus';
 		config.options.pushState = true;
-		// config.options.root = '/';
+		config.options.root = App.root;
 		config.addPipelineStep('postcomplete', PostCompleteStep);
+
 		config.map([
 			// { route: '', moduleId: PLATFORM.moduleName('no-selection'), title: 'Select' },
 			// { route: 'contacts/:id', moduleId: PLATFORM.moduleName('contact-detail'), name: 'contacts' },
@@ -37,6 +39,7 @@ export class App {
 			{ route: 'items', moduleId: "pages/items/itemsearch", name: 'items' },
 			{ route: 'sets', moduleId: "pages/sets/setsearch", name: 'sets' }
 		]);
+    
 		config.mapUnknownRoutes((instruction: NavigationInstruction): RouteConfig => {
 			return { route: 'unknownroute', name: 'unknownroute' };
 		}); //'not-found');
