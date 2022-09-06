@@ -6,7 +6,7 @@ define('api',["require", "exports", "aurelia-http-client"], function (require, e
             this.client = new aurelia_http_client_1.HttpClient();
         }
         WebAPI.prototype.getUrl = function () {
-            return "http://" + location.hostname + ":9696";
+            return "https://quickfus-backend.herokuapp.com";
         };
         WebAPI.prototype.findOne = function (collection, id) {
             var url = this.getUrl() + "/" + collection + "/" + id;
