@@ -1274,13 +1274,11 @@ define('pages/build/components/stats/addedstats',["require", "exports", "aurelia
         }
         addedstats.prototype.onChangeExo = function (name) {
             var doc = document.getElementById("exostat-" + name);
-            console.log("onChangeExo stat : " + name + "=" + doc.valueAsNumber);
             build_1.build.setExo(name, doc.valueAsNumber);
             build_1.build.inst.save();
         };
         addedstats.prototype.deleteExo = function (name) {
             var doc = document.getElementById("exostat-" + name);
-            console.log("deleteExo stat : " + name + "=" + doc.valueAsNumber);
             build_1.build.setExo(name, 0);
             build_1.build.inst.save();
         };
