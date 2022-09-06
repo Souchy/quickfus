@@ -10,48 +10,9 @@ export class WebAPI {
 
 	public getUrl() {
 		// console.log("url : " + location.hostname);
-		// return "https://data.mongodb-api.com/app/data-ewvjc/endpoint/data/v1"; 
-    return "http://" + location.hostname + ":9696";
+    // return "http://" + location.hostname + ":9696";
+    return "https://quickfus-backend.herokuapp.com";
 	}
-
-  // public findOne(collection: string, id: string): Promise<HttpResponseMessage> {
-	// 	var url = this.getUrl() + "/findOne";
-	// 	var body: string = JSON.stringify({
-  //     "dataSource": "SouchyAtlasCluster0",
-  //     "database": "quickfus",
-  //     "collection": collection,
-  //     "filter": { "_id": id }
-  //   });
-  //   var headers = new Headers({
-  //     // "Content-Type": "application/json",
-  //     // "Accept-Encoding": "gzip, deflate, br",
-  //     // "Accept": "*/*",
-  //     // "Access-Control-Allow-Origin": "*",
-  //     "api-key": "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI"
-  //   });
-	// 	var req = new HttpRequestMessage("POST", url, body, headers);
-	// 	return this.client.send(req, []);
-  // }
-
-  // public aggregate(collection: string, pipeline: any[]): Promise<HttpResponseMessage> {
-	// 	var url = this.getUrl() + "/aggregate";
-	// 	var body: string = JSON.stringify({
-  //     "dataSource": "SouchyAtlasCluster0",
-  //     "database": "quickfus",
-  //     "collection": collection,
-  //     "pipeline": pipeline
-  //   });
-  //   var headers = new Headers({
-  //     // "Content-Type": "application/json",
-  //     // "Accept-Encoding": "gzip, deflate, br",
-  //     // "Accept": "*/*",
-  //     // "Access-Control-Allow-Origin": "*",
-  //     "api-key": "k8JFpRr9LxAWCSsekfSR2j9aLlbj5kaK3oz3vB33tyx1BgxAG7LtRxx9nw4mdJWI"
-  //   });
-	// 	var req = new HttpRequestMessage("POST", url, body, headers);
-	// 	return this.client.send(req, []);
-  // }
-
   
   public findOne(collection: string, id: string): Promise<HttpResponseMessage> {
 		var url = this.getUrl() + "/" + collection + "/" + id;
@@ -60,7 +21,7 @@ export class WebAPI {
 
   public aggregate(collection: string, pipeline: any[]): Promise<HttpResponseMessage> {
 		var url = this.getUrl() + "/" + collection;
-		var req = new HttpRequestMessage("POST", url, pipeline); //body, headers);
+		var req = new HttpRequestMessage("POST", url, pipeline); 
 		return this.client.send(req, []);
   }
 
