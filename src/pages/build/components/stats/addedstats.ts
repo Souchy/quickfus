@@ -29,9 +29,10 @@ export class addedstats {
 	}
 	*/
 
+
 	public onChangeExo(name) {
+    var doc = document.getElementById("exostat-" + name) as HTMLInputElement;
 		console.log("onChangeExo stat : " + name + "=" + doc.valueAsNumber);
-		var doc = document.getElementById("exostat-" + name) as HTMLInputElement;
     build.setExo(name, doc.valueAsNumber);
     build.inst.save();
 	}

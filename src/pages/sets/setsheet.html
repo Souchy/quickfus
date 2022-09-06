@@ -25,7 +25,8 @@
     <div class="items">
       <!-- <item-slot repeat.for="item of data.items" style="margin-bottom: 2px;" id="${data[i+10]}" item.bind="item"></item-slot> -->
       <div class="item" repeat.for="item of data.items" onmouseover.call="hoverItem()">
-        <img src="/src/res/items0/${item.imgUrl}">
+        <!-- <img src="/src/res/items0/${item.imgUrl}"> -->
+        <img src="${getImgUrl(item)}">
         <itemsheet data.bind="item"></itemsheet>
       </div>
       <!-- <div repeat.for="item of data.items">

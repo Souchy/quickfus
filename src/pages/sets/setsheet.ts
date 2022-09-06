@@ -64,4 +64,8 @@ export class setsheet {
 		console.log("hover item");
 	}
 
+  public getImgUrl(item) {
+    return db.getImgUrl(item);
+  }
+
 }

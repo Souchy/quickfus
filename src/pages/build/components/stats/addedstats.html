@@ -7,7 +7,6 @@
   <div style="font-weight: bold;">Caractéristiques exotiques</div>
 
   <ul style="list-style-type: none; padding-left: 0px;">
-
     <li class="d-flex" repeat.for="[name, val] of stats" style="flex-wrap: nowrap;">
       <!-- <input type="text" value.bind="name" disabled class="mr-2" /> -->
       <button class="btnDelete" style="width: 30px;" onclick.call="deleteExo(name)">✕</button>
@@ -20,24 +19,6 @@
     </li>
 
 
-
-    <!-- <li class="row" repeat.for="[name, val] of stats">
-      <div name="modsearch" class="searchable">
-        <input name="modsearchinput" type="text" autocomplete="off" placeholder="+Add Stat Mod" value.bind="name" onkeyup.call="filterFunction2($this, $event)" onchange.call="oninput($this, $event)" onfocus.call="onModInputFocus($this, $event)"
-          onblur.call="onModInputBlur($this, $event)">
-        <dl name="modsearchlist" class="modlist">
-          <section repeat.for="[section, mods] of modsSections">
-            <dt>${section}</dt>
-            <dd repeat.for="modname of mods" onmouseover.call="onDDHover($this, $event, modname)" onclick.call="onDDClick($this, $event, name, modname)">${modname}</dd>
-          </section>
-        </dl>
-      </div>
-
-      <input id="exostat-${name}" type="number" value.bind="val" />
-
-      <button class="btnDelete" onclick.call="deleteExo(name)">x</button>
-    </li> -->
-
     <div name="modsearch" class="searchable">
       <input name="modsearchinput" type="text" autocomplete="off" placeholder="+Add Stat Mod" onkeyup.call="filterFunction2($this, $event)" onchange.call="oninput($this, $event)" onfocus.call="onModInputFocus($this, $event)"
         onblur.call="onModInputBlur($this, $event)">
@@ -48,10 +29,6 @@
         </section>
       </dl>
     </div>
-    
-
   </ul>
-
-  <!-- <button class="btnAdd">Add Stat</button> -->
 
 </template>
