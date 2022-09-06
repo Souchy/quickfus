@@ -4,9 +4,9 @@ name: Aurelia CI
 
 on:
   push:
-    branches: [ atlasapi ]
+    branches: [ master, atlasapi ]
   pull_request:
-    branches: [ atlasapi ]
+    branches: [ master, atlasapi ]
     
 defaults:
   run:
@@ -40,13 +40,6 @@ jobs:
     steps:
     - uses: actions/checkout@v3
     
-    
-    - name: Deploy Backend To Branch
-      uses: peaceiris/actions-gh-pages@v3
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: "/home/runner/work/quickfus/quickfus/DofusBuilder Backend"
-        publish_branch: backend
     
     - run: npm install
     - name: Setup aurelia 
