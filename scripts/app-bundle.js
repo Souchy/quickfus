@@ -60,12 +60,9 @@ define('app',["require", "exports", "aurelia-framework", "./api", "./db"], funct
             console.log("app ctor");
             db_1.db.init(true);
         }
-        App_1 = App;
         App.prototype.configureRouter = function (config, router) {
             console.log("configure router");
             config.title = 'Quickfus';
-            config.options.pushState = true;
-            config.options.root = App_1.root;
             config.addPipelineStep('postcomplete', PostCompleteStep);
             config.map([
                 { route: '', moduleId: "pages/build/build", name: 'index' },
@@ -73,21 +70,15 @@ define('app',["require", "exports", "aurelia-framework", "./api", "./db"], funct
                 { route: 'builds', moduleId: "pages/builds/builds", name: 'builds' },
                 { route: 'items', moduleId: "pages/items/itemsearch", name: 'items' },
                 { route: 'sets', moduleId: "pages/sets/setsearch", name: 'sets' },
-                { route: 'quickfus/', moduleId: "pages/build/build", name: 'index' },
-                { route: 'quickfus/build', moduleId: "pages/build/build", name: 'build' },
-                { route: 'quickfus/builds', moduleId: "pages/builds/builds", name: 'builds' },
-                { route: 'quickfus/items', moduleId: "pages/items/itemsearch", name: 'items' },
-                { route: 'quickfus/sets', moduleId: "pages/sets/setsearch", name: 'sets' }
             ]);
             config.mapUnknownRoutes(function (instruction) {
                 return { route: 'unknownroute', name: 'unknownroute' };
             });
             this.router = router;
         };
-        var App_1;
-        App.root = "quickfus/";
-        App.root2 = ".";
-        App = App_1 = __decorate([
+        App.root = "";
+        App.root2 = "";
+        App = __decorate([
             aurelia_framework_1.inject(api_1.WebAPI),
             __metadata("design:paramtypes", [api_1.WebAPI])
         ], App);
@@ -135,7 +126,7 @@ define('components/header',["require", "exports"], function (require, exports) {
 });
 ;
 define('text!components/header.css',[],function(){return "nav {\n  width: 100%;\n  height: 50px;\n  margin-bottom: 20px;\n  background-color: transparent;\n  border-bottom: 1px solid var(--accent1);\n  /* padding-left: 0px !important; */\n}\nnav li {\n  height: 50px;\n  padding-left: 10px;\n  padding-right: 10px;\n}\nnav li:hover {\n  color: var(--front1);\n  background-color: var(--accent1);\n  text-decoration: none;\n}\nnav li:hover a {\n  color: var(--front1);\n  background-color: var(--accent1);\n  text-decoration: none;\n}\nnav a {\n  height: 50px;\n  color: var(--accent1);\n  text-decoration: none;\n  padding: 12px !important;\n}\nnav a:visited {\n  color: var(--accent1);\n  text-decoration: none;\n  background-color: #555;\n}\n";});;
-define('text!components/header.html',[],function(){return "<template>\n  <require from=\"./header.css\"></require>\n\n  <nav class=\"navbar navbar-expand-lg\">\n\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"/builds\">Builds</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"/build\">Build</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"/items\">Items</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"/sets\">Sets</a>\n      </li>\n    </ul>\n\n    <ul class=\"navbar-nav\">\n      <li class=\"nav-item\">\n        <a href=\"https://twitter.com/quickfus\">\n          <i class=\"fab fa-twitter\"></i>\n        </a>\n      </li>\n      <li class=\"nav-item\">\n        <a href=\"https://github.com/Souchy/quickfus\">\n          <i class=\"fab fa-github\"></i>\n        </a>\n      </li>\n    </ul>\n\n  </nav>\n\n</template>\n";});;
+define('text!components/header.html',[],function(){return "<template>\n  <require from=\"./header.css\"></require>\n\n  <nav class=\"navbar navbar-expand-lg\">\n\n    <ul class=\"navbar-nav mr-auto\">\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#/builds\">Builds</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#/build\">Build</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#/items\">Items</a>\n      </li>\n      <li class=\"nav-item\">\n        <a class=\"nav-link\" href=\"#/sets\">Sets</a>\n      </li>\n    </ul>\n\n    <ul class=\"navbar-nav\">\n      <li class=\"nav-item\">\n        <a href=\"https://twitter.com/quickfus\">\n          <i class=\"fab fa-twitter\"></i>\n        </a>\n      </li>\n      <li class=\"nav-item\">\n        <a href=\"https://github.com/Souchy/quickfus\">\n          <i class=\"fab fa-github\"></i>\n        </a>\n      </li>\n    </ul>\n\n  </nav>\n\n</template>\n";});;
 define('text!components/mason.css',[],function(){return "/* ---- grid ---- */\n.grid:after {\n  content: '';\n  display: block;\n  clear: both;\n}\n.grid-wrapper {\n  width: 100%;\n  height: 100%;\n  min-height: 1000px;\n}\n.grid {\n  margin: 0 auto;\n  /* min-width: 540;\n  min-height: 1000px; */\n}\n/* clearfix */\n/* .grid:after {\n  content: '';\n  display: block;\n  clear: both;\n} */\n/* ---- grid-item ---- */\n.grid-item {\n  float: left;\n  width: 260px;\n  /* min-height: 150px; */\n  /* padding: 5px; */\n  /* margin: 5px;  /* masonry does not respect left & right margins, so we need to use gutter : 10 instead */\n  margin-bottom: 10px;\n  /* and to add a margin-bottom for vertical gutter (this is respected by masonry) */\n}\n";});;
 define('components/statmod',["require", "exports"], function (require, exports) {
     "use strict";
@@ -187,9 +178,9 @@ define('db',["require", "exports", "./i18n", "app"], function (require, exports,
             db.init(true);
         }
         db.init = function (force) {
-            i18n_1.i18n.readProperties(i18n_1.EnumStat, app_1.App.root2 + "/src/res/i18n/stats/stats");
-            i18n_1.i18n.readProperties(i18n_1.EnumWeaponStat, app_1.App.root2 + "/src/res/i18n/weaponStats/weaponStats");
-            i18n_1.i18n.readProperties(i18n_1.EnumItemType, app_1.App.root2 + "/src/res/i18n/itemTypes/itemTypes");
+            i18n_1.i18n.readProperties(i18n_1.EnumStat, app_1.App.root2 + "src/res/i18n/stats/stats");
+            i18n_1.i18n.readProperties(i18n_1.EnumWeaponStat, app_1.App.root2 + "src/res/i18n/weaponStats/weaponStats");
+            i18n_1.i18n.readProperties(i18n_1.EnumItemType, app_1.App.root2 + "src/res/i18n/itemTypes/itemTypes");
         };
         db.translateStat = function (str) {
             return "";
@@ -199,7 +190,7 @@ define('db',["require", "exports", "./i18n", "app"], function (require, exports,
                 return "";
             var name = item.imgUrl;
             var type = i18n_1.EnumItemType.findKeyFrench(item.type).toLowerCase();
-            return app_1.App.root2 + "/src/res/items/" + type + "/" + name;
+            return app_1.App.root2 + "src/res/items/" + type + "/" + name;
         };
         db.getStatColor = function (name) {
             switch (name) {
@@ -355,7 +346,7 @@ define('db',["require", "exports", "./i18n", "app"], function (require, exports,
             return "";
         };
         db.sprite = function (x, y) {
-            return "display: inline-block; width: 22px; height: 22px; background-image: url('" + app_1.App.root2 + "/src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;";
+            return "display: inline-block; width: 22px; height: 22px; background-image: url('" + app_1.App.root2 + "src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;";
         };
         return db;
     }());
