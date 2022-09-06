@@ -102,7 +102,7 @@ public class LabImport {
 			for (var rank : ranks.keySet()) {
 				var bonuses = ranks.getJSONArray(rank);
 
-				convertBonuses(bonuses);
+				convertBonuses(bonuses, (name) -> Stats.en_to_fr.get(name));
 
 				ranksArray.put(ranks.length() - r, bonuses); // en ordre inverse
 				r++;
@@ -214,7 +214,7 @@ public class LabImport {
 			var trans = translator.apply(name.toLowerCase());
 			if(trans == null || trans.isBlank()) {
 				trans = name;
-				Log.info("Translating error on: " + name);
+				Log.info("Translating item stat error on: " + name);
 			}
 			stat.put("name", trans); // Stats.en_to_fr.get(name));
 
@@ -227,7 +227,7 @@ public class LabImport {
 		}
 	}
 
-	private static void convertBonuses(JSONArray bonuses) {
+	private static void convertBonuses(JSONArray bonuses, Function<String, String> translator) {
 		for (int j = 0; j < bonuses.length(); j++) {
 			var stat = bonuses.getJSONObject(j);
 
@@ -235,10 +235,15 @@ public class LabImport {
 			rename(stat, "stat", "name");
 			rename(stat, "value", "max");
 			stat.remove("altStat");
-
+			
 			// translate name
-			var name = stat.get("name");
-			stat.put("name", Stats.en_to_fr.get(name));
+			var name = stat.get("name").toString();
+			var trans = translator.apply(name.toLowerCase());
+			if(trans == null || trans.isBlank()) {
+				trans = name;
+				Log.info("Translating set stat error on: " + name);
+			}
+			stat.put("name", trans); // Stats.en_to_fr.get(name));
 
 		}
 	}

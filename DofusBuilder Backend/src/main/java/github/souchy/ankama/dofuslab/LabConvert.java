@@ -162,8 +162,8 @@ public class LabConvert {
 
 		pipe.add(Aggregates.addFields(new Field<Document>("(Pseudo) statistics.(Pseudo) # res", resSizer(true))));
 		pipe.add(Aggregates.addFields(new Field<Document>("(Pseudo) statistics.(Pseudo) Total #% res", resSummer(true))));
-		pipe.add(Aggregates.addFields(new Field<Document>("(Pseudo) statistics.(Pseudo) # res �l�mentaires", resSizer(false))));
-		pipe.add(Aggregates.addFields(new Field<Document>("(Pseudo) statistics.(Pseudo) Total #% res �l�mentaires", resSummer(false))));
+		pipe.add(Aggregates.addFields(new Field<Document>("(Pseudo) statistics.(Pseudo) # res élémentaires", resSizer(false))));
+		pipe.add(Aggregates.addFields(new Field<Document>("(Pseudo) statistics.(Pseudo) Total #% res élémentaires", resSummer(false))));
 		
 		
 		var output = Emerald.sets().aggregate(pipe).into(new ArrayList<Document>());
@@ -194,26 +194,26 @@ public class LabConvert {
 	private static Document resFilter(boolean neutre) {
 		var arr = new BsonArray(Arrays.asList(
 				new BsonDocument().append("$eq", new BsonArray(Arrays.asList(
-						new BsonString("$$stat.name"), new BsonString(Stats.RES_PER_EARTH.fr) //"% R�sistance Terre")
+						new BsonString("$$stat.name"), new BsonString(Stats.RES_PER_EARTH.fr) //"% Résistance Terre")
 					))
 				),
 				new BsonDocument().append("$eq", new BsonArray(Arrays.asList(
-						new BsonString("$$stat.name"), new BsonString(Stats.RES_PER_FIRE.fr) //"% R�sistance Feu")
+						new BsonString("$$stat.name"), new BsonString(Stats.RES_PER_FIRE.fr) //"% Résistance Feu")
 					))
 				),
 				new BsonDocument().append("$eq", new BsonArray(Arrays.asList(
-						new BsonString("$$stat.name"), new BsonString(Stats.RES_PER_WATER.fr) //"% R�sistance Eau")
+						new BsonString("$$stat.name"), new BsonString(Stats.RES_PER_WATER.fr) //"% Résistance Eau")
 					))
 				),
 				new BsonDocument().append("$eq", new BsonArray(Arrays.asList(
-						new BsonString("$$stat.name"), new BsonString(Stats.RES_PER_AIR.fr) //"% R�sistance Air")
+						new BsonString("$$stat.name"), new BsonString(Stats.RES_PER_AIR.fr) //"% Résistance Air")
 					))
 				)
 		));
 		if(neutre) {
 			arr.add(
 				new BsonDocument().append("$eq", new BsonArray(Arrays.asList(
-					new BsonString("$$stat.name"), new BsonString(Stats.RES_PER_NEUTRAL.fr) //"% R�sistance Neutre")
+					new BsonString("$$stat.name"), new BsonString(Stats.RES_PER_NEUTRAL.fr) //"% Résistance Neutre")
 				))
 			));
 		}

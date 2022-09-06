@@ -6,26 +6,19 @@
 	"configurations": [
 		{
 			"type": "java",
-			"name": "Launch Quickfus",
-			"request": "launch",
-			"mainClass": "github.souchy.ankama.quickfus.Quickfus",
-			"projectName": "DofusBuilder Backend"
-		},
-		{
-			"type": "java",
 			"name": "Launch LabImport",
 			"request": "launch",
 			"mainClass": "github.souchy.ankama.dofuslab.LabImport",
-			"projectName": "Backend",
-			"cwd": "${workspaceFolder}/Backend/"
+			"projectName": "DofusBuilder Backend",
+			"cwd": "${workspaceFolder}/DofusBuilder Backend/"
 		},
 		{
 			"type": "java",
 			"name": "Launch Quickfus",
 			"request": "launch",
 			"mainClass": "github.souchy.ankama.quickfus.Quickfus",
-			"projectName": "Backend",
-			"cwd": "${workspaceFolder}/Backend/"
+			"projectName": "DofusBuilder Backend",
+			"cwd": "${workspaceFolder}/DofusBuilder Backend/"
 		},
 		{
 			"type": "java",
@@ -34,21 +27,5 @@
 			"mainClass": "${file}",
 			"cwd": "${fileDirname}"
 		},
-		{
-			"type": "java",
-			"name": "Launch Quickfus",
-			"request": "launch",
-			"mainClass": "DofusBuilder.Backend/github.souchy.ankama.dofusbuilder.backend.main.Quickfus",
-			"projectName": "DofusBuilder Backend",
-			"cwd": "${workspaceFolder}/DofusBuilder Backend/"
-		},
-		{
-			"type": "java",
-			"name": "Launch LabImport",
-			"request": "launch",
-			"mainClass": "DofusBuilder.Backend/github.souchy.ankama.dofusbuilder.conversion.dofuslab.LabImport",
-			"projectName": "DofusBuilder Backend",
-			"cwd": "${workspaceFolder}/DofusBuilder Backend/"
-		}
 	]
 }
