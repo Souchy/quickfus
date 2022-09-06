@@ -8,7 +8,8 @@ import { db } from './db';
 
 @inject(WebAPI)
 export class App {
-  public static root: string = "/quickfus";
+  public static root: string = ""; // quickfus
+  public static root2: string = ""; // quickfus
 	public router: Router;
 	public body: string = "";
 
@@ -39,7 +40,7 @@ export class App {
 			{ route: 'items', moduleId: "pages/items/itemsearch", name: 'items' },
 			{ route: 'sets', moduleId: "pages/sets/setsearch", name: 'sets' }
 		]);
-    
+
 		config.mapUnknownRoutes((instruction: NavigationInstruction): RouteConfig => {
 			return { route: 'unknownroute', name: 'unknownroute' };
 		}); //'not-found');

@@ -80,7 +80,8 @@ define('app',["require", "exports", "aurelia-framework", "./api", "./db"], funct
             this.router = router;
         };
         var App_1;
-        App.root = "/quickfus";
+        App.root = "";
+        App.root2 = "";
         App = App_1 = __decorate([
             aurelia_framework_1.inject(api_1.WebAPI),
             __metadata("design:paramtypes", [api_1.WebAPI])
@@ -173,7 +174,7 @@ define('components/statmod',["require", "exports"], function (require, exports) 
 });
 ;
 define('text!components/statmod.html',[],function(){return "<template>\n\n  <div name=\"modsearch\" class=\"searchable\">\n    <input name=\"modsearchinput\" type=\"text\" autocomplete=\"off\" placeholder=\"+Add Stat Mod\" value.bind=\"name\" onkeyup.call=\"filterFunction2($this,$event)\" onchange.call=\"oninput($this, $event)\" onfocus.call=\"onModInputFocus($this, $event, i, j)\"\n      onblur.call=\"onModInputBlur($this, $event, i, j)\">\n    <dl name=\"modsearchlist\" class=\"modlist\">\n      <section repeat.for=\"[section, mods] of modsSections\">\n        <dt>${section}</dt>\n        <dd repeat.for=\"modname of mods\" onmouseover.call=\"onDDHover($this, $event, i, j, modname)\" onclick.call=\"onDDClick($this, $event, i, j, modname)\">${modname}</dd>\n      </section>\n    </dl>\n  </div>\n\n</template>";});;
-define('db',["require", "exports", "./i18n"], function (require, exports, i18n_1) {
+define('db',["require", "exports", "./i18n", "app"], function (require, exports, i18n_1, app_1) {
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     var db = (function () {
@@ -181,9 +182,9 @@ define('db',["require", "exports", "./i18n"], function (require, exports, i18n_1
             db.init(true);
         }
         db.init = function (force) {
-            i18n_1.i18n.readProperties(i18n_1.EnumStat, "/src/res/i18n/stats/stats");
-            i18n_1.i18n.readProperties(i18n_1.EnumWeaponStat, "/src/res/i18n/weaponStats/weaponStats");
-            i18n_1.i18n.readProperties(i18n_1.EnumItemType, "/src/res/i18n/itemTypes/itemTypes");
+            i18n_1.i18n.readProperties(i18n_1.EnumStat, app_1.App.root2 + "/src/res/i18n/stats/stats");
+            i18n_1.i18n.readProperties(i18n_1.EnumWeaponStat, app_1.App.root2 + "/src/res/i18n/weaponStats/weaponStats");
+            i18n_1.i18n.readProperties(i18n_1.EnumItemType, app_1.App.root2 + "/src/res/i18n/itemTypes/itemTypes");
         };
         db.translateStat = function (str) {
             return "";
@@ -193,7 +194,7 @@ define('db',["require", "exports", "./i18n"], function (require, exports, i18n_1
                 return "";
             var name = item.imgUrl;
             var type = i18n_1.EnumItemType.findKeyFrench(item.type);
-            return "/src/res/items/" + type + "/" + name;
+            return app_1.App.root2 + "/src/res/items/" + type + "/" + name;
         };
         db.getStatColor = function (name) {
             switch (name) {
@@ -349,7 +350,7 @@ define('db',["require", "exports", "./i18n"], function (require, exports, i18n_1
             return "";
         };
         db.sprite = function (x, y) {
-            return "display: inline-block; width: 22px; height: 22px; background-image: url('/src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;";
+            return "display: inline-block; width: 22px; height: 22px; background-image: url(" + app_1.App.root2 + "'/src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;";
         };
         return db;
     }());
