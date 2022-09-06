@@ -72,7 +72,12 @@ define('app',["require", "exports", "aurelia-framework", "./api", "./db"], funct
                 { route: 'build', moduleId: "pages/build/build", name: 'build' },
                 { route: 'builds', moduleId: "pages/builds/builds", name: 'builds' },
                 { route: 'items', moduleId: "pages/items/itemsearch", name: 'items' },
-                { route: 'sets', moduleId: "pages/sets/setsearch", name: 'sets' }
+                { route: 'sets', moduleId: "pages/sets/setsearch", name: 'sets' },
+                { route: 'quickfus/', moduleId: "pages/build/build", name: 'index' },
+                { route: 'quickfus/build', moduleId: "pages/build/build", name: 'build' },
+                { route: 'quickfus/builds', moduleId: "pages/builds/builds", name: 'builds' },
+                { route: 'quickfus/items', moduleId: "pages/items/itemsearch", name: 'items' },
+                { route: 'quickfus/sets', moduleId: "pages/sets/setsearch", name: 'sets' }
             ]);
             config.mapUnknownRoutes(function (instruction) {
                 return { route: 'unknownroute', name: 'unknownroute' };
@@ -618,7 +623,6 @@ define('main',["require", "exports", "./environment"], function (require, export
     "use strict";
     Object.defineProperty(exports, "__esModule", { value: true });
     function configure(aurelia) {
-        console.log("configure main1");
         aurelia.use
             .standardConfiguration()
             .feature('resources');
