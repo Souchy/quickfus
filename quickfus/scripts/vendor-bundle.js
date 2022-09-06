@@ -39748,7 +39748,7 @@ function _aureliaConfigureModuleLoader(){requirejs.config({
     "attributes": "resources/attributes",
     "valueConverters": "resources/value-converters",
     "bindingBehaviors": "resources/binding-behaviors",
-    "app-bundle": "../../quickfus/scripts/app-bundle"
+    "app-bundle": "../quickfus/scripts/app-bundle"
   },
   "packages": [],
   "stubModules": [],
