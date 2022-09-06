@@ -34,7 +34,7 @@ public class Sets {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Document getSet(@PathParam("id") int id) {
+	public Document getSet(@PathParam("id") String id) {
 		return Emerald.sets().find(Filters.eq("id", id)).first();
 	}
 
