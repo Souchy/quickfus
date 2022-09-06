@@ -32,13 +32,13 @@ export class addedstats {
 
 	public onChangeExo(name) {
     var doc = document.getElementById("exostat-" + name) as HTMLInputElement;
-		console.log("onChangeExo stat : " + name + "=" + doc.valueAsNumber);
+		// console.log("onChangeExo stat : " + name + "=" + doc.valueAsNumber);
     build.setExo(name, doc.valueAsNumber);
     build.inst.save();
 	}
   public deleteExo(name) {
     var doc = document.getElementById("exostat-" + name) as HTMLInputElement;
-		console.log("deleteExo stat : " + name + "=" + doc.valueAsNumber);
+		// console.log("deleteExo stat : " + name + "=" + doc.valueAsNumber);
     build.setExo(name, 0);
     build.inst.save();
   }
