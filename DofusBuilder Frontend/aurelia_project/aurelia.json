@@ -42,7 +42,7 @@
     "index": "index.html",
     "baseDir": ".",
     "output": "quickfus/scripts",
-    "baseUrl": "quickfus/scripts"
+    "baseUrl": "scripts"
   },
   "build": {
     "targets": [{
@@ -50,7 +50,7 @@
       "index": "index.html",
       "baseDir": ".",
       "output": "quickfus/scripts",
-      "baseUrl": "quickfus/scripts"
+      "baseUrl": "scripts"
     }],
     "options": {
       "minify": "stage & prod",
