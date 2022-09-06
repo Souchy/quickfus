@@ -193,7 +193,7 @@ define('db',["require", "exports", "./i18n", "app"], function (require, exports,
             if (item == null)
                 return "";
             var name = item.imgUrl;
-            var type = i18n_1.EnumItemType.findKeyFrench(item.type);
+            var type = i18n_1.EnumItemType.findKeyFrench(item.type).toLowerCase();
             return app_1.App.root2 + "/src/res/items/" + type + "/" + name;
         };
         db.getStatColor = function (name) {
@@ -350,7 +350,7 @@ define('db',["require", "exports", "./i18n", "app"], function (require, exports,
             return "";
         };
         db.sprite = function (x, y) {
-            return "display: inline-block; width: 22px; height: 22px; background-image: url(" + app_1.App.root2 + "'/src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;";
+            return "display: inline-block; width: 22px; height: 22px; background-image: url('" + app_1.App.root2 + "/src/res/icons.png'); background-position: -" + x + "px; background-position-y: -" + y + "px; zoom: 1.0; vertical-align: middle;";
         };
         return db;
     }());
