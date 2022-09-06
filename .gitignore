@@ -3,7 +3,7 @@
 api.conf
 .remote-sync.json
 bin/
-.jar
+*.jar
 
 
 # Ignore Gradle project-specific cache directory

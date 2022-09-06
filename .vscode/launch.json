@@ -6,6 +6,13 @@
 	"configurations": [
 		{
 			"type": "java",
+			"name": "Launch Quickfus",
+			"request": "launch",
+			"mainClass": "github.souchy.ankama.quickfus.Quickfus",
+			"projectName": "DofusBuilder Backend"
+		},
+		{
+			"type": "java",
 			"name": "Launch LabImport",
 			"request": "launch",
 			"mainClass": "github.souchy.ankama.dofuslab.LabImport",

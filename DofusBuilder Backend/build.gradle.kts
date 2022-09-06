@@ -10,6 +10,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
   	id("com.energizedwork.heroku-buildpack-runnable-jar") version "1.3"
+  	id("com.github.johnrengelman.shadow") version "7.1.2"
 }
 
 repositories {
@@ -20,7 +21,19 @@ repositories {
 tasks.jar {
   manifest {
 	archiveBaseName.set("dofusbuilderapi")
+    attributes["Main-Class"] = "github.souchy.ankama.quickfus.Quickfus"
   }
+}
+
+herokuRunnableJarBuildpack {
+    // artifactUrl = "https://example.com/my-runnable-jar.jar"
+    applicationName = "quickfus-backend"
+	// gitUrl = "https://git.heroku.com/quickfus-backend.git"
+    apiKey = "ae9ebe3e-6c82-4b52-8bb9-517a59a41986"
+	// artifactFile = file(File("build/libs/DofusBuilder Backend-all.jar"))
+	artifactFile = file(File("../Quickfus.jar"))
+	procfileContents = "web: java -jar application.jar"
+	javaVersion = "17"
 }
 
 sourceSets {
@@ -59,6 +72,19 @@ dependencies {
 
 	implementation("org.glassfish.jersey.inject:jersey-hk2:3.1.0-M7")
 	implementation("org.glassfish.jersey.media:jersey-media-json-binding:3.1.0-M7")
+
+	// https://mvnrepository.com/artifact/jakarta.activation/jakarta.activation-api
+	implementation("jakarta.activation:jakarta.activation-api:2.1.0")
+	
+	// https://mvnrepository.com/artifact/org.eclipse.jetty/jetty-server
+	implementation("org.eclipse.jetty:jetty-server:11.0.11")
+	implementation("org.eclipse.jetty:jetty-webapp:11.0.11")
+	implementation("org.glassfish.jersey.containers:jersey-container-jetty-http:3.1.0-M7")
+
+	// https://mvnrepository.com/artifact/com.sun.jersey/jersey-servlet
+	// implementation("com.sun.jersey:jersey-servlet:1.19.4")
+	// https://mvnrepository.com/artifact/org.glassfish.jersey.containers/jersey-container-servlet
+	implementation("org.glassfish.jersey.containers:jersey-container-servlet:3.1.0-M7")
 
 }
 

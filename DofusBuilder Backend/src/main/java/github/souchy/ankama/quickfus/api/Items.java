@@ -36,7 +36,7 @@ public class Items {
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Document getSet(@PathParam("id") String id) {
-		// Log.info("hey items get one: " + id);
+		// Log.info("getItem: " + id);
 		return Emerald.items().find(Filters.eq("ankamaID", id)).first();
 	}
 	
@@ -45,7 +45,7 @@ public class Items {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Document> getItems(String jsonPipeline) { //@QueryParam("skip") int skip, @QueryParam("limit") int limit, String json) {
 		List<Document> list = new ArrayList<>();
-//		Log.info("getItems : " + jsonPipeline); 
+		// Log.info("getItems : " + jsonPipeline); 
 		try {
 			var pipeline = new ArrayList<Bson>();
 			if(jsonPipeline.isBlank()) {
