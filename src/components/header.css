@@ -34,3 +34,11 @@ color: var(--accent1);
   text-decoration: none;
   background-color: #555;
 }
+
+nav li a .lineImg {
+  filter: invert(65%) sepia(12%) saturate(4215%) hue-rotate(126deg) brightness(97%) contrast(103%);
+}
+
+nav li:hover a .lineImg {
+  filter: invert(0%) sepia(0%) saturate(5%) hue-rotate(166deg) brightness(98%) contrast(103%);
+}
