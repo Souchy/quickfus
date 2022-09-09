@@ -58,10 +58,10 @@ export class setsheet {
 	}
 
 	public hoverSet() {
-		console.log("hover set");
+		// console.log("hover set");
 	}
 	public hoverItem() {
-		console.log("hover item");
+		// console.log("hover item");
 	}
 
   public getImgUrl(item) {

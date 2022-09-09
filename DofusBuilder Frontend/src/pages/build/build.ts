@@ -18,8 +18,8 @@ export class build {
 	public name: string;
 	// items
 	public items: Map<string, any>;
-	// sets (id, set object)
-	public sets: any[] = []; //Map<number, any>;
+	// sets (set object, itemCount)
+	public sets: Map<any, number>;
 	// total stats
 	public stats: Map<string, number>;
 	// base stats
@@ -111,7 +111,7 @@ export class build {
 
 	public clear(force: boolean) {
 		if (!localStorage.getItem("build.name") || force) build.setName("unnamed build");
-		if (!localStorage.getItem("build.sets") || force) build.setSets([]);
+		if (!localStorage.getItem("build.sets") || force) build.setSets(new Map<any, number>());
 		if (!localStorage.getItem("build.items") || force) build.setItems(new Map<string, any>());
 
 		if (!localStorage.getItem("build.scrolls") || force) {
@@ -170,7 +170,7 @@ export class build {
 			"scrolls": Array.from(this.scrolls.entries()),
 			"bases": Array.from(this.bases.entries()),
 			"exos": Array.from(this.exos.entries()),
-			"sets": this.sets
+			"sets": Array.from(this.sets.entries()) //this.sets
 		});
 	}
 
@@ -188,7 +188,7 @@ export class build {
 			"scrolls": new Map<string, number>(b.scrolls),
 			"bases": new Map<string, number>(b.bases),
 			"exos": new Map<string, number>(b.exos),
-			"sets": b.sets,
+			"sets": new Map<string, number>(b.sets) //b.sets,
 		};
 		build.setName(obj.name);
 		build.setSets(obj.sets);
@@ -233,7 +233,7 @@ export class build {
 		});
 		// console.log("reload stats sets : " + JSON.stringify(this.sets));
 		this.sets.forEach((v, k) => {
-			build.addSet(v);
+			build.addSet(k, v);
 		});
 		// calcule initiative
 		db.getElementsStats().forEach(s => {
@@ -266,19 +266,29 @@ export class build {
 		}
 	}
 
-	private static addSet(set) {
+	private static addSet(set: any, itemCount: number) {
 		// console.log("build.addSet : " + JSON.stringify(set));
-		if (set.bonus && set.bonus.stats) {
-			// console.log("set has bonuses");
-			set.bonus.stats.forEach(stat => {
-				// console.log("set has stat : " + JSON.stringify(stat));
-				if (stat.max) {
-					build.addTotalStat(stat.name, Number.parseInt(stat.max));
-				} else {
-					build.addTotalStat(stat.name, Number.parseInt(stat.min));
-				}
-			});
-		}
+		// if (set.bonus && set.bonus.stats) {
+		// 	// console.log("set has bonuses");
+		// 	set.bonus.stats.forEach(stat => {
+		// 		// console.log("set has stat : " + JSON.stringify(stat));
+		// 		if (stat.max) {
+		// 			build.addTotalStat(stat.name, Number.parseInt(stat.max));
+		// 		} else {
+		// 			build.addTotalStat(stat.name, Number.parseInt(stat.min));
+		// 		}
+		// 	});
+		// }
+    if(!set.bonuses) return;
+    let bonuses = set.bonuses[set.items.length - itemCount];
+    if(!bonuses) return;
+    bonuses.forEach(stat => {
+      if (stat.max) {
+        build.addTotalStat(stat.name, Number.parseInt(stat.max));
+      } else {
+        build.addTotalStat(stat.name, Number.parseInt(stat.min));
+      }
+    });
 	}
 
 	public static addItemStats(item) {
@@ -294,32 +304,35 @@ export class build {
 	}
 
 	public static calcSets(items: Map<string, any>) {
-		build.inst.sets = [];
+		// build.inst.sets = [];
+    build.inst.sets.clear(); // = new Map<string, number>();
 		build.setSets(build.inst.sets);
-		// console.log("build sets 1 : " + build.inst.sets);
+		console.log("calcSet 1 : " + JSON.stringify(build.inst.sets));
 		// calcule le nombre d'items par panoplie
 		let setCounts = {};
 		items.forEach((v, k) => {
-			if (v.setId > 0) {
-				if (!setCounts[v.setId]) setCounts[v.setId] = 1;
-				else setCounts[v.setId] += 1;
+			if (v.setID > 0) {
+				if (!setCounts[v.setID]) setCounts[v.setID] = 1;
+				else setCounts[v.setID] += 1;
 			}
 		});
+    console.log("calcSet counts: " + JSON.stringify(setCounts));
 		// ajoute les stats des panos
 		let setkeys = Object.keys(setCounts);
 		setkeys.forEach(id => {
-			if (setCounts[id] > 1) {
-				// console.log("set [" + id + "] : " + setCounts[id]);
+      let itemCount = setCounts[id];
+			if (itemCount > 1) {
+				console.log("calcSet 2:  [" + id + "] count=" + itemCount);
 				build.inst.api.getSet(id).then(response => {
 					let set = response.content;
-					build.inst.sets.push(set);
-					build.addSet(set);
+					build.inst.sets.set(set, itemCount) // build.inst.sets.push(set);
+					// build.addSet(set, itemCount);
 					build.setSets(build.inst.sets);
-					build.inst.reloadTotalStats();
-					// console.log("build sets 2 : " + build.inst.sets);
+					console.log("calcSet 3 : " + JSON.stringify(build.inst.sets));
 				});
 			}
 		});
+		build.inst.reloadTotalStats();
 	}
 
 	public static setItem(item, reset?) {
@@ -350,7 +363,7 @@ export class build {
 		if (db.getPetTypes().indexOf(item.type) != -1) {
 			slot = "Familier";
 		}
-		console.log("build.setItem slot : " + slot + " (" + item.type + ")");
+		// console.log("build.setItem slot : " + slot + " (" + item.type + ")");
 		if (db.getSlotNames().indexOf(slot) == -1) {
 			console.log("build.setItem bad slot : " + slot);
 			return;
@@ -506,14 +519,17 @@ export class build {
 	}
 
 	private static getSets() {
-		let sets = localStorage.getItem("build.sets");
-		if (sets == "null" || sets == "undefined") return [];
-		return JSON.parse(sets);
+		// let sets = localStorage.getItem("build.sets");
+		// if (sets == "null" || sets == "undefined") return [];
+		// return JSON.parse(sets);
+		return new Map<any, number>(JSON.parse(localStorage.getItem("build.sets")));
 	}
 	private static setSets(sets) {
 		// update view and localStorage
+		// if (build.inst) build.inst.sets = sets;
+		// localStorage.setItem("build.sets", JSON.stringify(sets));
 		if (build.inst) build.inst.sets = sets;
-		localStorage.setItem("build.sets", JSON.stringify(sets));
+		localStorage.setItem("build.sets", JSON.stringify(Array.from(sets.entries())));
 	}
 
 

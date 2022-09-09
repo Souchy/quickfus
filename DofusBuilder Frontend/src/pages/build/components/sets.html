@@ -3,10 +3,10 @@
 
     <!-- <h2>Sets</h2> -->
 
-    <div repeat.for="set of sets">
-      <h5>${set.name}</h5>
-      <div repeat.for="stat of set.bonus.stats">
-        ${stat.min} ${stat.name}
+    <div repeat.for="[set, itemCount] of sets">
+      <h5>${set.name.fr} (${itemCount} items)</h5>
+      <div repeat.for="stat of getBonuses(set, itemCount)">
+        ${stat.max} <span style.bind="getStatColor(stat.name)">${stat.name}</span>
       </div>
     </div>
 

@@ -79,7 +79,8 @@ export class itemsheet {
 	}
 
   public getConditions() {
-    let root = this.data.conditions.conditions;
+    let root = this.data?.conditions?.conditions;
+    if(!root) return;
 
     let str: string = "";
     if(Object.keys(root).length > 0)
