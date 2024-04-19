@@ -117,21 +117,21 @@ export class itemsearch {
 			}
 		});
 
-    
-    var pipeline = [];
-    {
-      // sort
-      pipeline.push({ $sort: { "level": -1, "ankamaID": -1 } })
-      // sums
-      if(Object.keys(adds.$addFields).length > 0)
-        pipeline.push(adds);
-      // actual filter
-      pipeline.push({ $match: mongofilter } );
-      // limit
-      pipeline.push({ $limit: 100 });
-      // skip
-      pipeline.push({ $skip: 0 });
-    }
+
+		var pipeline = [];
+		{
+			// sort
+			pipeline.push({ $sort: { "level": -1, "ankamaID": -1 } })
+			// sums
+			if (Object.keys(adds.$addFields).length > 0)
+				pipeline.push(adds);
+			// actual filter
+			pipeline.push({ $match: mongofilter });
+			// limit
+			pipeline.push({ $limit: 100 });
+			// skip
+			pipeline.push({ $skip: 0 });
+		}
 
 		// console.log("filter : " + JSON.stringify(pipeline));
 		this.query(pipeline);
@@ -290,8 +290,8 @@ export class itemsearch {
 		itemSelector: '.box',
 		resizeable: false,
 		animate: true
-	});
-	*/
+	  });
+	  */
 		// firstTime = true;
 	}
 
